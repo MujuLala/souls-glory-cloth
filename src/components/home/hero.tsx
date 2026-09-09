@@ -526,7 +526,7 @@ export default function Hero() {
               className="
                 absolute
                 bottom-[3.5vw]
-                left-[-1.3vw]
+                left-[-8.3vw]
                 z-20
                 w-[13vw]
                 rounded-[0.8vw]
