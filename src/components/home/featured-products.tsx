@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import {
@@ -23,9 +22,10 @@ const products = [
     oldPrice: "",
     rating: "4.9",
     reviews: "124",
-    image: "/images/products/shalwar-kameez.jpg",
+    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
     href: "/product/classic-ivory-shalwar-kameez",
     tag: "Best Seller",
+    sold: "124 sold",
   },
   {
     name: "Midnight Formal Kurta",
@@ -34,9 +34,10 @@ const products = [
     oldPrice: "$95",
     rating: "4.8",
     reviews: "86",
-    image: "/images/products/formal-kurta.jpg",
+    image: "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1200&q=85",
     href: "/product/midnight-formal-kurta",
     tag: "Popular",
+    sold: "86 sold",
   },
   {
     name: "Pearl Wedding Ensemble",
@@ -45,9 +46,10 @@ const products = [
     oldPrice: "",
     rating: "5.0",
     reviews: "67",
-    image: "/images/products/wedding-ensemble.jpg",
+    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=85",
     href: "/product/pearl-wedding-ensemble",
     tag: "Premium",
+    sold: "67 sold",
   },
   {
     name: "Premium Sand Waistcoat",
@@ -56,9 +58,10 @@ const products = [
     oldPrice: "$82",
     rating: "4.9",
     reviews: "91",
-    image: "/images/products/waistcoat.jpg",
+    image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=1200&q=85",
     href: "/product/premium-sand-waistcoat",
     tag: "New",
+    sold: "91 sold",
   },
   {
     name: "Classic Black Kurta",
@@ -67,9 +70,10 @@ const products = [
     oldPrice: "",
     rating: "4.8",
     reviews: "52",
-    image: "/images/products/black-kurta.jpg",
+    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85",
     href: "/product/classic-black-kurta",
     tag: "Classic",
+    sold: "52 sold",
   },
   {
     name: "Ivory Premium Suit",
@@ -78,9 +82,10 @@ const products = [
     oldPrice: "$149",
     rating: "4.9",
     reviews: "74",
-    image: "/images/products/ivory-suit.jpg",
+    image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=85",
     href: "/product/ivory-premium-suit",
     tag: "Premium",
+    sold: "74 sold",
   },
 ];
 
@@ -125,7 +130,7 @@ export default function FeaturedProducts() {
               </span>
 
               <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary)]">
-                Featured products
+                Glory's Cloth — Featured
               </span>
             </div>
 
@@ -142,16 +147,16 @@ export default function FeaturedProducts() {
                 max-sm:text-[31px]
               "
             >
-              Discover pieces
+              Signature pieces
               <br />
               <span className="text-[var(--primary)]">
-                made to be yours.
+                made around you.
               </span>
             </h2>
 
             <p className="mt-4 max-w-[520px] text-[13px] leading-[1.6] text-[var(--text-secondary)]">
-              Explore our most loved styles, premium essentials and latest
-              arrivals — available ready-to-wear or made to your measurements.
+              Explore refined essentials and signature tailoring, available ready-to-wear
+              or crafted to your measurements.
             </p>
           </div>
 
@@ -299,7 +304,7 @@ function ProductCard({
         className="
           relative
           overflow-hidden
-          rounded-[1vw]
+          rounded-[1.1vw]
           border
           border-[var(--border)]
           bg-[var(--surface)]
@@ -309,14 +314,17 @@ function ProductCard({
       >
         <Link
           href={product.href}
-          className="relative block aspect-[0.82] overflow-hidden"
+          className="relative block aspect-[0.86] overflow-hidden"
         >
-          <Image
+          <img
             src={product.image}
             alt={product.name}
-            fill
-            sizes="(max-width: 640px) 82vw, (max-width: 1024px) 50vw, 25vw"
+            loading="lazy"
             className="
+              absolute
+              inset-0
+              h-full
+              w-full
               object-cover
               transition-transform
               duration-700
@@ -423,12 +431,12 @@ function ProductCard({
             py-2.5
             text-[9px]
             font-bold
-            text-black
+            !text-[var(--primary)]
             opacity-0
             shadow-xl
             transition-all
             duration-300
-
+            bg-[var(--primary)]
             group-hover:translate-y-0
             group-hover:opacity-100
 
@@ -444,7 +452,7 @@ function ProductCard({
           PRODUCT INFO
       ==================================================== */}
 
-      <div className="pt-3">
+      <div className="border-b border-[var(--border)] pb-4 pt-3">
         {/* Category */}
 
         <p className="mb-1 text-[8px] font-medium uppercase tracking-[0.1em] text-[var(--text-tertiary)]">
@@ -458,7 +466,7 @@ function ProductCard({
           className="
             block
             truncate
-            text-[0.9vw]
+            text-[0.95vw]
             font-semibold
             leading-[1.2]
             tracking-[-0.025em]
@@ -472,38 +480,39 @@ function ProductCard({
           {product.name}
         </Link>
 
-        {/* Rating + reviews */}
+        {/* Price + Rating */}
 
-        <div className="mt-2 flex items-center gap-2">
-          <div className="flex items-center gap-1">
+        <div className="mt-2.5 flex items-end justify-between gap-3">
+          <div className="flex min-w-0 items-baseline gap-2">
+            <span className="text-[15px] font-bold tracking-[-0.03em] text-[var(--text)]">
+              {product.price}
+            </span>
+
+            {product.oldPrice && (
+              <span className="text-[9px] font-medium text-[var(--text-tertiary)] line-through">
+                {product.oldPrice}
+              </span>
+            )}
+          </div>
+
+          <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 py-1">
             <Star
               size={9}
               fill="currentColor"
               className="text-[var(--primary)]"
             />
-
-            <span className="text-[9px] font-semibold text-[var(--text)]">
+            <span className="text-[9px] font-bold text-[var(--text)]">
               {product.rating}
             </span>
+            <span className="text-[8px] text-[var(--text-tertiary)]">
+              ({product.reviews})
+            </span>
           </div>
-
-          <span className="text-[8px] text-[var(--text-tertiary)]">
-            {product.reviews} reviews
-          </span>
         </div>
 
-        {/* Price */}
-
-        <div className="mt-2 flex items-center gap-2">
-          <span className="text-[12px] font-bold text-[var(--text)]">
-            {product.price}
-          </span>
-
-          {product.oldPrice && (
-            <span className="text-[9px] text-[var(--text-tertiary)] line-through">
-              {product.oldPrice}
-            </span>
-          )}
+        <div className="mt-2 flex items-center justify-between text-[8px] font-medium uppercase tracking-[0.08em] text-[var(--text-tertiary)]">
+          <span>{product.sold}</span>
+          <span>Made to measure</span>
         </div>
       </div>
     </article>

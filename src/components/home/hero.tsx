@@ -678,7 +678,7 @@ export default function Hero() {
             border-t
             border-[var(--border)]
             py-[1.35vw]
-
+            gap-[2.25vw]
             sm:grid-cols-3
           "
         >
@@ -860,71 +860,152 @@ function DashboardStat({
    PLATFORM BENEFIT
 ========================================================= */
 
+/* =========================================================
+   PLATFORM BENEFIT
+========================================================= */
+
 function PlatformBenefit({
   number,
   title,
   description,
-  bordered = false,
 }: {
   number: string;
   title: string;
   description: string;
-  bordered?: boolean;
 }) {
   return (
     <div
-      className={`
+      className="
+        group
+        relative
         flex
-        items-center
-        gap-[0.7vw]
-
-        ${
-          bordered
-            ? `
-              border-l
-              border-r
-              border-[var(--border)]
-              px-[2vw]
-            `
-            : ""
-        }
-      `}
+        items-left
+        justify-left
+       
+      "
     >
-      <span
+      {/* CARD */}
+
+      <div
         className="
-          text-[1.2vw]
-          font-bold
-          leading-none
-          tracking-[-0.05em]
-          text-[var(--text)]
+          relative
+          flex
+          w-full
+          max-w-[100%]
+          items-center
+          gap-[0.7vw]
+          rounded-[0.8vw]
+          border
+          border-[var(--border)]
+          bg-[var(--dropdown-bg)]
+          p-[0.8vw]
+          shadow-[0_1.5vw_4.5vw_rgba(0,0,0,0.32)]
+          backdrop-blur-2xl
+          transition-all
+          duration-500
+          hover:-translate-y-[0.2vw]
+          hover:border-[var(--primary)]
+          
         "
       >
-        {number}
-      </span>
+        {/* NUMBER */}
 
-      <div>
-        <p
+        <div
           className="
-            text-[0.58vw]
-            font-semibold
-            leading-none
-            text-[var(--text)]
+            relative
+            flex
+            h-[2.6vw]
+            w-[2.6vw]
+            shrink-0
+            items-center
+            justify-center
+            rounded-[0.55vw]
+            border
+            border-[var(--border)]
+            bg-[var(--surface)]
+            shadow-[0_0.5vw_1.5vw_rgba(0,0,0,0.18)]
           "
         >
-          {title}
-        </p>
+          {/* Small decorative dot */}
 
-        <p
+          <span
+            className="
+              absolute
+              right-[0.35vw]
+              top-[0.35vw]
+              h-[0.22vw]
+              w-[0.22vw]
+              rounded-full
+              bg-[var(--primary)]
+              opacity-70
+            "
+          />
+
+          <span
+            className="
+              text-[0.85vw]
+              font-bold
+              leading-none
+              tracking-[-0.04em]
+              text-[var(--text)]
+            "
+          >
+            {number}
+          </span>
+        </div>
+
+        {/* CONTENT */}
+
+        <div className="min-w-0">
+          <p
+            className="
+              text-[0.69vw]
+              font-semibold
+              leading-none
+              tracking-[-0.01em]
+              text-[var(--text)]
+            "
+          >
+            {title}
+          </p>
+
+          <p
+            className="
+              mt-[0.32vw]
+              text-[0.69vw]
+              leading-[1.3]
+              text-[var(--text-tertiary)]
+            "
+          >
+            {description}
+          </p>
+        </div>
+
+        {/* ACTIVE INDICATOR */}
+
+        <span
           className="
-            mt-[0.3vw]
-            text-[0.5vw]
-            leading-none
-            text-[var(--text-tertiary)]
+            absolute
+            bottom-[-0.18vw]
+            left-1/2
+            h-[0.35vw]
+            w-[0.35vw]
+            -translate-x-1/2
+            rounded-full
+            border
+            border-[var(--bg)]
+            bg-[var(--primary)]
+            opacity-0
+            transition-opacity
+            duration-300
+            group-hover:opacity-100
           "
-        >
-          {description}
-        </p>
+        />
       </div>
+
+      {/* VERTICAL DECORATIVE CONNECTOR */}
+
+      
     </div>
   );
 }

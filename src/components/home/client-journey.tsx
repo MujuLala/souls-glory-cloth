@@ -60,7 +60,7 @@ const journeySteps = [
 
 export default function ClientJourney() {
   return (
-    <section className="relative py-[8vw]">
+    <section className="relative ">
       <Container>
         <div
           className="
