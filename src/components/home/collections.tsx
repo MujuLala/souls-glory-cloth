@@ -6,7 +6,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 import Container from "@/components/ui/container";
 import Button from "@/components/ui/button";
-import AmbientBackground from "@/components/ui/ambient-background";
+
 
 const collections = [
   {
@@ -37,12 +37,12 @@ const collections = [
 
 export default function Collections() {
   return (
-    <section className="relative overflow-hidden bg-[var(--bg)] py-[6vw] max-lg:py-20 max-sm:py-14">
+    <section className="relative overflow-hidden bg-transparent py-[6vw] max-lg:py-20 max-sm:py-14">
       {/* =====================================================
           SAME AMBIENT BACKGROUND AS HERO
       ====================================================== */}
 
-      <AmbientBackground />
+      
 
       {/* =====================================================
           CONTENT

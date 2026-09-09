@@ -1,8 +1,8 @@
 import Collections from "@/components/home/collections";
 import Hero from "@/components/home/hero";
 // import Categories from "@/components/home/categories";
-// import ClientJourney from "@/components/home/client-journey";
-// import FeaturedProducts from "@/components/home/featured-products";
+ import ClientJourney from "@/components/home/client-journey";
+import FeaturedProducts from "@/components/home/featured-products";
 // import DashboardPreview from "@/components/home/dashboard-preview";
 // import CustomStudio from "@/components/home/custom-studio";
 // import Reviews from "@/components/home/reviews";
@@ -13,9 +13,10 @@ export default function Home() {
     <>
       <Hero />
       <Collections />
-      {/* <Categories />
-
       <ClientJourney />
+      <FeaturedProducts />
+
+      {/* <ClientJourney />
 
       <FeaturedProducts />
 
@@ -25,7 +26,7 @@ export default function Home() {
 
       <Reviews />
 
-      <FinalCTA /> */}
+      <FinalCTA /> */} 
     </>
   );
 }

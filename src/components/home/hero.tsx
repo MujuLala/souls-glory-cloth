@@ -15,17 +15,10 @@ import {
 
 import Container from "@/components/ui/container";
 import Button from "@/components/ui/button";
-import AmbientBackground from "@/components/ui/ambient-background";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[var(--bg)]">
-      {/* =====================================================
-          GLOBAL AMBIENT BACKGROUND
-      ====================================================== */}
-
-      <AmbientBackground />
-
+    <section className="relative overflow-hidden bg-transparent">
       {/* =====================================================
           MAIN CONTENT
       ====================================================== */}
@@ -34,7 +27,7 @@ export default function Hero() {
         <div
           className="
             grid
-            min-h-[calc(100vh-102px)]
+            min-h-[calc(100vh-7vw)]
             grid-cols-1
             items-center
             gap-[7vw]
@@ -49,15 +42,17 @@ export default function Hero() {
               LEFT CONTENT
           ================================================== */}
 
-          <div className="relative z-10 max-w-[650px]">
-            {/* Eyebrow */}
+          <div className="relative z-10">
+            {/* =================================================
+                EYEBROW
+            ================================================== */}
 
             <div
               className="
                 mb-[1.2vw]
                 inline-flex
                 items-center
-                gap-2
+                gap-[0.45vw]
                 rounded-full
                 border
                 border-[var(--border)]
@@ -65,17 +60,15 @@ export default function Hero() {
                 px-[0.75vw]
                 py-[0.4vw]
                 backdrop-blur-xl
-
-                max-lg:mb-4
-                max-lg:px-3
-                max-lg:py-1.5
               "
             >
               <span
                 className="
                   flex
-                  h-[18px]
-                  w-[18px]
+                  h-[1.15vw]
+                  w-[1.15vw]
+                  min-h-[10px]
+                  min-w-[10px]
                   items-center
                   justify-center
                   rounded-full
@@ -92,29 +85,25 @@ export default function Hero() {
                   font-semibold
                   uppercase
                   tracking-[0.12em]
+                  leading-none
                   text-[var(--text-secondary)]
-
-                  max-lg:text-[9px]
                 "
               >
                 Personal fashion platform
               </span>
             </div>
 
-            {/* Heading */}
+            {/* =================================================
+                HEADING
+            ================================================== */}
 
             <h1
               className="
-                max-w-[680px]
                 text-[5.2vw]
                 font-bold
                 leading-[0.94]
                 tracking-[-0.065em]
                 text-[var(--text)]
-
-                max-lg:text-[62px]
-                max-md:text-[52px]
-                max-sm:text-[43px]
               "
             >
               Clothing made
@@ -125,24 +114,23 @@ export default function Hero() {
               </span>
             </h1>
 
-            {/* Description */}
+            {/* =================================================
+                DESCRIPTION
+            ================================================== */}
 
             <p
               className="
                 mt-[1.4vw]
-                max-w-[535px]
+                w-[38vw]
                 text-[0.95vw]
                 leading-[1.65]
                 text-[var(--text-secondary)]
-
-                max-lg:mt-5
-                max-lg:text-[14px]
-                max-sm:text-[13px]
               "
             >
-              Shop ready-to-wear pieces or create garments tailored to your
-              measurements, style and preferences. Your profile, orders,
-              payments, measurements and support — all in one place.
+              Shop ready-to-wear pieces or create garments tailored
+              to your measurements, style and preferences. Your
+              profile, orders, payments, measurements and support —
+              all in one place.
             </p>
 
             {/* =================================================
@@ -156,9 +144,6 @@ export default function Hero() {
                 flex-wrap
                 items-center
                 gap-[0.65vw]
-
-                max-lg:mt-6
-                max-lg:gap-2
               "
             >
               <Button
@@ -166,19 +151,19 @@ export default function Hero() {
                 variant="primary"
                 className="
                   h-[3.05vw]
-                  min-h-[45px]
                   px-[1.35vw]
                   text-[0.7vw]
-
-                  max-lg:px-5
-                  max-lg:text-[11px]
                 "
               >
                 Become a Client
 
                 <ArrowRight
                   size={14}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
+                  className="
+                    transition-transform
+                    duration-300
+                    group-hover:translate-x-1
+                  "
                 />
               </Button>
 
@@ -187,12 +172,8 @@ export default function Hero() {
                 variant="secondary"
                 className="
                   h-[3.05vw]
-                  min-h-[45px]
                   px-[1.35vw]
                   text-[0.7vw]
-
-                  max-lg:px-5
-                  max-lg:text-[11px]
                 "
               >
                 Explore Collection
@@ -205,23 +186,20 @@ export default function Hero() {
                   ml-[0.25vw]
                   inline-flex
                   items-center
-                  gap-2
+                  gap-[0.5vw]
                   text-[0.66vw]
                   font-semibold
+                  leading-none
                   text-[var(--text-secondary)]
                   transition-colors
                   hover:text-[var(--text)]
-
-                  max-lg:text-[10px]
-                  max-sm:mt-2
-                  max-sm:w-full
                 "
               >
                 <span
                   className="
                     flex
-                    h-[30px]
-                    w-[30px]
+                    h-[1.9vw]
+                    w-[1.9vw]
                     items-center
                     justify-center
                     rounded-full
@@ -253,9 +231,6 @@ export default function Hero() {
                 flex
                 flex-wrap
                 gap-[1.25vw]
-
-                max-lg:mt-6
-                max-lg:gap-4
               "
             >
               <TrustItem label="Made to measure" />
@@ -274,12 +249,10 @@ export default function Hero() {
                 mt-[2.2vw]
                 flex
                 items-center
-                gap-3
-
-                max-lg:mt-7
+                gap-[0.8vw]
               "
             >
-              <div className="flex -space-x-2">
+              <div className="flex -space-x-[0.35vw]">
                 <Avatar letter="M" />
                 <Avatar letter="A" />
                 <Avatar letter="S" />
@@ -287,17 +260,37 @@ export default function Hero() {
               </div>
 
               <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[0.72vw] font-bold text-[var(--text)] max-lg:text-[11px]">
+                <div className="flex items-center gap-[0.25vw]">
+                  <span
+                    className="
+                      text-[0.72vw]
+                      font-bold
+                      leading-none
+                      text-[var(--text)]
+                    "
+                  >
                     10K+
                   </span>
 
-                  <span className="text-[0.6vw] text-[var(--text-secondary)] max-lg:text-[9px]">
+                  <span
+                    className="
+                      text-[0.6vw]
+                      leading-none
+                      text-[var(--text-secondary)]
+                    "
+                  >
                     clients
                   </span>
                 </div>
 
-                <p className="text-[0.52vw] text-[var(--text-tertiary)] max-lg:text-[8px]">
+                <p
+                  className="
+                    mt-[0.25vw]
+                    text-[0.52vw]
+                    leading-none
+                    text-[var(--text-tertiary)]
+                  "
+                >
                   Growing with Soul&apos;s Glory
                 </p>
               </div>
@@ -315,13 +308,11 @@ export default function Hero() {
               min-h-[38vw]
               items-center
               justify-center
-
-              max-lg:min-h-[520px]
-              max-md:min-h-[470px]
-              max-sm:min-h-[420px]
             "
           >
-            {/* Main image glow */}
+            {/* =================================================
+                MAIN IMAGE GLOW
+            ================================================== */}
 
             <div
               className="
@@ -333,9 +324,6 @@ export default function Hero() {
                 bg-[var(--primary)]
                 opacity-[0.11]
                 blur-[7vw]
-
-                max-lg:h-[330px]
-                max-lg:w-[330px]
               "
             />
 
@@ -348,22 +336,19 @@ export default function Hero() {
                 relative
                 z-10
                 w-[36vw]
-                max-w-[560px]
                 overflow-hidden
                 rounded-[1.45vw]
                 border
                 border-[var(--border)]
                 bg-[var(--surface)]
                 p-[0.55vw]
-                shadow-[0_30px_100px_rgba(0,0,0,0.38)]
+                shadow-[0_2vw_6vw_rgba(0,0,0,0.38)]
                 backdrop-blur-2xl
-
-                max-lg:w-[500px]
-                max-md:w-[430px]
-                max-sm:w-[88vw]
               "
             >
-              {/* Image */}
+              {/* =================================================
+                  IMAGE
+              ================================================== */}
 
               <div
                 className="
@@ -372,8 +357,6 @@ export default function Hero() {
                   overflow-hidden
                   rounded-[1.05vw]
                   bg-[#161616]
-
-                  max-sm:rounded-[14px]
                 "
               >
                 <Image
@@ -381,7 +364,7 @@ export default function Hero() {
                   alt="Soul's Glory custom fashion"
                   fill
                   priority
-                  sizes="(max-width: 640px) 88vw, (max-width: 1024px) 500px, 560px"
+                  sizes="36vw"
                   className="
                     object-cover
                     transition-transform
@@ -390,7 +373,9 @@ export default function Hero() {
                   "
                 />
 
-                {/* Image overlay */}
+                {/* =================================================
+                    IMAGE OVERLAY
+                ================================================== */}
 
                 <div
                   className="
@@ -403,7 +388,9 @@ export default function Hero() {
                   "
                 />
 
-                {/* Top label */}
+                {/* =================================================
+                    TOP LABEL
+                ================================================== */}
 
                 <div
                   className="
@@ -412,7 +399,7 @@ export default function Hero() {
                     top-[1vw]
                     flex
                     items-center
-                    gap-2
+                    gap-[0.45vw]
                     rounded-full
                     border
                     border-white/15
@@ -423,22 +410,26 @@ export default function Hero() {
                     font-semibold
                     uppercase
                     tracking-[0.12em]
+                    leading-none
                     text-white
                     backdrop-blur-xl
-
-                    max-lg:left-4
-                    max-lg:top-4
-                    max-lg:px-3
-                    max-lg:py-1.5
-                    max-lg:text-[8px]
                   "
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
+                  <span
+                    className="
+                      h-[0.35vw]
+                      w-[0.35vw]
+                      rounded-full
+                      bg-[var(--primary)]
+                    "
+                  />
 
                   Custom Collection
                 </div>
 
-                {/* Bottom content */}
+                {/* =================================================
+                    BOTTOM CONTENT
+                ================================================== */}
 
                 <div
                   className="
@@ -446,10 +437,6 @@ export default function Hero() {
                     bottom-[1vw]
                     left-[1vw]
                     right-[1vw]
-
-                    max-lg:bottom-4
-                    max-lg:left-4
-                    max-lg:right-4
                   "
                 >
                   <div className="flex items-end justify-between">
@@ -460,9 +447,8 @@ export default function Hero() {
                           font-medium
                           uppercase
                           tracking-[0.12em]
+                          leading-none
                           text-white/60
-
-                          max-lg:text-[8px]
                         "
                       >
                         Made for you
@@ -470,13 +456,12 @@ export default function Hero() {
 
                       <h2
                         className="
-                          mt-1
+                          mt-[0.35vw]
                           text-[1.2vw]
                           font-semibold
+                          leading-none
                           tracking-[-0.04em]
                           text-white
-
-                          max-lg:text-[18px]
                         "
                       >
                         Your fit. Your style.
@@ -488,16 +473,11 @@ export default function Hero() {
                         flex
                         h-[2.5vw]
                         w-[2.5vw]
-                        min-h-[38px]
-                        min-w-[38px]
                         items-center
                         justify-center
                         rounded-full
                         bg-white
                         text-black
-
-                        max-lg:h-10
-                        max-lg:w-10
                       "
                     >
                       <ArrowRight size={14} />
@@ -510,7 +490,14 @@ export default function Hero() {
                   PRODUCT INFO
               ================================================== */}
 
-              <div className="grid grid-cols-3 gap-[0.4vw] p-[0.4vw]">
+              <div
+                className="
+                  grid
+                  grid-cols-3
+                  gap-[0.4vw]
+                  p-[0.4vw]
+                "
+              >
                 <InfoItem
                   icon={<Ruler size={11} />}
                   label="Fit"
@@ -542,28 +529,21 @@ export default function Hero() {
                 left-[-1.3vw]
                 z-20
                 w-[13vw]
-                min-w-[175px]
-                rounded-[13px]
+                rounded-[0.8vw]
                 border
                 border-[var(--border)]
                 bg-[var(--dropdown-bg)]
                 p-[0.8vw]
-                shadow-[0_20px_60px_rgba(0,0,0,0.32)]
+                shadow-[0_1.5vw_4.5vw_rgba(0,0,0,0.32)]
                 backdrop-blur-2xl
-
-                max-lg:bottom-8
-                max-lg:left-0
-                max-lg:p-3
-
-                max-sm:left-[-5px]
               "
             >
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-[0.6vw]">
                 <div
                   className="
                     flex
-                    h-[31px]
-                    w-[31px]
+                    h-[2vw]
+                    w-[2vw]
                     shrink-0
                     items-center
                     justify-center
@@ -576,17 +556,40 @@ export default function Hero() {
                 </div>
 
                 <div className="min-w-0">
-                  <p className="text-[0.5vw] font-medium text-[var(--text-tertiary)] max-lg:text-[8px]">
+                  <p
+                    className="
+                      text-[0.5vw]
+                      font-medium
+                      leading-none
+                      text-[var(--text-tertiary)]
+                    "
+                  >
                     Client dashboard
                   </p>
 
-                  <p className="truncate text-[0.62vw] font-semibold text-[var(--text)] max-lg:text-[10px]">
+                  <p
+                    className="
+                      mt-[0.25vw]
+                      truncate
+                      text-[0.62vw]
+                      font-semibold
+                      leading-none
+                      text-[var(--text)]
+                    "
+                  >
                     Everything in one place
                   </p>
                 </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 gap-1">
+              <div
+                className="
+                  mt-[0.8vw]
+                  grid
+                  grid-cols-3
+                  gap-[0.2vw]
+                "
+              >
                 <DashboardStat
                   value="03"
                   label="Orders"
@@ -616,27 +619,22 @@ export default function Hero() {
                 z-20
                 flex
                 items-center
-                gap-2
+                gap-[0.45vw]
                 rounded-full
                 border
                 border-[var(--border)]
                 bg-[var(--dropdown-bg)]
                 px-[0.7vw]
                 py-[0.5vw]
-                shadow-[0_15px_45px_rgba(0,0,0,0.25)]
+                shadow-[0_1.2vw_3.5vw_rgba(0,0,0,0.25)]
                 backdrop-blur-2xl
-
-                max-lg:right-0
-                max-lg:top-10
-                max-lg:px-3
-                max-lg:py-2
               "
             >
               <span
                 className="
                   flex
-                  h-[24px]
-                  w-[24px]
+                  h-[1.5vw]
+                  w-[1.5vw]
                   items-center
                   justify-center
                   rounded-full
@@ -647,11 +645,25 @@ export default function Hero() {
                 <MessageCircle size={12} />
               </span>
 
-              <span className="text-[0.52vw] font-semibold text-[var(--text)] max-lg:text-[8px]">
+              <span
+                className="
+                  text-[0.52vw]
+                  font-semibold
+                  leading-none
+                  text-[var(--text)]
+                "
+              >
                 Chat with your tailor
               </span>
 
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              <span
+                className="
+                  h-[0.35vw]
+                  w-[0.35vw]
+                  rounded-full
+                  bg-green-500
+                "
+              />
             </div>
           </div>
         </div>
@@ -704,12 +716,18 @@ function TrustItem({
   label: string;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className="
+        flex
+        items-center
+        gap-[0.4vw]
+      "
+    >
       <span
         className="
           flex
-          h-[20px]
-          w-[20px]
+          h-[1.25vw]
+          w-[1.25vw]
           items-center
           justify-center
           rounded-full
@@ -720,7 +738,14 @@ function TrustItem({
         <Check size={11} />
       </span>
 
-      <span className="text-[0.6vw] font-medium text-[var(--text-secondary)] max-lg:text-[10px]">
+      <span
+        className="
+          text-[0.6vw]
+          font-medium
+          leading-none
+          text-[var(--text-secondary)]
+        "
+      >
         {label}
       </span>
     </div>
@@ -743,24 +768,43 @@ function InfoItem({
   return (
     <div
       className="
-        rounded-[8px]
+        rounded-[0.5vw]
         bg-[var(--surface)]
         px-[0.6vw]
         py-[0.55vw]
-
-        max-lg:px-2
-        max-lg:py-2
       "
     >
-      <div className="flex items-center gap-1.5 text-[var(--text-tertiary)]">
+      <div
+        className="
+          flex
+          items-center
+          gap-[0.3vw]
+          text-[var(--text-tertiary)]
+        "
+      >
         {icon}
 
-        <p className="text-[0.48vw] uppercase tracking-[0.08em] max-lg:text-[7px]">
+        <p
+          className="
+            text-[0.48vw]
+            uppercase
+            tracking-[0.08em]
+            leading-none
+          "
+        >
           {label}
         </p>
       </div>
 
-      <p className="mt-1 text-[0.65vw] font-semibold text-[var(--text)] max-lg:text-[10px]">
+      <p
+        className="
+          mt-[0.3vw]
+          text-[0.65vw]
+          font-semibold
+          leading-none
+          text-[var(--text)]
+        "
+      >
         {value}
       </p>
     </div>
@@ -781,17 +825,31 @@ function DashboardStat({
   return (
     <div
       className="
-        rounded-[6px]
+        rounded-[0.4vw]
         bg-[var(--surface)]
         p-[0.4vw]
         text-center
       "
     >
-      <p className="text-[0.72vw] font-bold text-[var(--text)] max-lg:text-[11px]">
+      <p
+        className="
+          text-[0.72vw]
+          font-bold
+          leading-none
+          text-[var(--text)]
+        "
+      >
         {value}
       </p>
 
-      <p className="text-[0.4vw] text-[var(--text-tertiary)] max-lg:text-[7px]">
+      <p
+        className="
+          mt-[0.15vw]
+          text-[0.4vw]
+          leading-none
+          text-[var(--text-tertiary)]
+        "
+      >
         {label}
       </p>
     </div>
@@ -822,25 +880,48 @@ function PlatformBenefit({
 
         ${
           bordered
-            ? "border-b border-[var(--border)] py-[1vw] sm:border-b-0 sm:border-r sm:border-l sm:px-[2vw] sm:py-0"
+            ? `
+              border-l
+              border-r
+              border-[var(--border)]
+              px-[2vw]
+            `
             : ""
         }
-
-        max-sm:border-b
-        max-sm:border-[var(--border)]
-        max-sm:py-4
       `}
     >
-      <span className="text-[1.2vw] font-bold tracking-[-0.05em] text-[var(--text)] max-lg:text-[18px]">
+      <span
+        className="
+          text-[1.2vw]
+          font-bold
+          leading-none
+          tracking-[-0.05em]
+          text-[var(--text)]
+        "
+      >
         {number}
       </span>
 
       <div>
-        <p className="text-[0.58vw] font-semibold text-[var(--text)] max-lg:text-[9px]">
+        <p
+          className="
+            text-[0.58vw]
+            font-semibold
+            leading-none
+            text-[var(--text)]
+          "
+        >
           {title}
         </p>
 
-        <p className="mt-0.5 text-[0.5vw] text-[var(--text-tertiary)] max-lg:text-[8px]">
+        <p
+          className="
+            mt-[0.3vw]
+            text-[0.5vw]
+            leading-none
+            text-[var(--text-tertiary)]
+          "
+        >
           {description}
         </p>
       </div>
@@ -861,16 +942,17 @@ function Avatar({
     <div
       className="
         flex
-        h-[27px]
-        w-[27px]
+        h-[1.7vw]
+        w-[1.7vw]
         items-center
         justify-center
         rounded-full
-        border-2
+        border-[0.12vw]
         border-[var(--bg)]
         bg-[var(--surface-hover)]
-        text-[9px]
+        text-[0.56vw]
         font-bold
+        leading-none
         text-[var(--text)]
       "
     >

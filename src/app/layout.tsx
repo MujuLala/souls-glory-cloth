@@ -6,6 +6,7 @@ import "./globals.css";
 import AnnouncementBar from "@/components/layout/announcement-bar";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import AmbientBackground from "@/components/ui/ambient-background";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,45 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Soul's Glory Cloth",
-    template: "%s | Soul's Glory Cloth",
-  },
-
-  description:
-    "Soul's Glory Cloth is a modern fashion and custom tailoring platform for ready-to-wear and made-to-measure clothing.",
-
-  keywords: [
-    "Soul's Glory Cloth",
-    "custom tailoring",
-    "custom clothing",
-    "made to measure",
-    "ready to wear",
-    "fashion",
-    "online tailoring",
-  ],
-
-  authors: [
-    {
-      name: "Soul's Glory Cloth",
-    },
-  ],
-
-  creator: "Soul's Glory Cloth",
-
-  robots: {
-    index: true,
-    follow: true,
-  },
-
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
-
-  icons: {
-    icon: "/favicon.ico",
-  },
+  title: "Soul's Glory Cloth",
+  description: "Custom clothing, made for you.",
 };
 
 export default function RootLayout({
@@ -61,25 +25,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      data-theme="dark"
-    >
+    <html lang="en">
       <body className={`${inter.variable} antialiased`}>
+        <AmbientBackground />
 
-        {/* Global Announcement */}
-        <AnnouncementBar />
+        <div className="relative z-10">
+          <AnnouncementBar />
 
-        {/* Global Header */}
-        <Header />
+          <Header />
 
-        {/* Main Application */}
-        <main>{children}</main>
+          <main>{children}</main>
 
-        {/* Global Footer */}
-        <Footer />
-
+          <Footer />
+        </div>
       </body>
     </html>
   );

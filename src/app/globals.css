@@ -1,116 +1,220 @@
 @import "tailwindcss";
 
+/* =========================================================
+   SOUL'S GLORY CLOTH — GLOBAL DESIGN SYSTEM
+   ========================================================= */
+
 :root {
+  /* Background */
   --bg: #050505;
   --bg-secondary: #0a0a0b;
 
+  /* Surfaces */
   --surface: rgba(255, 255, 255, 0.055);
   --surface-hover: rgba(255, 255, 255, 0.085);
 
+  /* Borders */
   --border: rgba(255, 255, 255, 0.11);
 
+  /* Text */
   --text: #f6f6f4;
   --text-secondary: #a0a0a4;
   --text-tertiary: #707075;
 
+  /* Brand */
   --primary: #e51e32;
   --primary-hover: #ff3347;
+
+  /* Header */
+  --header-bg: rgba(5, 5, 5, 0.78);
+  --dropdown-bg: rgba(15, 15, 16, 0.94);
+
+  /* Announcement */
+  --announcement-bg: #09090a;
+  --announcement-border: rgba(255, 255, 255, 0.08);
+  --announcement-text: #a7a7ac;
 }
 
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
 [data-theme="light"] {
+  /* Background */
   --bg: #f5f5f3;
   --bg-secondary: #ffffff;
 
-  --surface: rgba(255, 255, 255, 0.8);
-  --surface-hover: #ffffff;
+  /* Surfaces */
+  --surface: rgba(0, 0, 0, 0.035);
+  --surface-hover: rgba(0, 0, 0, 0.06);
 
+  /* Borders */
   --border: rgba(0, 0, 0, 0.1);
 
+  /* Text */
   --text: #111214;
   --text-secondary: #66686d;
   --text-tertiary: #8a8a8f;
 
+  /* Brand */
   --primary: #d9182d;
   --primary-hover: #ed263b;
+
+  /* Header */
+  --header-bg: rgba(255, 255, 255, 0.82);
+  --dropdown-bg: rgba(255, 255, 255, 0.96);
+
+  /* Announcement */
+  --announcement-bg: #f0f0ee;
+  --announcement-border: rgba(0, 0, 0, 0.08);
+  --announcement-text: #66686d;
 }
+
+/* =========================================================
+   HTML
+   ========================================================= */
 
 html {
   scroll-behavior: smooth;
+  background: var(--bg);
 }
+
+/* =========================================================
+   BODY
+   ========================================================= */
 
 body {
   margin: 0;
   padding: 0;
-  background: var(--background);
-  color: var(--foreground);
+  min-height: 100vh;
+
+  background: var(--bg);
+  color: var(--text);
+
   font-family: var(--font-inter), sans-serif;
-}
-:root {
-  --header-bg: rgba(5, 5, 5, 0.78);
-  --dropdown-bg: rgba(15, 15, 16, 0.94);
 
-  --surface: rgba(255, 255, 255, 0.05);
-  --surface-hover: rgba(255, 255, 255, 0.09);
-
-  --border: rgba(255, 255, 255, 0.11);
-
-  --text: #f5f5f5;
-  --text-secondary: #9b9ba0;
-
-  --primary: #e51e32;
-  --primary-hover: #ff3347;
+  transition:
+    background-color 300ms ease,
+    color 300ms ease;
 }
 
-[data-theme="light"] {
-  --header-bg: rgba(255, 255, 255, 0.82);
-  --dropdown-bg: rgba(255, 255, 255, 0.96);
+/* =========================================================
+   GLOBAL BOX SIZING
+   ========================================================= */
 
-  --surface: rgba(0, 0, 0, 0.035);
-  --surface-hover: rgba(0, 0, 0, 0.06);
-
-  --border: rgba(0, 0, 0, 0.10);
-
-  --text: #111214;
-  --text-secondary: #66686d;
-
-  --primary: #d9182d;
-  --primary-hover: #ed263b;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-:root {
-  --announcement-bg: #09090a;
-  --announcement-border: rgba(255, 255, 255, 0.08);
-  --announcement-text: #a7a7ac;
 
-  --header-bg: rgba(5, 5, 5, 0.78);
-  --dropdown-bg: rgba(15, 15, 16, 0.94);
+/* =========================================================
+   LINKS
+   ========================================================= */
 
-  --surface: rgba(255, 255, 255, 0.05);
-  --surface-hover: rgba(255, 255, 255, 0.09);
-
-  --border: rgba(255, 255, 255, 0.11);
-
-  --text: #f5f5f5;
-  --text-secondary: #9b9ba0;
-
-  --primary: #e51e32;
-  --primary-hover: #ff3347;
+a {
+  color: inherit;
+  text-decoration: none;
 }
-[data-theme="light"] {
-  --announcement-bg: #f0f0ee;
-  --announcement-border: rgba(0, 0, 0, 0.08);
-  --announcement-text: #66686d;
 
-  --header-bg: rgba(255, 255, 255, 0.82);
-  --dropdown-bg: rgba(255, 255, 255, 0.96);
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
-  --surface: rgba(0, 0, 0, 0.035);
-  --surface-hover: rgba(0, 0, 0, 0.06);
 
-  --border: rgba(0, 0, 0, 0.10);
 
-  --text: #111214;
-  --text-secondary: #66686d;
+/* =========================================================
+   IMAGES
+   ========================================================= */
 
-  --primary: #d9182d;
-  --primary-hover: #ed263b;
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* =========================================================
+   HORIZONTAL CAROUSEL SCROLLBAR
+   ========================================================= */
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   GLOBAL GLASS EFFECT
+   ========================================================= */
+
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* =========================================================
+   GLOBAL FOCUS
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

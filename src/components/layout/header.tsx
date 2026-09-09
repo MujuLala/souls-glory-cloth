@@ -56,6 +56,29 @@ const mainLinks = [
   },
 ];
 
+/*
+ * =========================================================
+ * SHARED DESKTOP NAVIGATION STYLE
+ *
+ * Same exact typography for:
+ * Platform
+ * Shop
+ * Custom Studio
+ * Collections
+ * Support
+ * =========================================================
+ */
+
+const navTextClass = `
+  text-[0.72vw]
+  font-medium
+  leading-none
+  tracking-[-0.01em]
+  text-[var(--text-secondary)]
+  transition-colors
+  hover:text-[var(--text)]
+`;
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [platformOpen, setPlatformOpen] = useState(false);
@@ -65,9 +88,9 @@ export default function Header() {
   const headerRef = useRef<HTMLElement>(null);
 
   /*
-   * ---------------------------------------------------------
+   * =========================================================
    * INITIAL THEME
-   * ---------------------------------------------------------
+   * =========================================================
    */
 
   useEffect(() => {
@@ -75,12 +98,14 @@ export default function Header() {
 
     if (savedTheme === "light") {
       setDarkMode(false);
+
       document.documentElement.setAttribute(
         "data-theme",
         "light"
       );
     } else {
       setDarkMode(true);
+
       document.documentElement.setAttribute(
         "data-theme",
         "dark"
@@ -89,9 +114,9 @@ export default function Header() {
   }, []);
 
   /*
-   * ---------------------------------------------------------
+   * =========================================================
    * CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
-   * ---------------------------------------------------------
+   * =========================================================
    */
 
   useEffect(() => {
@@ -105,10 +130,7 @@ export default function Header() {
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleClickOutside
-    );
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener(
@@ -119,9 +141,9 @@ export default function Header() {
   }, []);
 
   /*
-   * ---------------------------------------------------------
-   * THEME
-   * ---------------------------------------------------------
+   * =========================================================
+   * THEME TOGGLE
+   * =========================================================
    */
 
   const toggleTheme = () => {
@@ -141,9 +163,9 @@ export default function Header() {
   };
 
   /*
-   * ---------------------------------------------------------
-   * MOBILE NAV
-   * ---------------------------------------------------------
+   * =========================================================
+   * CLOSE MOBILE MENU
+   * =========================================================
    */
 
   const closeMobileMenu = () => {
@@ -158,7 +180,7 @@ export default function Header() {
       className="
         sticky
         top-0
-        z-50
+        z-[100]
         w-full
         border-b
         border-[var(--border)]
@@ -167,7 +189,7 @@ export default function Header() {
       "
     >
       {/* =====================================================
-          DESKTOP / MAIN HEADER
+          MAIN HEADER
       ====================================================== */}
 
       <Container
@@ -227,32 +249,33 @@ export default function Header() {
             lg:flex
           "
         >
-          {/* PLATFORM */}
+          {/* =================================================
+              PLATFORM
+          ================================================== */}
 
           <div className="relative">
             <button
               type="button"
               aria-expanded={platformOpen}
+              aria-haspopup="menu"
               onClick={() => {
-                setPlatformOpen(!platformOpen);
+                setPlatformOpen((value) => !value);
                 setShopOpen(false);
               }}
-              className="
+              className={`
                 flex
                 items-center
                 gap-[0.25vw]
-                text-[0.72vw]
-                font-medium
-                text-[var(--text-secondary)]
-                transition-colors
-                hover:text-[var(--text)]
-              "
+                ${navTextClass}
+              `}
             >
               Platform
 
               <ChevronDown
                 size={12}
+                strokeWidth={1.8}
                 className={`
+                  shrink-0
                   transition-transform
                   duration-200
                   ${platformOpen ? "rotate-180" : ""}
@@ -262,13 +285,15 @@ export default function Header() {
 
             {platformOpen && (
               <div
+                role="menu"
                 className="
                   absolute
                   left-[-0.8vw]
                   top-[calc(100%+1.15vw)]
+                  z-[110]
                   w-[17vw]
                   min-w-[225px]
-                  rounded-[12px]
+                  rounded-[0.65vw]
                   border
                   border-[var(--border)]
                   bg-[var(--dropdown-bg)]
@@ -281,13 +306,12 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={() => {
-                      setPlatformOpen(false);
-                    }}
+                    role="menuitem"
+                    onClick={() => setPlatformOpen(false)}
                     className="
                       group
                       block
-                      rounded-[8px]
+                      rounded-[0.45vw]
                       px-[0.75vw]
                       py-[0.65vw]
                       transition-colors
@@ -296,10 +320,11 @@ export default function Header() {
                   >
                     <div
                       className="
-                        text-[0.68vw]
-                        font-semibold
+                        text-[0.72vw]
+                        font-medium
+                        leading-none
+                        tracking-[-0.01em]
                         text-[var(--text)]
-                        max-[1100px]:text-[10px]
                       "
                     >
                       {item.label}
@@ -307,10 +332,11 @@ export default function Header() {
 
                     <div
                       className="
-                        mt-[2px]
+                        mt-[0.3vw]
                         text-[0.56vw]
+                        font-normal
+                        leading-[1.3]
                         text-[var(--text-tertiary)]
-                        max-[1100px]:text-[8px]
                       "
                     >
                       {item.description}
@@ -321,32 +347,33 @@ export default function Header() {
             )}
           </div>
 
-          {/* SHOP */}
+          {/* =================================================
+              SHOP
+          ================================================== */}
 
           <div className="relative">
             <button
               type="button"
               aria-expanded={shopOpen}
+              aria-haspopup="menu"
               onClick={() => {
-                setShopOpen(!shopOpen);
+                setShopOpen((value) => !value);
                 setPlatformOpen(false);
               }}
-              className="
+              className={`
                 flex
                 items-center
                 gap-[0.25vw]
-                text-[0.72vw]
-                font-medium
-                text-[var(--text-secondary)]
-                transition-colors
-                hover:text-[var(--text)]
-              "
+                ${navTextClass}
+              `}
             >
               Shop
 
               <ChevronDown
                 size={12}
+                strokeWidth={1.8}
                 className={`
+                  shrink-0
                   transition-transform
                   duration-200
                   ${shopOpen ? "rotate-180" : ""}
@@ -356,13 +383,15 @@ export default function Header() {
 
             {shopOpen && (
               <div
+                role="menu"
                 className="
                   absolute
                   left-[-0.8vw]
                   top-[calc(100%+1.15vw)]
+                  z-[110]
                   w-[13vw]
                   min-w-[180px]
-                  rounded-[12px]
+                  rounded-[0.65vw]
                   border
                   border-[var(--border)]
                   bg-[var(--dropdown-bg)]
@@ -375,19 +404,21 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    role="menuitem"
                     onClick={() => setShopOpen(false)}
                     className="
                       block
-                      rounded-[8px]
+                      rounded-[0.45vw]
                       px-[0.75vw]
                       py-[0.65vw]
-                      text-[0.68vw]
+                      text-[0.72vw]
                       font-medium
+                      leading-none
+                      tracking-[-0.01em]
                       text-[var(--text-secondary)]
                       transition-colors
                       hover:bg-[var(--surface-hover)]
                       hover:text-[var(--text)]
-                      max-[1100px]:text-[10px]
                     "
                   >
                     {item.label}
@@ -397,19 +428,15 @@ export default function Header() {
             )}
           </div>
 
-          {/* MAIN LINKS */}
+          {/* =================================================
+              CUSTOM STUDIO / COLLECTIONS / SUPPORT
+          ================================================== */}
 
           {mainLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="
-                text-[0.72vw]
-                font-medium
-                text-[var(--text-secondary)]
-                transition-colors
-                hover:text-[var(--text)]
-              "
+              className={navTextClass}
             >
               {item.label}
             </Link>
@@ -440,7 +467,7 @@ export default function Header() {
               min-w-[36px]
               items-center
               justify-center
-              rounded-[9px]
+              rounded-[0.6vw]
               border
               border-[var(--border)]
               bg-[var(--surface)]
@@ -451,7 +478,10 @@ export default function Header() {
               hover:text-[var(--text)]
             "
           >
-            <Search size={15} />
+            <Search
+              size={15}
+              strokeWidth={1.8}
+            />
           </Link>
 
           {/* LOGIN */}
@@ -464,6 +494,7 @@ export default function Header() {
               py-[0.6vw]
               text-[0.7vw]
               font-semibold
+              leading-none
               text-[var(--text-secondary)]
               transition-colors
               hover:text-[var(--text)]
@@ -482,10 +513,11 @@ export default function Header() {
               hidden
               h-[2.35vw]
               min-h-[36px]
-              rounded-[9px]
+              rounded-[0.6vw]
               px-[1vw]
               text-[0.68vw]
-              max-[1100px]:text-[10px]
+              font-semibold
+              leading-none
               lg:inline-flex
             "
           >
@@ -510,7 +542,7 @@ export default function Header() {
               min-w-[36px]
               items-center
               justify-center
-              rounded-[9px]
+              rounded-[0.6vw]
               border
               border-[var(--border)]
               bg-[var(--surface)]
@@ -522,9 +554,9 @@ export default function Header() {
             "
           >
             {darkMode ? (
-              <Sun size={15} />
+              <Sun size={15} strokeWidth={1.8} />
             ) : (
-              <Moon size={15} />
+              <Moon size={15} strokeWidth={1.8} />
             )}
           </button>
 
@@ -541,7 +573,7 @@ export default function Header() {
               min-w-[36px]
               items-center
               justify-center
-              rounded-[9px]
+              rounded-[0.6vw]
               border
               border-[var(--border)]
               bg-[var(--surface)]
@@ -553,7 +585,10 @@ export default function Header() {
               md:flex
             "
           >
-            <UserRound size={15} />
+            <UserRound
+              size={15}
+              strokeWidth={1.8}
+            />
           </Link>
 
           {/* CART */}
@@ -570,7 +605,7 @@ export default function Header() {
               min-w-[36px]
               items-center
               justify-center
-              rounded-[9px]
+              rounded-[0.6vw]
               border
               border-[var(--border)]
               bg-[var(--surface)]
@@ -581,23 +616,28 @@ export default function Header() {
               hover:text-[var(--text)]
             "
           >
-            <ShoppingBag size={15} />
+            <ShoppingBag
+              size={15}
+              strokeWidth={1.8}
+            />
 
             <span
               className="
                 absolute
-                right-[-3px]
-                top-[-4px]
+                right-[-0.2vw]
+                top-[-0.25vw]
                 flex
-                h-[14px]
+                h-[0.9vw]
+                min-h-[14px]
                 min-w-[14px]
                 items-center
                 justify-center
                 rounded-full
                 bg-[var(--primary)]
-                px-[3px]
-                text-[8px]
+                px-[0.2vw]
+                text-[0.5vw]
                 font-bold
+                leading-none
                 text-white
               "
             >
@@ -605,12 +645,12 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* MOBILE */}
+          {/* MOBILE MENU */}
 
           <button
             type="button"
             onClick={() => {
-              setMobileOpen(!mobileOpen);
+              setMobileOpen((value) => !value);
               setPlatformOpen(false);
               setShopOpen(false);
             }}
@@ -625,7 +665,7 @@ export default function Header() {
               w-[36px]
               items-center
               justify-center
-              rounded-[9px]
+              rounded-[0.6vw]
               border
               border-[var(--border)]
               bg-[var(--surface)]
@@ -665,7 +705,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() =>
-                    setPlatformOpen(!platformOpen)
+                    setPlatformOpen((value) => !value)
                   }
                   className="
                     flex
@@ -676,6 +716,7 @@ export default function Header() {
                     text-left
                     text-[14px]
                     font-semibold
+                    leading-none
                     text-[var(--text)]
                   "
                 >
@@ -683,11 +724,11 @@ export default function Header() {
 
                   <ChevronDown
                     size={16}
-                    className={
-                      platformOpen
-                        ? "rotate-180"
-                        : ""
-                    }
+                    className={`
+                      transition-transform
+                      duration-200
+                      ${platformOpen ? "rotate-180" : ""}
+                    `}
                   />
                 </button>
 
@@ -703,6 +744,8 @@ export default function Header() {
                           py-[2.5vw]
                           pl-[2vw]
                           text-[12px]
+                          font-medium
+                          leading-none
                           text-[var(--text-secondary)]
                         "
                       >
@@ -719,7 +762,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() =>
-                    setShopOpen(!shopOpen)
+                    setShopOpen((value) => !value)
                   }
                   className="
                     flex
@@ -730,6 +773,7 @@ export default function Header() {
                     text-left
                     text-[14px]
                     font-semibold
+                    leading-none
                     text-[var(--text)]
                   "
                 >
@@ -737,11 +781,11 @@ export default function Header() {
 
                   <ChevronDown
                     size={16}
-                    className={
-                      shopOpen
-                        ? "rotate-180"
-                        : ""
-                    }
+                    className={`
+                      transition-transform
+                      duration-200
+                      ${shopOpen ? "rotate-180" : ""}
+                    `}
                   />
                 </button>
 
@@ -757,6 +801,8 @@ export default function Header() {
                           py-[2.5vw]
                           pl-[2vw]
                           text-[12px]
+                          font-medium
+                          leading-none
                           text-[var(--text-secondary)]
                         "
                       >
@@ -780,6 +826,7 @@ export default function Header() {
                     py-[3.2vw]
                     text-[14px]
                     font-semibold
+                    leading-none
                     text-[var(--text)]
                   "
                 >
@@ -790,11 +837,14 @@ export default function Header() {
               {/* ACCOUNT ACTIONS */}
 
               <div className="mt-[4vw] grid grid-cols-2 gap-[2vw]">
-
                 <Button
                   href="/sign-in"
                   variant="secondary"
-                  className="h-[46px] text-[12px]"
+                  className="
+                    h-[46px]
+                    text-[12px]
+                    leading-none
+                  "
                 >
                   Log in
                 </Button>
@@ -802,11 +852,14 @@ export default function Header() {
                 <Button
                   href="/sign-up"
                   variant="primary"
-                  className="h-[46px] text-[12px]"
+                  className="
+                    h-[46px]
+                    text-[12px]
+                    leading-none
+                  "
                 >
                   Become a Client
                 </Button>
-
               </div>
             </nav>
           </Container>
