@@ -1,14 +1,8 @@
+
 "use client";
 
-import {
-  ArrowRight,
-  Check,
-  MessageCircle,
-  Package,
-  Ruler,
-  Scissors,
-  ShoppingBag,
-} from "lucide-react";
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 import Container from "@/components/ui/container";
 import Button from "@/components/ui/button";
@@ -19,72 +13,78 @@ const journeySteps = [
     title: "Become a Client",
     description:
       "Create your account in seconds and unlock your personal dashboard.",
-    icon: Check,
   },
   {
     number: "02",
     title: "Explore & Choose",
     description:
       "Browse collections, select ready-to-wear or start a custom piece.",
-    icon: ShoppingBag,
   },
   {
     number: "03",
     title: "Chat & Consult",
     description:
       "Talk to our team about fit, fabric, design and measurements.",
-    icon: MessageCircle,
   },
   {
     number: "04",
     title: "Order & Pay",
     description:
       "Confirm details, address and secure payment from checkout.",
-    icon: Package,
   },
   {
     number: "05",
     title: "We Craft It",
     description:
       "Follow measurement review, cutting, stitching and quality checks.",
-    icon: Scissors,
   },
   {
     number: "06",
     title: "Track Delivery",
     description:
       "Get shipment updates until your finished piece arrives.",
-    icon: Ruler,
   },
 ];
 
 export default function ClientJourney() {
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null);
+
   return (
-    <section className="relative ">
+    <section className="relative">
       <Container>
         <div
           className="
             relative
             overflow-hidden
-            rounded-[24px]
+            rounded-[20px]
             border
             border-[var(--border)]
             bg-[var(--surface)]
-            px-[2.1vw]
-            py-[2.2vw]
+            px-4
+            py-6
             backdrop-blur-2xl
+
+            sm:rounded-[22px]
+            sm:px-6
+            sm:py-8
+
+            lg:rounded-[24px]
+            lg:px-8
+            lg:py-9
+
+            xl:px-10
           "
         >
           {/* =================================================
-              LIGHT / DARK AMBIENT GLOW
+              AMBIENT GLOW
           ================================================== */}
 
           <div
             className="
               pointer-events-none
               absolute
-              left-[-10%]
-              top-[-35%]
+              -left-[10%]
+              -top-[35%]
               h-[70%]
               w-[45%]
               rounded-full
@@ -99,7 +99,7 @@ export default function ClientJourney() {
             className="
               pointer-events-none
               absolute
-              right-[-10%]
+              -right-[10%]
               top-[10%]
               h-[55%]
               w-[35%]
@@ -120,20 +120,22 @@ export default function ClientJourney() {
               relative
               z-10
               flex
-              items-end
-              justify-between
-              gap-8
-              max-md:flex-col
-              max-md:items-start
+              flex-col
+              gap-5
+
+              md:flex-row
+              md:items-end
+              md:justify-between
+              md:gap-8
             "
           >
-            <div>
+            <div className="max-w-[700px]">
               <div
                 className="
-                  mb-[0.7vw]
+                  mb-3
                   flex
                   items-center
-                  gap-[8px]
+                  gap-2
                   text-[10px]
                   font-semibold
                   uppercase
@@ -143,8 +145,9 @@ export default function ClientJourney() {
               >
                 <span
                   className="
-                    h-[6px]
-                    w-[6px]
+                    h-1.5
+                    w-1.5
+                    shrink-0
                     rounded-full
                     bg-[var(--primary)]
                   "
@@ -155,7 +158,7 @@ export default function ClientJourney() {
 
               <h2
                 className="
-                  text-[clamp(32px,3vw,48px)]
+                  text-[clamp(30px,4vw,48px)]
                   font-semibold
                   leading-[0.98]
                   tracking-[-0.045em]
@@ -168,11 +171,13 @@ export default function ClientJourney() {
 
             <p
               className="
-                max-w-[400px]
-                text-[12px]
-                leading-[1.55]
+                max-w-[520px]
+                text-[13px]
+                leading-[1.6]
                 text-[var(--text-secondary)]
-                max-md:max-w-[520px]
+
+                md:max-w-[400px]
+                md:text-[12px]
               "
             >
               Everything happens inside your account. Save your
@@ -185,49 +190,47 @@ export default function ClientJourney() {
               JOURNEY
           ================================================== */}
 
-          <div className="relative z-10 mt-[2.8vw]">
-            {/* Journey Line */}
-
-            <div
-              className="
-                pointer-events-none
-                absolute
-                left-[2.1%]
-                right-[2.1%]
-                top-[28px]
-                h-px
-                bg-[var(--border)]
-                max-md:hidden
-              "
-            />
-
-            <div
-              className="
-                pointer-events-none
-                absolute
-                left-[2.1%]
-                top-[28px]
-                h-px
-                w-[16%]
-                bg-[var(--primary)]
-                max-md:hidden
-              "
-            />
-
-            {/* Steps */}
-
+          <div
+            className="relative z-10 mt-8 sm:mt-10 lg:mt-11"
+            onMouseLeave={() => setHoveredStep(null)}
+          >
             <div
               className="
                 grid
-                grid-cols-6
-                gap-[1.2vw]
-                max-lg:grid-cols-3
-                max-md:grid-cols-1
+                grid-cols-1
+                gap-3
+
+                sm:grid-cols-2
+                sm:gap-4
+
+                lg:grid-cols-3
+                lg:gap-x-6
+                lg:gap-y-10
+
+                xl:grid-cols-6
+                xl:gap-5
               "
             >
               {journeySteps.map((step, index) => {
-                const Icon = step.icon;
-                const isActive = index === 0;
+                /*
+                 * Current step + all previous steps
+                 * become active.
+                 */
+                const isActive =
+                  hoveredStep !== null && index <= hoveredStep;
+
+                /*
+                 * The divider after this step becomes active
+                 * when this step has been reached.
+                 *
+                 * Example:
+                 * Hover 03 → lines after 01, 02 and 03 active.
+                 *
+                 * There is no line after 06 because the
+                 * connector is only rendered when index < 5.
+                 */
+                const isLineActive =
+                  hoveredStep !== null && index <= hoveredStep;
 
                 return (
                   <div
@@ -236,30 +239,119 @@ export default function ClientJourney() {
                       group
                       relative
                       min-w-0
+
+                      rounded-[12px]
+                      border
+                      border-[var(--border)]
+                      bg-[var(--bg)]
+                      p-4
+
+                      transition-all
+                      duration-300
+
+                      sm:p-5
+
+                      lg:border-0
+                      lg:bg-transparent
+                      lg:p-0
                     "
+                    onMouseEnter={() => setHoveredStep(index)}
                   >
-                    {/* Step Number */}
+                    {/* =================================================
+                        DESKTOP CONNECTOR
+                        No connector after 06
+                    ================================================== */}
+
+                    {index < journeySteps.length - 1 && (
+                      <div
+                        className="
+                          pointer-events-none
+                          absolute
+                          left-[56px]
+                          right-[-20px]
+                          top-[28px]
+                          z-0
+                          hidden
+                          h-[2px]
+                          overflow-hidden
+                          rounded-full
+                          bg-[var(--border)]
+
+                          xl:block
+                        "
+                      >
+                        <span
+                          className={`
+                            block
+                            h-full
+                            origin-left
+                            rounded-full
+                            bg-[var(--primary)]
+                            transition-[width]
+                            duration-500
+                            ease-out
+
+                            ${
+                              isLineActive
+                                ? "w-full"
+                                : "w-0"
+                            }
+                          `}
+                        />
+                      </div>
+                    )}
+
+                    {/* =================================================
+                        MOBILE CONNECTOR
+                    ================================================== */}
+
+                    {index < journeySteps.length - 1 && (
+                      <span
+                        className="
+                          pointer-events-none
+                          absolute
+                          bottom-[-13px]
+                          left-[27px]
+                          z-0
+                          h-3
+                          w-px
+                          bg-[var(--border)]
+
+                          sm:left-[27px]
+
+                          lg:hidden
+                        "
+                      />
+                    )}
+
+                    {/* =================================================
+                        NUMBER
+                    ================================================== */}
 
                     <div
                       className={`
                         relative
                         z-10
                         flex
-                        h-[56px]
-                        w-[56px]
+                        h-14
+                        w-14
+                        shrink-0
                         items-center
                         justify-center
                         rounded-[14px]
-                        border-[3px]
+                        border-[2px]
                         text-[11px]
                         font-semibold
+                        leading-none
+
                         transition-all
                         duration-300
+                        ease-out
 
                         ${
                           isActive
                             ? `
-                              border-[var(--text)]
+                              border-white
                               bg-[var(--primary)]
                               text-white
                               shadow-[0_8px_25px_rgba(229,30,50,0.22)]
@@ -268,8 +360,6 @@ export default function ClientJourney() {
                               border-[var(--border)]
                               bg-[var(--bg-secondary)]
                               text-[var(--text-tertiary)]
-                              group-hover:border-[var(--primary)]
-                              group-hover:text-[var(--primary)]
                             `
                         }
                       `}
@@ -277,12 +367,14 @@ export default function ClientJourney() {
                       {step.number}
                     </div>
 
-                    {/* Content */}
+                    {/* =================================================
+                        CONTENT
+                    ================================================== */}
 
-                    <div className="mt-[10px]">
+                    <div className="mt-3">
                       <div
                         className="
-                          mb-[5px]
+                          mb-1.5
                           text-[9px]
                           font-semibold
                           uppercase
@@ -290,15 +382,17 @@ export default function ClientJourney() {
                           text-[var(--primary)]
                         "
                       >
-                        {step.number}
+                        Step {step.number}
                       </div>
 
                       <h3
                         className="
-                          text-[12px]
+                          text-[13px]
                           font-semibold
-                          leading-[1.2]
+                          leading-[1.25]
                           text-[var(--text)]
+
+                          sm:text-[14px]
                         "
                       >
                         {step.title}
@@ -306,32 +400,17 @@ export default function ClientJourney() {
 
                       <p
                         className="
-                          mt-[8px]
-                          max-w-[180px]
-                          text-[10px]
-                          leading-[1.45]
+                          mt-2
+                          max-w-[230px]
+                          text-[11px]
+                          leading-[1.5]
                           text-[var(--text-secondary)]
+
+                          sm:text-[12px]
                         "
                       >
                         {step.description}
                       </p>
-                    </div>
-
-                    {/* Icon */}
-
-                    <div
-                      className="
-                        absolute
-                        right-[4px]
-                        top-[8px]
-                        opacity-0
-                        transition-all
-                        duration-300
-                        group-hover:opacity-50
-                        max-md:hidden
-                      "
-                    >
-                      <Icon size={14} />
                     </div>
                   </div>
                 );
@@ -347,38 +426,61 @@ export default function ClientJourney() {
             className="
               relative
               z-10
-              mt-[2.4vw]
+              mt-8
               flex
-              items-center
-              justify-between
-              gap-6
+              flex-col
+              gap-5
               border-t
               border-[var(--border)]
-              pt-[1.5vw]
-              max-md:flex-col
-              max-md:items-start
+              pt-5
+
+              sm:mt-10
+              sm:pt-6
+
+              md:flex-row
+              md:items-center
+              md:justify-between
+              md:gap-6
             "
           >
             <p
               className="
+                max-w-[620px]
                 text-[11px]
-                leading-[1.4]
+                leading-[1.5]
                 text-[var(--text-secondary)]
+
+                sm:text-[12px]
               "
             >
               Already a client? Sign in to continue to your
               orders, measurements and conversations.
             </p>
 
-            <div className="flex shrink-0 items-center gap-[8px]">
+            <div
+              className="
+                grid
+                w-full
+                grid-cols-2
+                gap-2
+
+                md:flex
+                md:w-auto
+                md:shrink-0
+              "
+            >
               <Button
                 href="/sign-in"
                 variant="secondary"
                 className="
-                  h-[42px]
+                  h-11
+                  w-full
                   rounded-[9px]
-                  px-[18px]
-                  text-[11px]
+                  px-4
+                  text-[13px]
+
+                  md:w-auto
+                  md:px-[18px]
                 "
               >
                 Log in
@@ -388,10 +490,14 @@ export default function ClientJourney() {
                 href="/sign-up"
                 variant="primary"
                 className="
-                  h-[42px]
+                  h-11
+                  w-full
                   rounded-[9px]
-                  px-[18px]
-                  text-[11px]
+                  px-4
+                  text-[13px]
+
+                  md:w-auto
+                  md:px-[18px]
                 "
               >
                 Become a Client
@@ -404,3 +510,4 @@ export default function ClientJourney() {
     </section>
   );
 }
+

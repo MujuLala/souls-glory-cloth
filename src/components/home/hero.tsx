@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -19,56 +20,63 @@ import Button from "@/components/ui/button";
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-transparent">
-      {/* =====================================================
-          MAIN CONTENT
-      ====================================================== */}
-
       <Container className="relative z-10">
+        {/* =====================================================
+            MAIN HERO
+        ====================================================== */}
+
         <div
           className="
             grid
-            min-h-[calc(100vh-7vw)]
             grid-cols-1
             items-center
-            gap-[7vw]
-            py-[5vw]
+            gap-12
+            py-12
 
+            sm:gap-14
+            sm:py-16
+
+            lg:min-h-[calc(100vh-72px)]
             lg:grid-cols-[0.9fr_1.1fr]
-            lg:gap-[3vw]
-            lg:py-[3.8vw]
+            lg:gap-10
+            lg:py-12
+
+            xl:gap-14
+            xl:py-14
+
+            2xl:gap-16
           "
         >
           {/* =================================================
               LEFT CONTENT
           ================================================== */}
 
-          <div className="relative z-10">
-            {/* =================================================
-                EYEBROW
-            ================================================== */}
+          <div className="relative z-10 max-w-[680px]">
+            {/* EYEBROW */}
 
             <div
               className="
-                mb-[1.2vw]
+                mb-5
                 inline-flex
                 items-center
-                gap-[0.45vw]
+                gap-2
                 rounded-full
                 border
                 border-[var(--border)]
                 bg-[var(--surface)]
-                px-[0.75vw]
-                py-[0.4vw]
+                px-3
+                py-2
                 backdrop-blur-xl
+
+                sm:mb-6
               "
             >
               <span
                 className="
                   flex
-                  h-[1.15vw]
-                  w-[1.15vw]
-                  min-h-[10px]
-                  min-w-[10px]
+                  h-5
+                  w-5
+                  shrink-0
                   items-center
                   justify-center
                   rounded-full
@@ -81,25 +89,26 @@ export default function Hero() {
 
               <span
                 className="
-                  text-[0.62vw]
+                  text-[10px]
                   font-semibold
                   uppercase
-                  tracking-[0.12em]
                   leading-none
+                  tracking-[0.12em]
                   text-[var(--text-secondary)]
+
+                  sm:text-[11px]
                 "
               >
                 Personal fashion platform
               </span>
             </div>
 
-            {/* =================================================
-                HEADING
-            ================================================== */}
+            {/* HEADING */}
 
             <h1
               className="
-                text-[5.2vw]
+                max-w-[760px]
+                text-[clamp(2.8rem,6vw,5.2rem)]
                 font-bold
                 leading-[0.94]
                 tracking-[-0.065em]
@@ -114,17 +123,21 @@ export default function Hero() {
               </span>
             </h1>
 
-            {/* =================================================
-                DESCRIPTION
-            ================================================== */}
+            {/* DESCRIPTION */}
 
             <p
               className="
-                mt-[1.4vw]
-                w-[38vw]
-                text-[0.95vw]
+                mt-6
+                max-w-[620px]
+                text-[15px]
                 leading-[1.65]
                 text-[var(--text-secondary)]
+
+                sm:mt-7
+                sm:text-[16px]
+
+                lg:max-w-[570px]
+                xl:text-[17px]
               "
             >
               Shop ready-to-wear pieces or create garments tailored
@@ -133,32 +146,40 @@ export default function Hero() {
               all in one place.
             </p>
 
-            {/* =================================================
-                ACTIONS
-            ================================================== */}
+            {/* ACTIONS */}
 
             <div
               className="
-                mt-[1.8vw]
+                mt-7
                 flex
-                flex-wrap
-                items-center
-                gap-[0.65vw]
+                flex-col
+                gap-3
+
+                sm:flex-row
+                sm:flex-wrap
+                sm:items-center
+                sm:gap-2.5
+
+                lg:mt-8
               "
             >
               <Button
                 href="/sign-up"
                 variant="primary"
                 className="
-                  h-[3.05vw]
-                  px-[1.35vw]
-                  text-[0.7vw]
+                  h-12
+                  w-full
+                  px-5
+                  text-[14px]
+
+                  sm:w-auto
+                  sm:text-[15px]
                 "
               >
                 Become a Client
 
                 <ArrowRight
-                  size={14}
+                  size={15}
                   className="
                     transition-transform
                     duration-300
@@ -171,9 +192,13 @@ export default function Hero() {
                 href="/shop"
                 variant="secondary"
                 className="
-                  h-[3.05vw]
-                  px-[1.35vw]
-                  text-[0.7vw]
+                  h-12
+                  w-full
+                  px-5
+                  text-[14px]
+
+                  sm:w-auto
+                  sm:text-[15px]
                 "
               >
                 Explore Collection
@@ -183,23 +208,28 @@ export default function Hero() {
                 href="/custom-studio"
                 className="
                   group
-                  ml-[0.25vw]
                   inline-flex
+                  min-h-11
                   items-center
-                  gap-[0.5vw]
-                  text-[0.66vw]
+                  justify-center
+                  gap-2
+                  px-2
+                  text-[13px]
                   font-semibold
                   leading-none
                   text-[var(--text-secondary)]
                   transition-colors
                   hover:text-[var(--text)]
+
+                  sm:justify-start
                 "
               >
                 <span
                   className="
                     flex
-                    h-[1.9vw]
-                    w-[1.9vw]
+                    h-8
+                    w-8
+                    shrink-0
                     items-center
                     justify-center
                     rounded-full
@@ -221,38 +251,36 @@ export default function Hero() {
               </Link>
             </div>
 
-            {/* =================================================
-                TRUST FEATURES
-            ================================================== */}
+            {/* TRUST FEATURES */}
 
             <div
               className="
-                mt-[1.8vw]
+                mt-7
                 flex
                 flex-wrap
-                gap-[1.25vw]
+                gap-x-5
+                gap-y-3
+
+                sm:mt-8
+                sm:gap-x-6
               "
             >
               <TrustItem label="Made to measure" />
-
               <TrustItem label="Worldwide delivery" />
-
               <TrustItem label="Personal support" />
             </div>
 
-            {/* =================================================
-                MINI CLIENT STATUS
-            ================================================== */}
+            {/* MINI CLIENT STATUS */}
 
             <div
               className="
-                mt-[2.2vw]
+                mt-8
                 flex
                 items-center
-                gap-[0.8vw]
+                gap-3
               "
             >
-              <div className="flex -space-x-[0.35vw]">
+              <div className="flex -space-x-2">
                 <Avatar letter="M" />
                 <Avatar letter="A" />
                 <Avatar letter="S" />
@@ -260,10 +288,10 @@ export default function Hero() {
               </div>
 
               <div>
-                <div className="flex items-center gap-[0.25vw]">
+                <div className="flex items-center gap-1.5">
                   <span
                     className="
-                      text-[0.72vw]
+                      text-[14px]
                       font-bold
                       leading-none
                       text-[var(--text)]
@@ -274,7 +302,7 @@ export default function Hero() {
 
                   <span
                     className="
-                      text-[0.6vw]
+                      text-[12px]
                       leading-none
                       text-[var(--text-secondary)]
                     "
@@ -285,8 +313,8 @@ export default function Hero() {
 
                 <p
                   className="
-                    mt-[0.25vw]
-                    text-[0.52vw]
+                    mt-1
+                    text-[10px]
                     leading-none
                     text-[var(--text-tertiary)]
                   "
@@ -305,77 +333,90 @@ export default function Hero() {
             className="
               relative
               flex
-              min-h-[38vw]
+              min-h-[430px]
               items-center
               justify-center
+
+              sm:min-h-[520px]
+
+              lg:min-h-[560px]
+              xl:min-h-[620px]
             "
           >
-            {/* =================================================
-                MAIN IMAGE GLOW
-            ================================================== */}
+            {/* IMAGE GLOW */}
 
             <div
               className="
                 pointer-events-none
                 absolute
-                h-[25vw]
-                w-[25vw]
+                h-[280px]
+                w-[280px]
                 rounded-full
                 bg-[var(--primary)]
                 opacity-[0.11]
-                blur-[7vw]
+                blur-[90px]
+
+                sm:h-[360px]
+                sm:w-[360px]
+                sm:blur-[110px]
+
+                lg:h-[400px]
+                lg:w-[400px]
               "
             />
 
-            {/* =================================================
-                MAIN IMAGE CARD
-            ================================================== */}
+            {/* MAIN IMAGE CARD */}
 
             <div
               className="
                 relative
                 z-10
-                w-[36vw]
+                w-full
+                max-w-[560px]
                 overflow-hidden
-                rounded-[1.45vw]
+                rounded-[22px]
                 border
                 border-[var(--border)]
                 bg-[var(--surface)]
-                p-[0.55vw]
-                shadow-[0_2vw_6vw_rgba(0,0,0,0.38)]
+                p-2
+                shadow-[0_30px_90px_rgba(0,0,0,0.38)]
                 backdrop-blur-2xl
+
+                sm:rounded-[24px]
+                sm:p-2.5
+
+                lg:w-[520px]
+                xl:w-[580px]
               "
             >
-              {/* =================================================
-                  IMAGE
-              ================================================== */}
+              {/* IMAGE */}
 
               <div
                 className="
                   relative
                   aspect-[1.1]
                   overflow-hidden
-                  rounded-[1.05vw]
+                  rounded-[16px]
                   bg-[#161616]
+
+                  sm:rounded-[18px]
                 "
               >
                 <Image
-                  src="/images/hero-fashion.jpg"
-                  alt="Soul's Glory custom fashion"
-                  fill
-                  priority
-                  sizes="36vw"
-                  className="
-                    object-cover
-                    transition-transform
-                    duration-700
-                    hover:scale-[1.035]
-                  "
-                />
+  src="/images/hero-fashion.jpg"
+  alt="Soul's Glory custom fashion"
+  fill
+  priority
+  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 70vw, 580px"
+  className="
+    object-cover
+    transition-transform
+    duration-700
+    hover:scale-[1.035]
+  "
+/>
 
-                {/* =================================================
-                    IMAGE OVERLAY
-                ================================================== */}
+                {/* OVERLAY */}
 
                 <div
                   className="
@@ -388,37 +429,38 @@ export default function Hero() {
                   "
                 />
 
-                {/* =================================================
-                    TOP LABEL
-                ================================================== */}
+                {/* TOP LABEL */}
 
                 <div
                   className="
                     absolute
-                    left-[1vw]
-                    top-[1vw]
+                    left-4
+                    top-4
                     flex
                     items-center
-                    gap-[0.45vw]
+                    gap-2
                     rounded-full
                     border
                     border-white/15
                     bg-black/35
-                    px-[0.7vw]
-                    py-[0.35vw]
-                    text-[0.52vw]
+                    px-3
+                    py-2
+                    text-[9px]
                     font-semibold
                     uppercase
                     tracking-[0.12em]
                     leading-none
                     text-white
                     backdrop-blur-xl
+
+                    sm:left-5
+                    sm:top-5
                   "
                 >
                   <span
                     className="
-                      h-[0.35vw]
-                      w-[0.35vw]
+                      h-1.5
+                      w-1.5
                       rounded-full
                       bg-[var(--primary)]
                     "
@@ -427,23 +469,25 @@ export default function Hero() {
                   Custom Collection
                 </div>
 
-                {/* =================================================
-                    BOTTOM CONTENT
-                ================================================== */}
+                {/* BOTTOM CONTENT */}
 
                 <div
                   className="
                     absolute
-                    bottom-[1vw]
-                    left-[1vw]
-                    right-[1vw]
+                    bottom-4
+                    left-4
+                    right-4
+
+                    sm:bottom-5
+                    sm:left-5
+                    sm:right-5
                   "
                 >
-                  <div className="flex items-end justify-between">
+                  <div className="flex items-end justify-between gap-4">
                     <div>
                       <p
                         className="
-                          text-[0.52vw]
+                          text-[9px]
                           font-medium
                           uppercase
                           tracking-[0.12em]
@@ -456,12 +500,14 @@ export default function Hero() {
 
                       <h2
                         className="
-                          mt-[0.35vw]
-                          text-[1.2vw]
+                          mt-1.5
+                          text-[18px]
                           font-semibold
                           leading-none
                           tracking-[-0.04em]
                           text-white
+
+                          sm:text-[21px]
                         "
                       >
                         Your fit. Your style.
@@ -471,47 +517,49 @@ export default function Hero() {
                     <div
                       className="
                         flex
-                        h-[2.5vw]
-                        w-[2.5vw]
+                        h-10
+                        w-10
+                        shrink-0
                         items-center
                         justify-center
                         rounded-full
                         bg-white
                         text-black
+
+                        sm:h-11
+                        sm:w-11
                       "
                     >
-                      <ArrowRight size={14} />
+                      <ArrowRight size={15} />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* =================================================
-                  PRODUCT INFO
-              ================================================== */}
+              {/* PRODUCT INFO */}
 
               <div
                 className="
                   grid
                   grid-cols-3
-                  gap-[0.4vw]
-                  p-[0.4vw]
+                  gap-1.5
+                  p-1.5
                 "
               >
                 <InfoItem
-                  icon={<Ruler size={11} />}
+                  icon={<Ruler size={12} />}
                   label="Fit"
                   value="Personal"
                 />
 
                 <InfoItem
-                  icon={<Sparkles size={11} />}
+                  icon={<Sparkles size={12} />}
                   label="Fabric"
                   value="Premium"
                 />
 
                 <InfoItem
-                  icon={<ShoppingBag size={11} />}
+                  icon={<ShoppingBag size={12} />}
                   label="Delivery"
                   value="Worldwide"
                 />
@@ -519,31 +567,41 @@ export default function Hero() {
             </div>
 
             {/* =================================================
-                CLIENT DASHBOARD CARD
+                CLIENT DASHBOARD
             ================================================== */}
 
             <div
               className="
                 absolute
-                bottom-[3.5vw]
-                left-[-8.3vw]
+                bottom-8
+                left-0
                 z-20
-                w-[13vw]
-                rounded-[0.8vw]
+                hidden
+                w-[205px]
+                rounded-[14px]
                 border
                 border-[var(--border)]
                 bg-[var(--dropdown-bg)]
-                p-[0.8vw]
-                shadow-[0_1.5vw_4.5vw_rgba(0,0,0,0.32)]
+                p-3
+                shadow-[0_20px_60px_rgba(0,0,0,0.32)]
                 backdrop-blur-2xl
+
+                sm:block
+                sm:left-2
+
+                lg:-left-8
+                lg:bottom-14
+                lg:w-[210px]
+
+                xl:-left-12
               "
             >
-              <div className="flex items-center gap-[0.6vw]">
+              <div className="flex items-center gap-2.5">
                 <div
                   className="
                     flex
-                    h-[2vw]
-                    w-[2vw]
+                    h-9
+                    w-9
                     shrink-0
                     items-center
                     justify-center
@@ -558,7 +616,7 @@ export default function Hero() {
                 <div className="min-w-0">
                   <p
                     className="
-                      text-[0.5vw]
+                      text-[9px]
                       font-medium
                       leading-none
                       text-[var(--text-tertiary)]
@@ -569,9 +627,9 @@ export default function Hero() {
 
                   <p
                     className="
-                      mt-[0.25vw]
+                      mt-1.5
                       truncate
-                      text-[0.62vw]
+                      text-[11px]
                       font-semibold
                       leading-none
                       text-[var(--text)]
@@ -582,28 +640,10 @@ export default function Hero() {
                 </div>
               </div>
 
-              <div
-                className="
-                  mt-[0.8vw]
-                  grid
-                  grid-cols-3
-                  gap-[0.2vw]
-                "
-              >
-                <DashboardStat
-                  value="03"
-                  label="Orders"
-                />
-
-                <DashboardStat
-                  value="02"
-                  label="Fits"
-                />
-
-                <DashboardStat
-                  value="01"
-                  label="Chat"
-                />
+              <div className="mt-3 grid grid-cols-3 gap-1">
+                <DashboardStat value="03" label="Orders" />
+                <DashboardStat value="02" label="Fits" />
+                <DashboardStat value="01" label="Chat" />
               </div>
             </div>
 
@@ -614,27 +654,35 @@ export default function Hero() {
             <div
               className="
                 absolute
-                right-[-1vw]
-                top-[6vw]
+                right-0
+                top-10
                 z-20
-                flex
+                hidden
                 items-center
-                gap-[0.45vw]
+                gap-2
                 rounded-full
                 border
                 border-[var(--border)]
                 bg-[var(--dropdown-bg)]
-                px-[0.7vw]
-                py-[0.5vw]
-                shadow-[0_1.2vw_3.5vw_rgba(0,0,0,0.25)]
+                px-3
+                py-2.5
+                shadow-[0_20px_55px_rgba(0,0,0,0.25)]
                 backdrop-blur-2xl
+
+                sm:flex
+                sm:right-0
+
+                lg:right-[-8px]
+                lg:top-20
+
+                xl:right-[-18px]
               "
             >
               <span
                 className="
                   flex
-                  h-[1.5vw]
-                  w-[1.5vw]
+                  h-7
+                  w-7
                   items-center
                   justify-center
                   rounded-full
@@ -647,7 +695,7 @@ export default function Hero() {
 
               <span
                 className="
-                  text-[0.52vw]
+                  text-[10px]
                   font-semibold
                   leading-none
                   text-[var(--text)]
@@ -658,8 +706,8 @@ export default function Hero() {
 
               <span
                 className="
-                  h-[0.35vw]
-                  w-[0.35vw]
+                  h-1.5
+                  w-1.5
                   rounded-full
                   bg-green-500
                 "
@@ -675,11 +723,17 @@ export default function Hero() {
         <div
           className="
             grid
+            gap-3
             border-t
             border-[var(--border)]
-            py-[1.35vw]
-            gap-[2.25vw]
+            py-5
+
             sm:grid-cols-3
+            sm:gap-4
+            sm:py-6
+
+            lg:gap-6
+            lg:py-7
           "
         >
           <PlatformBenefit
@@ -692,7 +746,6 @@ export default function Hero() {
             number="02"
             title="Choose your experience"
             description="Ready-to-wear or custom-made"
-            
           />
 
           <PlatformBenefit
@@ -710,24 +763,15 @@ export default function Hero() {
    TRUST ITEM
 ========================================================= */
 
-function TrustItem({
-  label,
-}: {
-  label: string;
-}) {
+function TrustItem({ label }: { label: string }) {
   return (
-    <div
-      className="
-        flex
-        items-center
-        gap-[0.4vw]
-      "
-    >
+    <div className="flex items-center gap-2">
       <span
         className="
           flex
-          h-[1.25vw]
-          w-[1.25vw]
+          h-5
+          w-5
+          shrink-0
           items-center
           justify-center
           rounded-full
@@ -740,10 +784,12 @@ function TrustItem({
 
       <span
         className="
-          text-[0.6vw]
+          text-[11px]
           font-medium
           leading-none
           text-[var(--text-secondary)]
+
+          sm:text-[12px]
         "
       >
         {label}
@@ -768,17 +814,20 @@ function InfoItem({
   return (
     <div
       className="
-        rounded-[0.5vw]
+        rounded-[8px]
         bg-[var(--surface)]
-        px-[0.6vw]
-        py-[0.55vw]
+        px-2
+        py-2
+
+        sm:px-2.5
+        sm:py-2.5
       "
     >
       <div
         className="
           flex
           items-center
-          gap-[0.3vw]
+          gap-1
           text-[var(--text-tertiary)]
         "
       >
@@ -786,10 +835,12 @@ function InfoItem({
 
         <p
           className="
-            text-[0.48vw]
+            text-[8px]
             uppercase
             tracking-[0.08em]
             leading-none
+
+            sm:text-[9px]
           "
         >
           {label}
@@ -798,11 +849,13 @@ function InfoItem({
 
       <p
         className="
-          mt-[0.3vw]
-          text-[0.65vw]
+          mt-1
+          text-[10px]
           font-semibold
           leading-none
           text-[var(--text)]
+
+          sm:text-[11px]
         "
       >
         {value}
@@ -825,15 +878,15 @@ function DashboardStat({
   return (
     <div
       className="
-        rounded-[0.4vw]
+        rounded-[6px]
         bg-[var(--surface)]
-        p-[0.4vw]
+        p-2
         text-center
       "
     >
       <p
         className="
-          text-[0.72vw]
+          text-[12px]
           font-bold
           leading-none
           text-[var(--text)]
@@ -844,8 +897,8 @@ function DashboardStat({
 
       <p
         className="
-          mt-[0.15vw]
-          text-[0.4vw]
+          mt-1
+          text-[8px]
           leading-none
           text-[var(--text-tertiary)]
         "
@@ -855,10 +908,6 @@ function DashboardStat({
     </div>
   );
 }
-
-/* =========================================================
-   PLATFORM BENEFIT
-========================================================= */
 
 /* =========================================================
    PLATFORM BENEFIT
@@ -874,38 +923,29 @@ function PlatformBenefit({
   description: string;
 }) {
   return (
-    <div
-      className="
-        group
-        relative
-        flex
-        items-left
-        justify-left
-       
-      "
-    >
-      {/* CARD */}
-
+    <div className="group relative">
       <div
         className="
           relative
           flex
+          min-h-[78px]
           w-full
-          max-w-[100%]
           items-center
-          gap-[0.7vw]
-          rounded-[0.8vw]
+          gap-3
+          rounded-[12px]
           border
           border-[var(--border)]
           bg-[var(--dropdown-bg)]
-          p-[0.8vw]
-          shadow-[0_1.5vw_4.5vw_rgba(0,0,0,0.32)]
+          p-3.5
+          shadow-[0_12px_35px_rgba(0,0,0,0.18)]
           backdrop-blur-2xl
           transition-all
           duration-500
-          hover:-translate-y-[0.2vw]
+          hover:-translate-y-1
           hover:border-[var(--primary)]
-          
+
+          sm:min-h-[84px]
+          sm:p-4
         "
       >
         {/* NUMBER */}
@@ -914,27 +954,28 @@ function PlatformBenefit({
           className="
             relative
             flex
-            h-[2.6vw]
-            w-[2.6vw]
+            h-10
+            w-10
             shrink-0
             items-center
             justify-center
-            rounded-[0.55vw]
+            rounded-[9px]
             border
             border-[var(--border)]
             bg-[var(--surface)]
-            shadow-[0_0.5vw_1.5vw_rgba(0,0,0,0.18)]
+            shadow-[0_6px_18px_rgba(0,0,0,0.18)]
+
+            sm:h-11
+            sm:w-11
           "
         >
-          {/* Small decorative dot */}
-
           <span
             className="
               absolute
-              right-[0.35vw]
-              top-[0.35vw]
-              h-[0.22vw]
-              w-[0.22vw]
+              right-1.5
+              top-1.5
+              h-1.5
+              w-1.5
               rounded-full
               bg-[var(--primary)]
               opacity-70
@@ -943,11 +984,13 @@ function PlatformBenefit({
 
           <span
             className="
-              text-[0.85vw]
+              text-[13px]
               font-bold
               leading-none
               tracking-[-0.04em]
               text-[var(--text)]
+
+              sm:text-[14px]
             "
           >
             {number}
@@ -959,11 +1002,13 @@ function PlatformBenefit({
         <div className="min-w-0">
           <p
             className="
-              text-[0.69vw]
+              text-[12px]
               font-semibold
-              leading-none
+              leading-[1.2]
               tracking-[-0.01em]
               text-[var(--text)]
+
+              sm:text-[13px]
             "
           >
             {title}
@@ -971,10 +1016,12 @@ function PlatformBenefit({
 
           <p
             className="
-              mt-[0.32vw]
-              text-[0.69vw]
-              leading-[1.3]
+              mt-1
+              text-[10px]
+              leading-[1.35]
               text-[var(--text-tertiary)]
+
+              sm:text-[11px]
             "
           >
             {description}
@@ -986,14 +1033,12 @@ function PlatformBenefit({
         <span
           className="
             absolute
-            bottom-[-0.18vw]
+            bottom-[-3px]
             left-1/2
-            h-[0.35vw]
-            w-[0.35vw]
+            h-1
+            w-1
             -translate-x-1/2
             rounded-full
-            border
-            border-[var(--bg)]
             bg-[var(--primary)]
             opacity-0
             transition-opacity
@@ -1002,10 +1047,6 @@ function PlatformBenefit({
           "
         />
       </div>
-
-      {/* VERTICAL DECORATIVE CONNECTOR */}
-
-      
     </div>
   );
 }
@@ -1014,27 +1055,26 @@ function PlatformBenefit({
    AVATAR
 ========================================================= */
 
-function Avatar({
-  letter,
-}: {
-  letter: string;
-}) {
+function Avatar({ letter }: { letter: string }) {
   return (
     <div
       className="
         flex
-        h-[1.7vw]
-        w-[1.7vw]
+        h-7
+        w-7
         items-center
         justify-center
         rounded-full
-        border-[0.12vw]
+        border-2
         border-[var(--bg)]
         bg-[var(--surface-hover)]
-        text-[0.56vw]
+        text-[9px]
         font-bold
         leading-none
         text-[var(--text)]
+
+        sm:h-8
+        sm:w-8
       "
     >
       {letter}

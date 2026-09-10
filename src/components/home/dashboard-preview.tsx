@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Bell,
@@ -14,7 +15,6 @@ import {
   Ruler,
   Shirt,
   Sparkles,
-  Star,
   UserRound,
 } from "lucide-react";
 
@@ -29,25 +29,16 @@ const stats = [
     label: "Active orders",
     value: "02",
     icon: Shirt,
-    meta: "+1 this month",
   },
   {
-    label: "Saved profiles",
+    label: "Measurements",
     value: "03",
-    icon: UserRound,
-    meta: "2 complete",
+    icon: Ruler,
   },
   {
     label: "Wishlist",
     value: "08",
     icon: Heart,
-    meta: "3 new items",
-  },
-  {
-    label: "Reviews",
-    value: "04",
-    icon: Star,
-    meta: "Waiting for you",
   },
 ];
 
@@ -58,7 +49,6 @@ const orders = [
     type: "Custom Made",
     status: "Stitching",
     progress: 72,
-    placeholder: "KURTA",
   },
   {
     id: "#SG-1039",
@@ -66,7 +56,6 @@ const orders = [
     type: "Ready to Wear",
     status: "In Transit",
     progress: 88,
-    placeholder: "SUIT",
   },
 ];
 
@@ -75,23 +64,16 @@ const accountItems = [
     icon: Ruler,
     label: "Measurements",
     value: "3 profiles",
-    accent: true,
   },
   {
     icon: MapPin,
-    label: "Addresses",
+    label: "Saved addresses",
     value: "2 saved",
   },
   {
     icon: CreditCard,
-    label: "Payments & invoices",
-    value: "View",
-  },
-  {
-    icon: Star,
-    label: "Reviews",
-    value: "4 pending",
-    accent: true,
+    label: "Payments",
+    value: "Up to date",
   },
 ];
 
@@ -106,12 +88,26 @@ const activities = [
     title: "Order moved to stitching",
     time: "Yesterday",
   },
-  {
-    icon: Star,
-    title: "New review reminder",
-    time: "2d ago",
-  },
 ];
+
+/* -------------------------------------------------------------------------- */
+/* ANIMATION                                                                  */
+/* -------------------------------------------------------------------------- */
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 /* -------------------------------------------------------------------------- */
 /* MAIN COMPONENT                                                             */
@@ -119,471 +115,1391 @@ const activities = [
 
 export default function DashboardPreview() {
   return (
-    <section className="relative overflow-hidden">
-      {/* ------------------------------------------------------------------ */}
-      {/* AMBIENT BACKGROUND                                                  */}
-      {/* ------------------------------------------------------------------ */}
+    <section className="relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-[6vw]">
+      <Container>
+        {/* ================================================================
+            SECTION INTRO
+        ================================================================= */}
 
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-12%] top-[18%] h-[26vw] w-[26vw] rounded-full bg-[var(--primary)]/8 blur-[110px]" />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          variants={fadeUp}
+          className="
+            mb-9
+            grid
+            gap-5
 
-        <div className="absolute bottom-[-15%] right-[-8%] h-[24vw] w-[24vw] rounded-full bg-[var(--accent)]/5 blur-[110px]" />
-      </div>
+            sm:mb-11
 
-      <Container className="relative">
-        {/* ---------------------------------------------------------------- */}
-        {/* SECTION INTRO                                                     */}
-        {/* ---------------------------------------------------------------- */}
+            lg:mb-[3vw]
+            lg:grid-cols-[1.4fr_0.6fr]
+            lg:items-end
+            lg:gap-[3vw]
+          "
+        >
+          {/* ==============================================================
+              HEADING
+          ============================================================== */}
 
-        <div className="mb-[2.5vw] grid gap-[2vw] lg:grid-cols-[1.45fr_0.55fr] lg:items-end">
           <div>
-            <div className="mb-[0.6vw] flex items-center gap-2">
-              <span className="h-[5px] w-[5px] rounded-full bg-[var(--primary)]" />
+            <div
+              className="
+                mb-4
+                flex
+                items-center
+                gap-2
+              "
+            >
+              <span
+                className="
+                  h-[5px]
+                  w-[5px]
+                  shrink-0
+                  rounded-full
+                  bg-[var(--primary)]
+                "
+              />
 
-              <span className="text-[clamp(10px,0.65vw,12px)] font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
+              <span
+                className="
+                  text-[10px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.18em]
+                  text-[var(--primary)]
+                "
+              >
                 Your account
               </span>
             </div>
 
-            <h2 className="max-w-[850px] text-[clamp(38px,3.8vw,68px)] font-semibold leading-[0.97] tracking-[-0.055em] text-[var(--foreground)]">
-              A dashboard built
+            <h2
+              className="
+                max-w-[850px]
+                text-[3vw]
+                font-bold
+                leading-[0.96]
+                tracking-[-0.06em]
+                text-[var(--text)]
+
+                max-lg:text-[40px]
+                max-md:text-[35px]
+                max-sm:text-[31px]
+              "
+            >
+              Your entire experience.
               <br />
-              for every client.
+
+              <span className="text-[var(--primary)]">
+                One simple dashboard.
+              </span>
             </h2>
           </div>
 
-          <p className="max-w-[400px] text-[clamp(13px,0.85vw,16px)] leading-[1.5] text-[var(--muted-foreground)] lg:pb-[0.2vw]">
-            Orders, measurements, appointments, payments and support — all
-            organized in one simple client space.
+          {/* ==============================================================
+              DESCRIPTION
+          ============================================================== */}
+
+          <p
+            className="
+              max-w-[420px]
+              text-[13px]
+              leading-[1.65]
+              text-[var(--muted-foreground)]
+
+              sm:text-[14px]
+
+              lg:pb-[0.25vw]
+            "
+          >
+            Manage your orders, measurements, payments and
+            conversations from one elegant client space.
           </p>
-        </div>
+        </motion.div>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* DASHBOARD                                                         */}
-        {/* ---------------------------------------------------------------- */}
+        {/* ================================================================
+            DASHBOARD PREVIEW
+        ================================================================= */}
 
-        <div className="overflow-hidden rounded-[1.2vw] border border-[var(--border)] bg-[var(--surface)] shadow-[0_30px_90px_rgba(0,0,0,0.22)] max-lg:rounded-[18px]">
-          {/* ================================================================ */}
-          {/* TOP BAR                                                          */}
-          {/* ================================================================ */}
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+            scale: 0.985,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.12,
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="
+            relative
+            mx-auto
+            max-w-[1120px]
+          "
+        >
+          {/* ==============================================================
+              SOFT BACKGROUND GLOW
+          ============================================================== */}
 
-          <div className="flex items-center justify-between border-b border-[var(--border)] px-[1.2vw] py-[0.8vw] max-lg:px-4 max-lg:py-3">
-            <div className="flex items-center gap-2.5">
-              <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)]">
-                <UserRound className="h-3.5 w-3.5 text-[var(--foreground)]" />
+          <div
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-1/2
+              h-[55%]
+              w-[65%]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-[var(--primary)]
+              opacity-[0.035]
+              blur-[100px]
+            "
+          />
 
-                <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full border-2 border-[var(--surface)] bg-green-500" />
-              </div>
+          {/* ==============================================================
+              DASHBOARD FRAME
+          ============================================================== */}
 
-              <div>
-                <p className="text-[clamp(12px,0.75vw,15px)] font-semibold text-[var(--foreground)]">
-                  Good morning, Ahmed
-                </p>
+          <div
+            className="
+              relative
+              overflow-hidden
+              rounded-[18px]
+              border
+              border-[var(--border)]
+              bg-[var(--surface)]
+              shadow-[0_25px_75px_rgba(0,0,0,0.14)]
 
-                <p className="mt-0.5 text-[9px] text-[var(--muted-foreground)]">
-                  Here&apos;s your latest account overview.
-                </p>
-              </div>
-            </div>
+              sm:rounded-[20px]
 
-            <div className="flex items-center gap-2">
-              <div className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)]">
-                <Bell className="h-3.5 w-3.5 text-[var(--foreground)]" />
+              lg:rounded-[22px]
+            "
+          >
+            {/* ============================================================
+                TOP BAR
+            ============================================================= */}
 
-                <span className="absolute right-[6px] top-[5px] h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
-              </div>
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                border-b
+                border-[var(--border)]
+                px-3.5
+                py-3
 
-              <span className="hidden rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)] px-3 py-1.5 text-[9px] font-medium text-[var(--muted-foreground)] sm:block">
-                Client dashboard
-              </span>
-            </div>
-          </div>
+                sm:px-5
+                sm:py-3.5
 
-          {/* ================================================================ */}
-          {/* DASHBOARD GRID                                                   */}
-          {/* ================================================================ */}
+                lg:px-6
+              "
+            >
+              {/* Client */}
 
-          <div className="grid items-stretch gap-[0.8vw] p-[0.8vw] max-lg:p-3 xl:grid-cols-[1.65fr_1fr]">
-            {/* ============================================================ */}
-            {/* LEFT COLUMN                                                    */}
-            {/* ============================================================ */}
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="
+                    relative
+                    flex
+                    h-8
+                    w-8
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-[var(--primary)]
+                    text-white
 
-            <div className="flex min-w-0 flex-col gap-[0.8vw] max-lg:gap-3">
-              {/* ---------------------------------------------------------- */}
-              {/* STATS                                                        */}
-              {/* ---------------------------------------------------------- */}
+                    sm:h-9
+                    sm:w-9
+                  "
+                >
+                  <UserRound className="h-3.5 w-3.5" />
 
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {stats.map((stat, index) => {
-                  const Icon = stat.icon;
-
-                  return (
-                    <div
-                      key={stat.label}
-                      className="group relative overflow-hidden rounded-[0.75vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.85vw] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)]/35 max-lg:rounded-[12px] max-lg:p-3"
-                    >
-                      {/* Decorative corner */}
-                      <div className="pointer-events-none absolute -right-5 -top-5 h-14 w-14 rounded-full border border-[var(--border)] opacity-40 transition-transform duration-500 group-hover:scale-125" />
-
-                      <div className="relative flex items-start justify-between">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface)]">
-                          <Icon className="h-3.5 w-3.5 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
-                        </div>
-
-                        {index === 0 && (
-                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-green-500" />
-                        )}
-                      </div>
-
-                      <div className="relative mt-[0.8vw] max-lg:mt-3">
-                        <p className="text-[clamp(9px,0.6vw,12px)] font-medium text-[var(--muted-foreground)]">
-                          {stat.label}
-                        </p>
-
-                        <div className="mt-1 flex items-end justify-between gap-2">
-                          <span className="text-[clamp(24px,1.65vw,34px)] font-semibold leading-none tracking-[-0.05em] text-[var(--foreground)]">
-                            {stat.value}
-                          </span>
-
-                          <span className="hidden text-right text-[8px] text-[var(--muted-foreground)] sm:block">
-                            {stat.meta}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* ---------------------------------------------------------- */}
-              {/* RECENT ORDERS                                                */}
-              {/* ---------------------------------------------------------- */}
-
-              <div className="rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
-                <div className="mb-[0.7vw] flex items-center justify-between max-lg:mb-3">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-[clamp(15px,0.95vw,19px)] font-semibold text-[var(--foreground)]">
-                        Recent orders
-                      </h3>
-
-                      <span className="rounded-full bg-[var(--surface)] px-2 py-0.5 text-[8px] text-[var(--muted-foreground)]">
-                        2 active
-                      </span>
-                    </div>
-
-                    <p className="mt-1 text-[9px] text-[var(--muted-foreground)]">
-                      Track your latest pieces.
-                    </p>
-                  </div>
-
-                  <button className="group flex items-center gap-1 text-[9px] font-medium text-[var(--foreground)]">
-                    View all
-                    <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                  </button>
+                  <span
+                    className="
+                      absolute
+                      bottom-0
+                      right-0
+                      h-2
+                      w-2
+                      rounded-full
+                      border-2
+                      border-[var(--surface)]
+                      bg-green-500
+                    "
+                  />
                 </div>
 
-                <div className="space-y-2">
-                  {orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="group grid grid-cols-[52px_minmax(0,1fr)_auto] items-center gap-3 rounded-[0.6vw] border border-[var(--border)] p-2 transition-all duration-300 hover:border-[var(--primary)]/25 hover:bg-[var(--surface)] max-lg:grid-cols-[52px_minmax(0,1fr)] max-lg:rounded-[10px]"
-                    >
-                      {/* ------------------------------------------------ */}
-                      {/* PRODUCT PLACEHOLDER                              */}
-                      {/* ------------------------------------------------ */}
+                <div>
+                  <p
+                    className="
+                      text-[11px]
+                      font-semibold
+                      text-[var(--foreground)]
 
-                      <div className="relative flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-[9px] border border-[var(--border)] bg-[var(--surface)]">
-                        {/* Subtle tailoring pattern */}
-                        <div className="pointer-events-none absolute inset-0 opacity-40">
-                          <div className="absolute left-1/2 top-0 h-full w-px bg-[var(--border)]" />
-                          <div className="absolute left-0 top-1/2 h-px w-full bg-[var(--border)]" />
-                        </div>
+                      sm:text-[12px]
+                    "
+                  >
+                    Good morning, Ahmed
+                  </p>
 
-                        <div className="relative flex flex-col items-center">
-                          <Shirt className="mb-1 h-4 w-4 text-[var(--muted-foreground)]" />
+                  <p
+                    className="
+                      mt-0.5
+                      text-[8px]
+                      text-[var(--muted-foreground)]
 
-                          <span className="text-[6px] font-semibold tracking-[0.12em] text-[var(--muted-foreground)]">
-                            {order.placeholder}
-                          </span>
-                        </div>
-                      </div>
+                      sm:text-[9px]
+                    "
+                  >
+                    Welcome back to your account.
+                  </p>
+                </div>
+              </div>
 
-                      {/* ------------------------------------------------ */}
-                      {/* ORDER INFORMATION                                */}
-                      {/* ------------------------------------------------ */}
+              {/* Right */}
 
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          <h4 className="truncate text-[clamp(11px,0.72vw,14px)] font-semibold text-[var(--foreground)]">
-                            {order.title}
-                          </h4>
+              <div className="flex items-center gap-2">
+                <span
+                  className="
+                    hidden
+                    rounded-full
+                    border
+                    border-[var(--border)]
+                    bg-[var(--dropdown-bg)]
+                    px-3
+                    py-1.5
+                    text-[8px]
+                    font-medium
+                    text-[var(--muted-foreground)]
 
-                          <span className="rounded-full bg-[var(--primary)]/10 px-1.5 py-0.5 text-[7px] font-semibold text-[var(--primary)]">
-                            {order.status}
-                          </span>
-                        </div>
+                    sm:block
+                  "
+                >
+                  Client dashboard
+                </span>
 
-                        <p className="mt-1 text-[8px] text-[var(--muted-foreground)]">
-                          {order.id} · {order.type}
-                        </p>
+                <div
+                  className="
+                    relative
+                    flex
+                    h-8
+                    w-8
+                    items-center
+                    justify-center
+                    rounded-full
+                    border
+                    border-[var(--border)]
+                    bg-[var(--dropdown-bg)]
+                  "
+                >
+                  <Bell className="h-3.5 w-3.5" />
 
-                        <div className="mt-2 flex max-w-[360px] items-center gap-2">
-                          <div className="h-[3px] flex-1 overflow-hidden rounded-full bg-[var(--border)]">
-                            <div
-                              className="h-full rounded-full bg-[var(--primary)]"
-                              style={{
-                                width: `${order.progress}%`,
-                              }}
+                  <span
+                    className="
+                      absolute
+                      right-[6px]
+                      top-[5px]
+                      h-1.5
+                      w-1.5
+                      rounded-full
+                      bg-[var(--primary)]
+                    "
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ============================================================
+                DASHBOARD GRID
+            ============================================================= */}
+
+            <div
+              className="
+                grid
+                gap-3
+                p-3
+
+                sm:gap-4
+                sm:p-4
+
+                lg:grid-cols-2
+                lg:items-stretch
+                lg:gap-4
+                lg:p-5
+              "
+            >
+              {/* ==========================================================
+                  LEFT COLUMN
+              =========================================================== */}
+
+              <div
+                className="
+                  grid
+                  min-w-0
+                  grid-rows-[auto_auto_auto]
+                  gap-3
+
+                  sm:gap-4
+
+                  lg:h-full
+                "
+              >
+                {/* ========================================================
+                    STATS
+                ========================================================= */}
+
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  {stats.map((stat, index) => {
+                    const Icon = stat.icon;
+
+                    return (
+                      <motion.div
+                        key={stat.label}
+                        initial={{
+                          opacity: 0,
+                          y: 10,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          delay: index * 0.06,
+                          duration: 0.4,
+                        }}
+                        whileHover={{
+                          y: -3,
+                        }}
+                        className="
+                          group
+                          flex
+                          min-h-[112px]
+                          flex-col
+                          justify-between
+                          rounded-[12px]
+                          border
+                          border-[var(--border)]
+                          bg-[var(--dropdown-bg)]
+                          p-3
+                          transition-all
+                          duration-300
+                          hover:border-[var(--primary)]/30
+
+                          sm:min-h-[125px]
+                          sm:rounded-[14px]
+                          sm:p-3.5
+                        "
+                      >
+                        <div className="flex items-center justify-between">
+                          <div
+                            className="
+                              flex
+                              h-7
+                              w-7
+                              items-center
+                              justify-center
+                              rounded-lg
+                              bg-[var(--surface)]
+                            "
+                          >
+                            <Icon
+                              className="
+                                h-3.5
+                                w-3.5
+                                text-[var(--muted-foreground)]
+                                transition-colors
+                                duration-300
+                                group-hover:text-[var(--primary)]
+                              "
                             />
                           </div>
 
-                          <span className="text-[8px] font-medium text-[var(--muted-foreground)]">
-                            {order.progress}%
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* ------------------------------------------------ */}
-                      {/* ORDER STATUS                                      */}
-                      {/* ------------------------------------------------ */}
-
-                      <div className="hidden min-w-[55px] text-right sm:block">
-                        <p className="text-[8px] text-[var(--muted-foreground)]">
-                          Progress
-                        </p>
-
-                        <p className="mt-0.5 text-[10px] font-semibold text-[var(--foreground)]">
-                          {order.progress}%
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* ---------------------------------------------------------- */}
-              {/* APPOINTMENT + STYLE                                         */}
-              {/* ---------------------------------------------------------- */}
-
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {/* Appointment */}
-                <div className="group relative overflow-hidden rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface)]">
-                      <CalendarDays className="h-3.5 w-3.5 text-[var(--primary)]" />
-                    </div>
-
-                    <span className="flex items-center gap-1 text-[8px] font-medium text-[var(--primary)]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
-                      Upcoming
-                    </span>
-                  </div>
-
-                  <div className="mt-3">
-                    <p className="text-[8px] text-[var(--muted-foreground)]">
-                      Next appointment
-                    </p>
-
-                    <h4 className="mt-1 text-[clamp(13px,0.8vw,16px)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
-                      Final fitting session
-                    </h4>
-
-                    <div className="mt-2 flex items-center gap-1.5 text-[8px] text-[var(--muted-foreground)]">
-                      <Clock3 className="h-3 w-3" />
-                      Tomorrow · 04:30 PM
-                    </div>
-                  </div>
-                </div>
-
-                {/* Style Profile */}
-                <div className="group relative overflow-hidden rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface)]">
-                      <Sparkles className="h-3.5 w-3.5 text-[var(--foreground)]" />
-                    </div>
-
-                    <span className="text-[8px] text-[var(--muted-foreground)]">
-                      92% complete
-                    </span>
-                  </div>
-
-                  <div className="mt-3">
-                    <p className="text-[8px] text-[var(--muted-foreground)]">
-                      Style profile
-                    </p>
-
-                    <h4 className="mt-1 text-[clamp(13px,0.8vw,16px)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
-                      Classic & Contemporary
-                    </h4>
-
-                    <div className="mt-2 flex flex-wrap gap-1">
-                      {["Formal", "Minimal", "Tailored"].map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-full border border-[var(--border)] px-1.5 py-0.5 text-[7px] text-[var(--muted-foreground)]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* ============================================================ */}
-            {/* RIGHT COLUMN                                                   */}
-            {/* ============================================================ */}
-
-            <div className="flex min-w-0 flex-col gap-[0.8vw] max-lg:gap-3">
-              {/* ---------------------------------------------------------- */}
-              {/* ACCOUNT HUB                                                  */}
-              {/* ---------------------------------------------------------- */}
-
-              <div className="rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[13px] max-lg:p-3.5">
-                <div className="mb-[0.8vw] max-lg:mb-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-[clamp(17px,1.25vw,24px)] font-semibold tracking-[-0.04em] text-[var(--foreground)]">
-                        Everything in one place.
-                      </h3>
-
-                      <p className="mt-1 text-[9px] leading-relaxed text-[var(--muted-foreground)]">
-                        Your profile, preferences and account details.
-                      </p>
-                    </div>
-
-                    <div className="hidden h-7 w-7 items-center justify-center rounded-full border border-[var(--border)] sm:flex">
-                      <ArrowUpRight className="h-3 w-3" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  {accountItems.map((item) => {
-                    const Icon = item.icon;
-
-                    return (
-                      <button
-                        key={item.label}
-                        className="group flex w-full items-center justify-between rounded-[9px] border border-[var(--border)] px-2.5 py-2 text-left transition-all duration-300 hover:border-[var(--primary)]/30 hover:bg-[var(--surface)]"
-                      >
-                        <div className="flex min-w-0 items-center gap-2.5">
-                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[var(--surface)]">
-                            <Icon className="h-3 w-3 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
-                          </div>
-
-                          <span className="truncate text-[clamp(10px,0.65vw,13px)] font-medium text-[var(--foreground)]">
-                            {item.label}
-                          </span>
+                          {index === 0 && (
+                            <span
+                              className="
+                                h-1.5
+                                w-1.5
+                                rounded-full
+                                bg-green-500
+                              "
+                            />
+                          )}
                         </div>
 
-                        <div className="flex shrink-0 items-center gap-1">
-                          <span
-                            className={`text-[8px] ${
-                              item.accent
-                                ? "font-medium text-[var(--primary)]"
-                                : "text-[var(--muted-foreground)]"
-                            }`}
+                        <div>
+                          <p
+                            className="
+                              text-[8px]
+                              font-medium
+                              text-[var(--muted-foreground)]
+
+                              sm:text-[9px]
+                            "
                           >
-                            {item.value}
-                          </span>
+                            {stat.label}
+                          </p>
 
-                          <ChevronRight className="h-3 w-3 text-[var(--muted-foreground)] transition-transform group-hover:translate-x-0.5" />
+                          <p
+                            className="
+                              mt-1
+                              text-[23px]
+                              font-semibold
+                              leading-none
+                              tracking-[-0.05em]
+                              text-[var(--foreground)]
+
+                              sm:text-[27px]
+                            "
+                          >
+                            {stat.value}
+                          </p>
                         </div>
-                      </button>
+                      </motion.div>
                     );
                   })}
                 </div>
-              </div>
 
-              {/* ---------------------------------------------------------- */}
-              {/* SUPPORT CHAT                                                 */}
-              {/* ---------------------------------------------------------- */}
+                {/* ========================================================
+                    RECENT ORDERS
+                ========================================================= */}
 
-              <div className="rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
-                <div className="flex items-center justify-between">
+                <div
+                  className="
+                    flex
+                    min-h-[245px]
+                    flex-col
+                    rounded-[12px]
+                    border
+                    border-[var(--border)]
+                    bg-[var(--dropdown-bg)]
+                    p-3
+
+                    sm:min-h-[265px]
+                    sm:rounded-[14px]
+                    sm:p-4
+                  "
+                >
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h3
+                          className="
+                            text-[13px]
+                            font-semibold
+                            text-[var(--foreground)]
+
+                            sm:text-[14px]
+                          "
+                        >
+                          Recent orders
+                        </h3>
+
+                        <span
+                          className="
+                            rounded-full
+                            bg-[var(--surface)]
+                            px-1.5
+                            py-0.5
+                            text-[6px]
+                            font-medium
+                            text-[var(--muted-foreground)]
+                          "
+                        >
+                          2 active
+                        </span>
+                      </div>
+
+                      <p
+                        className="
+                          mt-0.5
+                          text-[8px]
+                          text-[var(--muted-foreground)]
+
+                          sm:text-[9px]
+                        "
+                      >
+                        Track your latest pieces.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="
+                        flex
+                        items-center
+                        gap-1
+                        text-[8px]
+                        font-medium
+                        text-[var(--muted-foreground)]
+                        transition-colors
+                        hover:text-[var(--primary)]
+                      "
+                    >
+                      View all
+                      <ArrowUpRight className="h-3 w-3" />
+                    </button>
+                  </div>
+
+                  <div className="flex flex-1 flex-col justify-center gap-2">
+                    {orders.map((order, index) => (
+                      <motion.div
+                        key={order.id}
+                        initial={{
+                          opacity: 0,
+                          x: -8,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          x: 0,
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          delay: 0.15 + index * 0.1,
+                          duration: 0.45,
+                        }}
+                        className="
+                          group
+                          flex
+                          items-center
+                          gap-2.5
+                          rounded-[10px]
+                          border
+                          border-[var(--border)]
+                          p-2
+                          transition-all
+                          duration-300
+                          hover:border-[var(--primary)]/30
+                          hover:bg-[var(--surface)]
+
+                          sm:gap-3
+                          sm:p-2.5
+                        "
+                      >
+                        {/* PRODUCT */}
+
+                        <div
+                          className="
+                            flex
+                            h-11
+                            w-11
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-[8px]
+                            bg-[var(--surface)]
+
+                            sm:h-12
+                            sm:w-12
+                          "
+                        >
+                          <Shirt
+                            className="
+                              h-4
+                              w-4
+                              text-[var(--muted-foreground)]
+                              transition-transform
+                              duration-500
+                              group-hover:scale-110
+                            "
+                          />
+                        </div>
+
+                        {/* INFO */}
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <h4
+                              className="
+                                truncate
+                                text-[10px]
+                                font-semibold
+                                text-[var(--foreground)]
+
+                                sm:text-[11px]
+                              "
+                            >
+                              {order.title}
+                            </h4>
+
+                            <span
+                              className="
+                                hidden
+                                shrink-0
+                                rounded-full
+                                bg-[var(--primary)]/10
+                                px-1.5
+                                py-0.5
+                                text-[6px]
+                                font-semibold
+                                text-[var(--primary)]
+
+                                sm:inline-flex
+                              "
+                            >
+                              {order.status}
+                            </span>
+                          </div>
+
+                          <p
+                            className="
+                              mt-0.5
+                              text-[7px]
+                              text-[var(--muted-foreground)]
+
+                              sm:text-[8px]
+                            "
+                          >
+                            {order.id} · {order.type}
+                          </p>
+
+                          <div className="mt-2 flex items-center gap-2">
+                            <div
+                              className="
+                                h-[3px]
+                                flex-1
+                                overflow-hidden
+                                rounded-full
+                                bg-[var(--border)]
+                              "
+                            >
+                              <motion.div
+                                initial={{
+                                  width: 0,
+                                }}
+                                whileInView={{
+                                  width: `${order.progress}%`,
+                                }}
+                                viewport={{
+                                  once: true,
+                                }}
+                                transition={{
+                                  duration: 1,
+                                  delay: 0.35 + index * 0.12,
+                                  ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className="
+                                  h-full
+                                  rounded-full
+                                  bg-[var(--primary)]
+                                "
+                              />
+                            </div>
+
+                            <span
+                              className="
+                                text-[7px]
+                                font-medium
+                                text-[var(--muted-foreground)]
+                              "
+                            >
+                              {order.progress}%
+                            </span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ========================================================
+                    APPOINTMENT
+                ========================================================= */}
+
+                <div
+                  className="
+                    flex
+                    min-h-[92px]
+                    items-center
+                    justify-between
+                    gap-3
+                    rounded-[12px]
+                    border
+                    border-[var(--border)]
+                    bg-[var(--dropdown-bg)]
+                    p-3
+
+                    sm:min-h-[105px]
+                    sm:rounded-[14px]
+                    sm:p-4
+                  "
+                >
                   <div className="flex min-w-0 items-center gap-2.5">
-                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--surface)]">
-                      <MessageCircle className="h-3.5 w-3.5 text-[var(--primary)]" />
-
-                      <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-green-500" />
+                    <div
+                      className="
+                        flex
+                        h-9
+                        w-9
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-lg
+                        bg-[var(--surface)]
+                      "
+                    >
+                      <CalendarDays
+                        className="
+                          h-4
+                          w-4
+                          text-[var(--primary)]
+                        "
+                      />
                     </div>
 
                     <div className="min-w-0">
-                      <h3 className="truncate text-[clamp(13px,0.8vw,16px)] font-semibold text-[var(--foreground)]">
-                        Chat with your tailor
-                      </h3>
+                      <p
+                        className="
+                          text-[7px]
+                          uppercase
+                          tracking-[0.12em]
+                          text-[var(--muted-foreground)]
+                        "
+                      >
+                        Next appointment
+                      </p>
 
-                      <p className="mt-0.5 truncate text-[8px] text-[var(--muted-foreground)]">
-                        Questions about your order?
+                      <p
+                        className="
+                          mt-1
+                          truncate
+                          text-[10px]
+                          font-semibold
+                          text-[var(--foreground)]
+
+                          sm:text-[11px]
+                        "
+                      >
+                        Final fitting session
+                      </p>
+
+                      <p
+                        className="
+                          mt-1
+                          flex
+                          items-center
+                          gap-1
+                          text-[7px]
+                          text-[var(--muted-foreground)]
+                        "
+                      >
+                        <Clock3 className="h-2.5 w-2.5" />
+                        Tomorrow · 04:30 PM
                       </p>
                     </div>
                   </div>
 
-                  {/* GREEN ONLINE */}
-                  <span className="flex shrink-0 items-center gap-1.5 text-[8px] font-medium text-green-500">
-                    <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                    Online
+                  <span
+                    className="
+                      flex
+                      shrink-0
+                      items-center
+                      gap-1.5
+                      rounded-full
+                      border
+                      border-[var(--border)]
+                      px-2
+                      py-1
+                      text-[7px]
+                      font-medium
+                      text-[var(--primary)]
+                    "
+                  >
+                    <span
+                      className="
+                        h-1.5
+                        w-1.5
+                        rounded-full
+                        bg-[var(--primary)]
+                      "
+                    />
+                    Upcoming
                   </span>
                 </div>
-
-                <button className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--foreground)] px-3 py-2 text-[8px] font-semibold text-[var(--background)] transition-all duration-300 hover:opacity-80">
-                  Open conversation
-                  <ArrowUpRight className="h-3 w-3" />
-                </button>
               </div>
 
-              {/* ---------------------------------------------------------- */}
-              {/* RECENT ACTIVITY                                              */}
-              {/* ---------------------------------------------------------- */}
+              {/* ==========================================================
+                  RIGHT COLUMN
+              =========================================================== */}
 
-              <div className="flex-1 rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
-                <div className="mb-[0.7vw] flex items-center justify-between max-lg:mb-3">
-                  <div>
-                    <h3 className="text-[clamp(13px,0.85vw,17px)] font-semibold text-[var(--foreground)]">
-                      Recent activity
-                    </h3>
+              <div
+                className="
+                  grid
+                  min-w-0
+                  grid-rows-[auto_auto_auto]
+                  gap-3
 
-                    <p className="mt-0.5 text-[8px] text-[var(--muted-foreground)]">
-                      Latest account updates.
-                    </p>
+                  sm:gap-4
+
+                  lg:h-full
+                "
+              >
+                {/* ========================================================
+                    PROFILE
+                ========================================================= */}
+
+                <div
+                  className="
+                    flex
+                    min-h-[112px]
+                    flex-col
+                    justify-between
+                    rounded-[12px]
+                    border
+                    border-[var(--border)]
+                    bg-[var(--dropdown-bg)]
+                    p-3.5
+
+                    sm:min-h-[125px]
+                    sm:rounded-[14px]
+                    sm:p-4
+                  "
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p
+                        className="
+                          text-[7px]
+                          font-medium
+                          uppercase
+                          tracking-[0.15em]
+                          text-[var(--primary)]
+                        "
+                      >
+                        Personal profile
+                      </p>
+
+                      <h3
+                        className="
+                          mt-1.5
+                          text-[16px]
+                          font-semibold
+                          leading-tight
+                          tracking-[-0.04em]
+                          text-[var(--foreground)]
+
+                          sm:text-[18px]
+                        "
+                      >
+                        Your style,
+                        <br />
+                        already saved.
+                      </h3>
+                    </div>
+
+                    <div
+                      className="
+                        flex
+                        h-8
+                        w-8
+                        shrink-0
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-[var(--surface)]
+                      "
+                    >
+                      <Sparkles
+                        className="
+                          h-3.5
+                          w-3.5
+                          text-[var(--primary)]
+                        "
+                      />
+                    </div>
                   </div>
 
-                  <Bell className="h-3.5 w-3.5 text-[var(--muted-foreground)]" />
+                  <div className="mt-4">
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <span
+                        className="
+                          text-[8px]
+                          text-[var(--muted-foreground)]
+                        "
+                      >
+                        Profile completion
+                      </span>
+
+                      <span
+                        className="
+                          text-[8px]
+                          font-semibold
+                          text-[var(--foreground)]
+                        "
+                      >
+                        92%
+                      </span>
+                    </div>
+
+                    <div
+                      className="
+                        h-[4px]
+                        overflow-hidden
+                        rounded-full
+                        bg-[var(--border)]
+                      "
+                    >
+                      <motion.div
+                        initial={{
+                          width: 0,
+                        }}
+                        whileInView={{
+                          width: "92%",
+                        }}
+                        viewport={{
+                          once: true,
+                        }}
+                        transition={{
+                          duration: 1,
+                          delay: 0.4,
+                        }}
+                        className="
+                          h-full
+                          rounded-full
+                          bg-[var(--primary)]
+                        "
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-2.5">
-                  {activities.map((activity) => {
-                    const Icon = activity.icon;
+                {/* ========================================================
+                    ACCOUNT
+                ========================================================= */}
 
-                    return (
-                      <div
-                        key={activity.title}
-                        className="group flex items-center gap-2.5"
+                <div
+                  className="
+                    flex
+                    min-h-[245px]
+                    flex-col
+                    rounded-[12px]
+                    border
+                    border-[var(--border)]
+                    bg-[var(--dropdown-bg)]
+                    p-3
+
+                    sm:min-h-[265px]
+                    sm:rounded-[14px]
+                    sm:p-4
+                  "
+                >
+                  <div className="mb-3 flex items-center justify-between">
+                    <div>
+                      <h3
+                        className="
+                          text-[13px]
+                          font-semibold
+                          text-[var(--foreground)]
+
+                          sm:text-[14px]
+                        "
                       >
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
-                          <Icon className="h-3 w-3 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
+                        Account
+                      </h3>
+
+                      <p
+                        className="
+                          mt-0.5
+                          text-[8px]
+                          text-[var(--muted-foreground)]
+                        "
+                      >
+                        Manage your personal details.
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                        flex
+                        h-7
+                        w-7
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-[var(--surface)]
+                      "
+                    >
+                      <UserRound className="h-3.5 w-3.5" />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-1 flex-col justify-center gap-1.5">
+                    {accountItems.map((item) => {
+                      const Icon = item.icon;
+
+                      return (
+                        <button
+                          key={item.label}
+                          type="button"
+                          className="
+                            group
+                            flex
+                            w-full
+                            items-center
+                            justify-between
+                            rounded-[9px]
+                            border
+                            border-[var(--border)]
+                            px-2.5
+                            py-2.5
+                            text-left
+                            transition-all
+                            duration-300
+                            hover:border-[var(--primary)]/30
+                            hover:bg-[var(--surface)]
+                          "
+                        >
+                          <div className="flex min-w-0 items-center gap-2.5">
+                            <div
+                              className="
+                                flex
+                                h-7
+                                w-7
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-md
+                                bg-[var(--surface)]
+                              "
+                            >
+                              <Icon
+                                className="
+                                  h-3.5
+                                  w-3.5
+                                  text-[var(--muted-foreground)]
+                                  transition-colors
+                                  duration-300
+                                  group-hover:text-[var(--primary)]
+                                "
+                              />
+                            </div>
+
+                            <span
+                              className="
+                                truncate
+                                text-[9px]
+                                font-medium
+                                text-[var(--foreground)]
+
+                                sm:text-[10px]
+                              "
+                            >
+                              {item.label}
+                            </span>
+                          </div>
+
+                          <div className="flex shrink-0 items-center gap-1">
+                            <span
+                              className="
+                                text-[7px]
+                                text-[var(--muted-foreground)]
+                              "
+                            >
+                              {item.value}
+                            </span>
+
+                            <ChevronRight
+                              className="
+                                h-2.5
+                                w-2.5
+                                text-[var(--muted-foreground)]
+                                transition-transform
+                                group-hover:translate-x-0.5
+                              "
+                            />
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* ========================================================
+                    NEED HELP — HIGHLIGHT
+                ========================================================= */}
+
+                <motion.div
+                  whileHover={{
+                    y: -3,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                  }}
+                  className="
+                    group
+                    relative
+                    min-h-[92px]
+                    overflow-hidden
+                    rounded-[12px]
+                    border
+                    border-[var(--primary)]/25
+                    bg-[var(--primary)]
+                    p-3.5
+                    text-white
+                    shadow-[0_16px_45px_rgba(229,30,50,0.16)]
+
+                    sm:min-h-[105px]
+                    sm:rounded-[14px]
+                    sm:p-4
+                  "
+                >
+                  {/* Decorative glow */}
+
+                  <div
+                    className="
+                      pointer-events-none
+                      absolute
+                      -right-10
+                      -top-10
+                      h-28
+                      w-28
+                      rounded-full
+                      bg-white/10
+                      blur-2xl
+                      transition-transform
+                      duration-700
+                      group-hover:scale-125
+                    "
+                  />
+
+                  {/* Decorative ring */}
+
+                  <div
+                    className="
+                      pointer-events-none
+                      absolute
+                      -bottom-10
+                      right-8
+                      h-24
+                      w-24
+                      rounded-full
+                      border
+                      border-white/10
+                      transition-transform
+                      duration-700
+                      group-hover:scale-110
+                    "
+                  />
+
+                  <div
+                    className="
+                      relative
+                      z-10
+                      flex
+                      h-full
+                      items-center
+                      justify-between
+                      gap-4
+                    "
+                  >
+                    {/* Help content */}
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="
+                            flex
+                            h-8
+                            w-8
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-white/15
+                            backdrop-blur-sm
+                          "
+                        >
+                          <MessageCircle className="h-3.5 w-3.5" />
                         </div>
 
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[9px] font-medium text-[var(--foreground)]">
-                            {activity.title}
-                          </p>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <h3
+                              className="
+                                text-[11px]
+                                font-semibold
+                                text-white
 
-                          <p className="mt-0.5 text-[7px] text-[var(--muted-foreground)]">
-                            {activity.time}
+                                sm:text-[12px]
+                              "
+                            >
+                              Need help?
+                            </h3>
+
+                            <span
+                              className="
+                                h-1.5
+                                w-1.5
+                                rounded-full
+                                bg-green-300
+                              "
+                            />
+                          </div>
+
+                          <p
+                            className="
+                              mt-0.5
+                              text-[7px]
+                              text-white/60
+                            "
+                          >
+                            Your tailor is online
                           </p>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+
+                      <p
+                        className="
+                          mt-3
+                          max-w-[260px]
+                          text-[8px]
+                          leading-[1.5]
+                          text-white/75
+                        "
+                      >
+                        Questions about your fitting, order or
+                        delivery? We&apos;re here to help.
+                      </p>
+                    </div>
+
+                    {/* CTA */}
+
+                    <button
+                      type="button"
+                      className="
+                        flex
+                        h-9
+                        shrink-0
+                        items-center
+                        gap-1.5
+                        rounded-full
+                        bg-white
+                        px-3
+                        text-[8px]
+                        font-semibold
+                        text-[var(--primary)]
+                        transition-all
+                        duration-300
+                        hover:scale-[1.03]
+                        hover:shadow-[0_8px_25px_rgba(0,0,0,0.14)]
+                      "
+                    >
+                      Chat now
+                      <ArrowUpRight className="h-3 w-3" />
+                    </button>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </div>
-        </div>
+
+          {/* ==============================================================
+              FLOATING UPDATE
+          ============================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: 20,
+              y: 10,
+            }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              delay: 0.8,
+              duration: 0.6,
+            }}
+            animate={{
+              y: [0, -5, 0],
+            }}
+            className="
+              absolute
+              -right-2
+              top-[12%]
+              z-20
+              hidden
+              items-center
+              gap-2
+              rounded-full
+              border
+              border-[var(--border)]
+              bg-[var(--dropdown-bg)]
+              px-3
+              py-2
+              shadow-[0_15px_45px_rgba(0,0,0,0.15)]
+              backdrop-blur-xl
+
+              lg:flex
+
+              xl:-right-5
+            "
+          >
+            <div
+              className="
+                flex
+                h-6
+                w-6
+                items-center
+                justify-center
+                rounded-full
+                bg-[var(--primary)]
+                text-white
+              "
+            >
+              <CheckCircle2 className="h-3 w-3" />
+            </div>
+
+            <div>
+              <p
+                className="
+                  text-[8px]
+                  font-semibold
+                  text-[var(--foreground)]
+                "
+              >
+                Order updated
+              </p>
+
+              <p
+                className="
+                  mt-0.5
+                  text-[6px]
+                  text-[var(--muted-foreground)]
+                "
+              >
+                SG-1048 is now stitching
+              </p>
+            </div>
+          </motion.div>
+        </motion.div>
       </Container>
     </section>
   );

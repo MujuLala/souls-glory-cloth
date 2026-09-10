@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion } from "framer-motion";
@@ -98,52 +97,70 @@ function TestimonialCard({
 }) {
   return (
     <motion.article
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -6 }}
+      transition={{
+        duration: 0.35,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className="
         group
         relative
-        w-[340px]
+        w-[285px]
         shrink-0
         overflow-hidden
-        rounded-[1.2vw]
+        rounded-[16px]
         border
         border-[var(--border)]
         bg-[var(--dropdown-bg)]
-        p-[1.15vw]
-        shadow-[0_1.5vw_4vw_rgba(0,0,0,0.04)]
+        p-4
+        shadow-[0_18px_50px_rgba(0,0,0,0.04)]
         transition-all
         duration-500
         hover:border-[var(--primary)]
-        hover:shadow-[0_1.8vw_5vw_rgba(0,0,0,0.08)]
-        sm:w-[390px]
-        md:p-[1.35vw]
+        hover:shadow-[0_20px_55px_rgba(0,0,0,0.08)]
+
+        sm:w-[320px]
+        sm:rounded-[18px]
+        sm:p-5
+
+        lg:w-[340px]
+        lg:rounded-[20px]
+        lg:p-5
       "
     >
       {/* Decorative quote */}
+
       <div
         className="
+          pointer-events-none
           absolute
-          right-[1vw]
-          top-[0.8vw]
+          right-4
+          top-3
           opacity-[0.035]
           transition-opacity
           duration-500
           group-hover:opacity-[0.08]
         "
       >
-        <Quote className="h-16 w-16" strokeWidth={1} />
+        <Quote
+          className="h-14 w-14 sm:h-16 sm:w-16"
+          strokeWidth={1}
+        />
       </div>
 
-      {/* Top */}
-      <div className="relative z-10 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      {/* =================================================
+          TOP
+      ================================================== */}
+
+      <div className="relative z-10 flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           {/* Avatar */}
+
           <div
             className="
               flex
-              h-11
-              w-11
+              h-10
+              w-10
               shrink-0
               items-center
               justify-center
@@ -151,67 +168,171 @@ function TestimonialCard({
               border
               border-[var(--border)]
               bg-[var(--surface)]
-              text-sm
+              text-[12px]
               font-semibold
               text-[var(--foreground)]
+
+              sm:h-11
+              sm:w-11
+              sm:text-sm
             "
           >
             {testimonial.initials}
           </div>
 
-          <div>
-            <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-semibold tracking-[-0.01em] text-[var(--foreground)]">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1">
+              <h3
+                className="
+                  truncate
+                  text-[13px]
+                  font-semibold
+                  tracking-[-0.01em]
+                  text-[var(--foreground)]
+
+                  sm:text-sm
+                "
+              >
                 {testimonial.name}
               </h3>
 
               <BadgeCheck
-                className="h-4 w-4 text-[var(--primary)]"
+                className="
+                  h-3.5
+                  w-3.5
+                  shrink-0
+                  text-[var(--primary)]
+
+                  sm:h-4
+                  sm:w-4
+                "
                 strokeWidth={2.2}
               />
             </div>
 
-            <p className="mt-0.5 text-[11px] text-[var(--muted-foreground)]">
+            <p
+              className="
+                mt-0.5
+                text-[10px]
+                text-[var(--muted-foreground)]
+
+                sm:text-[11px]
+              "
+            >
               {testimonial.role}
             </p>
           </div>
         </div>
 
         {/* Rating */}
-        <div className="flex items-center gap-0.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 py-1">
-          {Array.from({ length: testimonial.rating }).map((_, index) => (
+
+        <div
+          className="
+            flex
+            shrink-0
+            items-center
+            gap-0.5
+            rounded-full
+            border
+            border-[var(--border)]
+            bg-[var(--surface)]
+            px-1.5
+            py-1
+
+            sm:px-2
+          "
+        >
+          {Array.from({
+            length: testimonial.rating,
+          }).map((_, index) => (
             <Star
               key={index}
-              className="h-3 w-3 fill-current text-[var(--primary)]"
+              className="
+                h-2.5
+                w-2.5
+                fill-current
+                text-[var(--primary)]
+
+                sm:h-3
+                sm:w-3
+              "
               strokeWidth={1.5}
             />
           ))}
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="my-5 h-px bg-[var(--border)]" />
+      {/* =================================================
+          DIVIDER
+      ================================================== */}
 
-      {/* Review */}
-      <div className="relative z-10 min-h-[112px]">
+      <div className="my-4 h-px bg-[var(--border)] sm:my-5" />
+
+      {/* =================================================
+          REVIEW
+      ================================================== */}
+
+      <div className="relative z-10 min-h-[128px] sm:min-h-[118px]">
         <Quote
-          className="mb-3 h-5 w-5 text-[var(--primary)]"
+          className="
+            mb-2.5
+            h-4
+            w-4
+            text-[var(--primary)]
+
+            sm:mb-3
+            sm:h-5
+            sm:w-5
+          "
           strokeWidth={1.8}
         />
 
-        <p className="text-[15px] leading-[1.65] tracking-[-0.01em] text-[var(--foreground)]/80">
+        <p
+          className="
+            text-[13px]
+            leading-[1.65]
+            tracking-[-0.01em]
+            text-[var(--foreground)]/80
+
+            sm:text-[14px]
+            lg:text-[15px]
+          "
+        >
           “{testimonial.text}”
         </p>
       </div>
 
-      {/* Product */}
-      <div className="mt-5 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
+      {/* =================================================
+          PRODUCT
+      ================================================== */}
+
+      <div className="mt-4 flex items-center justify-between gap-3 sm:mt-5">
+        <div className="min-w-0">
+          <p
+            className="
+              text-[8px]
+              font-medium
+              uppercase
+              tracking-[0.16em]
+              text-[var(--muted-foreground)]
+
+              sm:text-[9px]
+            "
+          >
             Ordered
           </p>
 
-          <p className="mt-1 text-[11px] font-medium text-[var(--foreground)]">
+          <p
+            className="
+              mt-1
+              truncate
+              text-[10px]
+              font-medium
+              text-[var(--foreground)]
+
+              sm:text-[11px]
+            "
+          >
             {testimonial.product}
           </p>
         </div>
@@ -221,6 +342,7 @@ function TestimonialCard({
             flex
             h-8
             w-8
+            shrink-0
             items-center
             justify-center
             rounded-full
@@ -249,64 +371,43 @@ function MarqueeRow({
   reverse?: boolean;
 }) {
   /*
-    Duplicate the cards so the animation can loop seamlessly.
-    The group itself pauses when the user hovers anywhere over the row.
-  */
+   * Three copies create enough content for
+   * a smooth infinite marquee.
+   */
   const duplicated = [...items, ...items, ...items];
 
   return (
     <div
       className="
-        group/marquee
         relative
+        w-full
         overflow-hidden
-        py-3
+        py-2
+
+        sm:py-3
       "
+      style={{
+        maskImage:
+          "linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)",
+        WebkitMaskImage:
+          "linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)",
+      }}
     >
-      {/* Left fade */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          left-0
-          top-0
-          z-20
-          h-full
-          w-[8vw]
-          bg-gradient-to-r
-          from-[var(--background)]
-          to-transparent
-        "
-      />
-
-      {/* Right fade */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          right-0
-          top-0
-          z-20
-          h-full
-          w-[8vw]
-          bg-gradient-to-l
-          from-[var(--background)]
-          to-transparent
-        "
-      />
-
       <motion.div
         className="
           flex
           w-max
-          gap-4
-          group-hover/marquee:[animation-play-state:paused]
+          gap-3
+
+          sm:gap-4
         "
         animate={{
-          x: reverse ? ["-33.333%", "0%"] : ["0%", "-33.333%"],
+          x: reverse
+            ? ["-33.333%", "0%"]
+            : ["0%", "-33.333%"],
         }}
         transition={{
-          duration: 38,
+          duration: reverse ? 42 : 38,
           repeat: Infinity,
           ease: "linear",
         }}
@@ -329,15 +430,34 @@ export default function Testimonials() {
         relative
         overflow-hidden
         bg-[var(--background)]
-        py-[8vw]
-        sm:py-[7vw]
-        md:py-[6vw]
+        py-16
+
+        sm:py-20
+
+        md:py-24
+
+        lg:py-[6vw]
       "
     >
+      {/* =================================================
+          HEADING
+      ================================================== */}
+
       <Container>
-        {/* Heading */}
-        <div className="mx-auto mb-[4vw] max-w-[760px] text-center">
+        <div
+          className="
+            mx-auto
+            mb-10
+            max-w-[800px]
+            text-center
+
+            sm:mb-12
+
+            lg:mb-[4vw]
+          "
+        >
           {/* Eyebrow */}
+
           <div
             className="
               mb-5
@@ -361,95 +481,194 @@ export default function Testimonials() {
               className="h-3.5 w-3.5 text-[var(--primary)]"
               strokeWidth={1.8}
             />
+
             Loved by our customers
           </div>
 
+          {/* MAIN HEADING */}
+
           <h2
             className="
-              text-[clamp(2.4rem,5vw,5.5rem)]
-              font-semibold
-              leading-[0.95]
-              tracking-[-0.055em]
-              text-[var(--foreground)]
+              text-[3vw]
+              font-bold
+              leading-[0.96]
+              tracking-[-0.06em]
+              text-[var(--text)]
+
+              max-lg:text-[40px]
+              max-md:text-[35px]
+              max-sm:text-[31px]
             "
           >
             Made with care.
             <br />
-            <span className="text-[var(--muted-foreground)]">
+
+            <span className="text-[var(--primary)]">
               Worn with confidence.
             </span>
           </h2>
 
+          {/* DESCRIPTION */}
+
           <p
             className="
               mx-auto
-              mt-6
-              max-w-[560px]
-              text-sm
-              leading-7
+              mt-5
+              max-w-[600px]
+              text-[13px]
+              leading-[1.7]
               text-[var(--muted-foreground)]
-              md:text-base
+
+              sm:mt-6
+              sm:text-[14px]
+
+              md:text-[15px]
             "
           >
-            Every piece is made around the person wearing it. Here is what our
-            customers have to say about their Soul&apos;s Glory Cloth
-            experience.
+            Every piece is made around the person wearing it.
+            Here is what our customers have to say about their
+            Soul&apos;s Glory Cloth experience.
           </p>
         </div>
       </Container>
 
-      {/* Marquees intentionally extend outside the Container */}
-      <div className="space-y-2">
+      {/* =================================================
+          MARQUEE ROWS
+          Transparent left + right masks
+      ================================================== */}
+
+      <div className="space-y-1 sm:space-y-2">
         <MarqueeRow items={firstRow} />
-        <MarqueeRow items={secondRow} reverse />
+
+        
       </div>
 
+      {/* =================================================
+          TRUST STATS
+      ================================================== */}
+
       <Container>
-        {/* Bottom trust stats */}
         <div
           className="
             mx-auto
-            mt-[4vw]
+            mt-10
             flex
             max-w-[850px]
             flex-col
             items-center
             justify-center
-            gap-5
+            gap-6
             border-t
             border-[var(--border)]
             pt-7
+
+            sm:mt-12
             sm:flex-row
             sm:gap-10
+            sm:pt-8
+
+            lg:mt-[4vw]
           "
         >
+          {/* Rating */}
+
           <div className="text-center">
-            <p className="text-xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+            <p
+              className="
+                text-xl
+                font-semibold
+                tracking-[-0.03em]
+                text-[var(--foreground)]
+              "
+            >
               4.9/5
             </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
+
+            <p
+              className="
+                mt-1
+                text-[9px]
+                uppercase
+                tracking-[0.14em]
+                text-[var(--muted-foreground)]
+              "
+            >
               Average Rating
             </p>
           </div>
 
-          <div className="hidden h-8 w-px bg-[var(--border)] sm:block" />
+          <div
+            className="
+              hidden
+              h-8
+              w-px
+              bg-[var(--border)]
+
+              sm:block
+            "
+          />
+
+          {/* Customers */}
 
           <div className="text-center">
-            <p className="text-xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+            <p
+              className="
+                text-xl
+                font-semibold
+                tracking-[-0.03em]
+                text-[var(--foreground)]
+              "
+            >
               1,200+
             </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
+
+            <p
+              className="
+                mt-1
+                text-[9px]
+                uppercase
+                tracking-[0.14em]
+                text-[var(--muted-foreground)]
+              "
+            >
               Happy Customers
             </p>
           </div>
 
-          <div className="hidden h-8 w-px bg-[var(--border)] sm:block" />
+          <div
+            className="
+              hidden
+              h-8
+              w-px
+              bg-[var(--border)]
+
+              sm:block
+            "
+          />
+
+          {/* Handcrafted */}
 
           <div className="text-center">
-            <p className="text-xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+            <p
+              className="
+                text-xl
+                font-semibold
+                tracking-[-0.03em]
+                text-[var(--foreground)]
+              "
+            >
               100%
             </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
+
+            <p
+              className="
+                mt-1
+                text-[9px]
+                uppercase
+                tracking-[0.14em]
+                text-[var(--muted-foreground)]
+              "
+            >
               Handcrafted
             </p>
           </div>

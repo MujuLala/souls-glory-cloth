@@ -56,27 +56,82 @@ const mainLinks = [
   },
 ];
 
-/*
- * =========================================================
- * SHARED DESKTOP NAVIGATION STYLE
- *
- * Same exact typography for:
- * Platform
- * Shop
- * Custom Studio
- * Collections
- * Support
- * =========================================================
- */
+/* =========================================================
+   SHARED NAV TYPOGRAPHY
+   IMPORTANT:
+   All navigation items use the exact same color.
+========================================================= */
 
 const navTextClass = `
-  text-[0.72vw]
+  text-[13px]
+  xl:text-[14px]
+  2xl:text-[15px]
   font-medium
   leading-none
-  tracking-[-0.01em]
-  text-[var(--text-secondary)]
+  tracking-[-0.015em]
+  !text-[#d6d6d6]
   transition-colors
-  hover:text-[var(--text)]
+  duration-200
+  hover:!text-[var(--primary)]
+`;
+
+/* =========================================================
+   DROPDOWN MAIN TEXT
+========================================================= */
+
+const dropdownTitleClass = `
+  text-[14px]
+  font-medium
+  leading-none
+  !text-[#d6d6d6]
+  transition-colors
+  duration-200
+  group-hover:!text-[var(--primary)]
+`;
+
+/* =========================================================
+   DROPDOWN SIMPLE ITEM
+========================================================= */
+
+const dropdownItemClass = `
+  block
+  rounded-[8px]
+  px-3
+  py-3
+  text-[14px]
+  font-medium
+  leading-none
+  !text-[#d6d6d6]
+  transition-all
+  duration-200
+  hover:bg-[var(--surface-hover)]
+  hover:!text-[var(--primary)]
+`;
+
+/* =========================================================
+   ICON BUTTON
+========================================================= */
+
+const iconButtonClass = `
+  flex
+  h-[38px]
+  w-[38px]
+  shrink-0
+  items-center
+  justify-center
+  rounded-[8px]
+  border
+  border-[var(--border)]
+  bg-[var(--surface)]
+  !text-[var(--text-secondary)]
+  transition-all
+  duration-200
+  hover:border-[var(--primary)]
+  hover:bg-[var(--surface-hover)]
+  hover:!text-[var(--text)]
+  active:scale-[0.97]
+  sm:h-[40px]
+  sm:w-[40px]
 `;
 
 export default function Header() {
@@ -87,37 +142,25 @@ export default function Header() {
 
   const headerRef = useRef<HTMLElement>(null);
 
-  /*
-   * =========================================================
-   * INITIAL THEME
-   * =========================================================
-   */
+  /* =========================================================
+     INITIAL THEME
+  ========================================================= */
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("soul-glory-theme");
 
     if (savedTheme === "light") {
       setDarkMode(false);
-
-      document.documentElement.setAttribute(
-        "data-theme",
-        "light"
-      );
+      document.documentElement.setAttribute("data-theme", "light");
     } else {
       setDarkMode(true);
-
-      document.documentElement.setAttribute(
-        "data-theme",
-        "dark"
-      );
+      document.documentElement.setAttribute("data-theme", "dark");
     }
   }, []);
 
-  /*
-   * =========================================================
-   * CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
-   * =========================================================
-   */
+  /* =========================================================
+     CLOSE DROPDOWNS OUTSIDE
+  ========================================================= */
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -133,40 +176,26 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  /*
-   * =========================================================
-   * THEME TOGGLE
-   * =========================================================
-   */
+  /* =========================================================
+     THEME
+  ========================================================= */
 
   const toggleTheme = () => {
     const nextTheme = darkMode ? "light" : "dark";
 
-    document.documentElement.setAttribute(
-      "data-theme",
-      nextTheme
-    );
-
-    localStorage.setItem(
-      "soul-glory-theme",
-      nextTheme
-    );
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    localStorage.setItem("soul-glory-theme", nextTheme);
 
     setDarkMode(!darkMode);
   };
 
-  /*
-   * =========================================================
-   * CLOSE MOBILE MENU
-   * =========================================================
-   */
+  /* =========================================================
+     CLOSE MOBILE
+  ========================================================= */
 
   const closeMobileMenu = () => {
     setMobileOpen(false);
@@ -195,11 +224,12 @@ export default function Header() {
       <Container
         className="
           flex
-          h-[4.4vw]
-          min-h-[64px]
-          max-h-[76px]
+          h-[64px]
           items-center
           justify-between
+          sm:h-[68px]
+          lg:h-[72px]
+          xl:h-[74px]
         "
       >
         {/* =================================================
@@ -219,12 +249,14 @@ export default function Header() {
         >
           <div
             className="
-              text-[1.15vw]
+              text-[18px]
               font-bold
               leading-[0.86]
               tracking-[-0.065em]
               text-[var(--text)]
-              max-[1100px]:text-[18px]
+              sm:text-[19px]
+              lg:text-[20px]
+              xl:text-[21px]
             "
           >
             Soul&apos;s
@@ -245,8 +277,10 @@ export default function Header() {
           className="
             hidden
             items-center
-            gap-[1.55vw]
+            gap-5
             lg:flex
+            xl:gap-7
+            2xl:gap-8
           "
         >
           {/* =================================================
@@ -265,18 +299,19 @@ export default function Header() {
               className={`
                 flex
                 items-center
-                gap-[0.25vw]
+                gap-1.5
                 ${navTextClass}
               `}
             >
-              Platform
+              <span>Platform</span>
 
               <ChevronDown
-                size={12}
+                size={14}
                 strokeWidth={1.8}
                 className={`
                   shrink-0
-                  transition-transform
+                  !text-[#d6d6d6]
+                  transition-all
                   duration-200
                   ${platformOpen ? "rotate-180" : ""}
                 `}
@@ -288,16 +323,16 @@ export default function Header() {
                 role="menu"
                 className="
                   absolute
-                  left-[-0.8vw]
-                  top-[calc(100%+1.15vw)]
+                  left-1/2
+                  top-[calc(100%+40px)]
                   z-[110]
-                  w-[17vw]
-                  min-w-[225px]
-                  rounded-[0.65vw]
+                  w-[260px]
+                  -translate-x-1/2
+                  rounded-[12px]
                   border
                   border-[var(--border)]
                   bg-[var(--dropdown-bg)]
-                  p-[0.4vw]
+                  p-2
                   shadow-2xl
                   backdrop-blur-2xl
                 "
@@ -311,32 +346,25 @@ export default function Header() {
                     className="
                       group
                       block
-                      rounded-[0.45vw]
-                      px-[0.75vw]
-                      py-[0.65vw]
+                      rounded-[8px]
+                      px-3
+                      py-3
                       transition-colors
+                      duration-200
                       hover:bg-[var(--surface-hover)]
                     "
                   >
-                    <div
-                      className="
-                        text-[0.72vw]
-                        font-medium
-                        leading-none
-                        tracking-[-0.01em]
-                        text-[var(--text)]
-                      "
-                    >
+                    <div className={dropdownTitleClass}>
                       {item.label}
                     </div>
 
                     <div
                       className="
-                        mt-[0.3vw]
-                        text-[0.56vw]
+                        mt-1.5
+                        text-[12px]
                         font-normal
-                        leading-[1.3]
-                        text-[var(--text-tertiary)]
+                        leading-[1.35]
+                        !text-[#999999]
                       "
                     >
                       {item.description}
@@ -363,18 +391,19 @@ export default function Header() {
               className={`
                 flex
                 items-center
-                gap-[0.25vw]
+                gap-1.5
                 ${navTextClass}
               `}
             >
-              Shop
+              <span>Shop</span>
 
               <ChevronDown
-                size={12}
+                size={14}
                 strokeWidth={1.8}
                 className={`
                   shrink-0
-                  transition-transform
+                  !text-[#d6d6d6]
+                  transition-all
                   duration-200
                   ${shopOpen ? "rotate-180" : ""}
                 `}
@@ -386,16 +415,16 @@ export default function Header() {
                 role="menu"
                 className="
                   absolute
-                  left-[-0.8vw]
-                  top-[calc(100%+1.15vw)]
+                  left-1/2
+                  top-[calc(100%+40px)]
                   z-[110]
-                  w-[13vw]
-                  min-w-[180px]
-                  rounded-[0.65vw]
+                  w-[200px]
+                  -translate-x-1/2
+                  rounded-[12px]
                   border
                   border-[var(--border)]
                   bg-[var(--dropdown-bg)]
-                  p-[0.4vw]
+                  p-2
                   shadow-2xl
                   backdrop-blur-2xl
                 "
@@ -406,20 +435,7 @@ export default function Header() {
                     href={item.href}
                     role="menuitem"
                     onClick={() => setShopOpen(false)}
-                    className="
-                      block
-                      rounded-[0.45vw]
-                      px-[0.75vw]
-                      py-[0.65vw]
-                      text-[0.72vw]
-                      font-medium
-                      leading-none
-                      tracking-[-0.01em]
-                      text-[var(--text-secondary)]
-                      transition-colors
-                      hover:bg-[var(--surface-hover)]
-                      hover:text-[var(--text)]
-                    "
+                    className={dropdownItemClass}
                   >
                     {item.label}
                   </Link>
@@ -429,7 +445,7 @@ export default function Header() {
           </div>
 
           {/* =================================================
-              CUSTOM STUDIO / COLLECTIONS / SUPPORT
+              MAIN LINKS
           ================================================== */}
 
           {mainLinks.map((item) => (
@@ -451,7 +467,8 @@ export default function Header() {
           className="
             flex
             items-center
-            gap-[0.4vw]
+            gap-1.5
+            sm:gap-2
           "
         >
           {/* SEARCH */}
@@ -459,29 +476,9 @@ export default function Header() {
           <Link
             href="/search"
             aria-label="Search"
-            className="
-              flex
-              h-[2.35vw]
-              min-h-[36px]
-              w-[2.35vw]
-              min-w-[36px]
-              items-center
-              justify-center
-              rounded-[0.6vw]
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
-              text-[var(--text-secondary)]
-              transition-all
-              hover:border-[var(--primary)]
-              hover:bg-[var(--surface-hover)]
-              hover:text-[var(--text)]
-            "
+            className={iconButtonClass}
           >
-            <Search
-              size={15}
-              strokeWidth={1.8}
-            />
+            <Search size={16} strokeWidth={1.8} />
           </Link>
 
           {/* LOGIN */}
@@ -490,15 +487,17 @@ export default function Header() {
             href="/sign-in"
             className="
               hidden
-              px-[0.55vw]
-              py-[0.6vw]
-              text-[0.7vw]
+              px-2
+              py-2
+              text-[13px]
               font-semibold
               leading-none
-              text-[var(--text-secondary)]
+              !text-[#d6d6d6]
               transition-colors
-              hover:text-[var(--text)]
+              duration-200
+              hover:!text-[var(--primary)]
               xl:block
+              2xl:text-[14px]
             "
           >
             Log in
@@ -511,14 +510,15 @@ export default function Header() {
             variant="primary"
             className="
               hidden
-              h-[2.35vw]
-              min-h-[36px]
-              rounded-[0.6vw]
-              px-[1vw]
-              text-[0.68vw]
+              h-[40px]
+              rounded-[8px]
+              px-4
+              text-[13px]
               font-semibold
               leading-none
               lg:inline-flex
+              xl:px-5
+              xl:text-[14px]
             "
           >
             Become a Client
@@ -534,29 +534,12 @@ export default function Header() {
                 ? "Switch to light mode"
                 : "Switch to dark mode"
             }
-            className="
-              flex
-              h-[2.35vw]
-              min-h-[36px]
-              w-[2.35vw]
-              min-w-[36px]
-              items-center
-              justify-center
-              rounded-[0.6vw]
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
-              text-[var(--text-secondary)]
-              transition-all
-              hover:border-[var(--primary)]
-              hover:bg-[var(--surface-hover)]
-              hover:text-[var(--text)]
-            "
+            className={iconButtonClass}
           >
             {darkMode ? (
-              <Sun size={15} strokeWidth={1.8} />
+              <Sun size={16} strokeWidth={1.8} />
             ) : (
-              <Moon size={15} strokeWidth={1.8} />
+              <Moon size={16} strokeWidth={1.8} />
             )}
           </button>
 
@@ -565,30 +548,13 @@ export default function Header() {
           <Link
             href="/account"
             aria-label="My account"
-            className="
+            className={`
+              ${iconButtonClass}
               hidden
-              h-[2.35vw]
-              min-h-[36px]
-              w-[2.35vw]
-              min-w-[36px]
-              items-center
-              justify-center
-              rounded-[0.6vw]
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
-              text-[var(--text-secondary)]
-              transition-all
-              hover:border-[var(--primary)]
-              hover:bg-[var(--surface-hover)]
-              hover:text-[var(--text)]
               md:flex
-            "
+            `}
           >
-            <UserRound
-              size={15}
-              strokeWidth={1.8}
-            />
+            <UserRound size={16} strokeWidth={1.8} />
           </Link>
 
           {/* CART */}
@@ -596,46 +562,27 @@ export default function Header() {
           <Link
             href="/cart"
             aria-label="Shopping cart"
-            className="
+            className={`
+              ${iconButtonClass}
               relative
-              flex
-              h-[2.35vw]
-              min-h-[36px]
-              w-[2.35vw]
-              min-w-[36px]
-              items-center
-              justify-center
-              rounded-[0.6vw]
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
-              text-[var(--text-secondary)]
-              transition-all
-              hover:border-[var(--primary)]
-              hover:bg-[var(--surface-hover)]
-              hover:text-[var(--text)]
-            "
+            `}
           >
-            <ShoppingBag
-              size={15}
-              strokeWidth={1.8}
-            />
+            <ShoppingBag size={16} strokeWidth={1.8} />
 
             <span
               className="
                 absolute
-                right-[-0.2vw]
-                top-[-0.25vw]
+                -right-1
+                -top-1
                 flex
-                h-[0.9vw]
-                min-h-[14px]
-                min-w-[14px]
+                h-[15px]
+                min-w-[15px]
                 items-center
                 justify-center
                 rounded-full
                 bg-[var(--primary)]
-                px-[0.2vw]
-                text-[0.5vw]
+                px-1
+                text-[9px]
                 font-bold
                 leading-none
                 text-white
@@ -654,29 +601,16 @@ export default function Header() {
               setPlatformOpen(false);
               setShopOpen(false);
             }}
-            aria-label={
-              mobileOpen
-                ? "Close menu"
-                : "Open menu"
-            }
-            className="
-              flex
-              h-[36px]
-              w-[36px]
-              items-center
-              justify-center
-              rounded-[0.6vw]
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
-              text-[var(--text)]
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            className={`
+              ${iconButtonClass}
               lg:hidden
-            "
+            `}
           >
             {mobileOpen ? (
-              <X size={18} />
+              <X size={19} />
             ) : (
-              <Menu size={18} />
+              <Menu size={19} />
             )}
           </button>
         </div>
@@ -696,10 +630,12 @@ export default function Header() {
             lg:hidden
           "
         >
-          <Container className="py-[4vw]">
+          <Container className="py-4 sm:py-5">
             <nav className="flex flex-col">
 
-              {/* PLATFORM */}
+              {/* =================================================
+                  PLATFORM
+              ================================================== */}
 
               <div className="border-b border-[var(--border)]">
                 <button
@@ -709,22 +645,26 @@ export default function Header() {
                   }
                   className="
                     flex
+                    min-h-[52px]
                     w-full
                     items-center
                     justify-between
-                    py-[3.2vw]
                     text-left
-                    text-[14px]
+                    text-[15px]
                     font-semibold
                     leading-none
-                    text-[var(--text)]
+                    !text-[#d6d6d6]
+                    transition-colors
+                    duration-200
+                    hover:!text-[var(--primary)]
                   "
                 >
                   Platform
 
                   <ChevronDown
-                    size={16}
+                    size={17}
                     className={`
+                      !text-[#d6d6d6]
                       transition-transform
                       duration-200
                       ${platformOpen ? "rotate-180" : ""}
@@ -733,7 +673,7 @@ export default function Header() {
                 </button>
 
                 {platformOpen && (
-                  <div className="pb-[2vw]">
+                  <div className="pb-3">
                     {platformItems.map((item) => (
                       <Link
                         key={item.href}
@@ -741,12 +681,17 @@ export default function Header() {
                         onClick={closeMobileMenu}
                         className="
                           block
-                          py-[2.5vw]
-                          pl-[2vw]
-                          text-[12px]
+                          rounded-[8px]
+                          px-3
+                          py-3
+                          text-[13px]
                           font-medium
                           leading-none
-                          text-[var(--text-secondary)]
+                          !text-[#d6d6d6]
+                          transition-all
+                          duration-200
+                          hover:bg-[var(--surface-hover)]
+                          hover:!text-[var(--primary)]
                         "
                       >
                         {item.label}
@@ -756,7 +701,9 @@ export default function Header() {
                 )}
               </div>
 
-              {/* SHOP */}
+              {/* =================================================
+                  SHOP
+              ================================================== */}
 
               <div className="border-b border-[var(--border)]">
                 <button
@@ -766,22 +713,26 @@ export default function Header() {
                   }
                   className="
                     flex
+                    min-h-[52px]
                     w-full
                     items-center
                     justify-between
-                    py-[3.2vw]
                     text-left
-                    text-[14px]
+                    text-[15px]
                     font-semibold
                     leading-none
-                    text-[var(--text)]
+                    !text-[#d6d6d6]
+                    transition-colors
+                    duration-200
+                    hover:!text-[var(--primary)]
                   "
                 >
                   Shop
 
                   <ChevronDown
-                    size={16}
+                    size={17}
                     className={`
+                      !text-[#d6d6d6]
                       transition-transform
                       duration-200
                       ${shopOpen ? "rotate-180" : ""}
@@ -790,7 +741,7 @@ export default function Header() {
                 </button>
 
                 {shopOpen && (
-                  <div className="pb-[2vw]">
+                  <div className="pb-3">
                     {shopItems.map((item) => (
                       <Link
                         key={item.href}
@@ -798,12 +749,17 @@ export default function Header() {
                         onClick={closeMobileMenu}
                         className="
                           block
-                          py-[2.5vw]
-                          pl-[2vw]
-                          text-[12px]
+                          rounded-[8px]
+                          px-3
+                          py-3
+                          text-[13px]
                           font-medium
                           leading-none
-                          text-[var(--text-secondary)]
+                          !text-[#d6d6d6]
+                          transition-all
+                          duration-200
+                          hover:bg-[var(--surface-hover)]
+                          hover:!text-[var(--primary)]
                         "
                       >
                         {item.label}
@@ -813,7 +769,9 @@ export default function Header() {
                 )}
               </div>
 
-              {/* MAIN LINKS */}
+              {/* =================================================
+                  MAIN LINKS
+              ================================================== */}
 
               {mainLinks.map((item) => (
                 <Link
@@ -821,29 +779,37 @@ export default function Header() {
                   href={item.href}
                   onClick={closeMobileMenu}
                   className="
+                    flex
+                    min-h-[52px]
+                    items-center
                     border-b
                     border-[var(--border)]
-                    py-[3.2vw]
-                    text-[14px]
+                    text-[15px]
                     font-semibold
                     leading-none
-                    text-[var(--text)]
+                    !text-[#d6d6d6]
+                    transition-colors
+                    duration-200
+                    hover:!text-[var(--primary)]
                   "
                 >
                   {item.label}
                 </Link>
               ))}
 
-              {/* ACCOUNT ACTIONS */}
+              {/* =================================================
+                  ACCOUNT ACTIONS
+              ================================================== */}
 
-              <div className="mt-[4vw] grid grid-cols-2 gap-[2vw]">
+              <div className="mt-5 grid grid-cols-2 gap-2.5">
                 <Button
                   href="/sign-in"
                   variant="secondary"
                   className="
                     h-[46px]
-                    text-[12px]
-                    leading-none
+                    w-full
+                    px-3
+                    text-[14px]
                   "
                 >
                   Log in
@@ -854,8 +820,9 @@ export default function Header() {
                   variant="primary"
                   className="
                     h-[46px]
-                    text-[12px]
-                    leading-none
+                    w-full
+                    px-3
+                    text-[14px]
                   "
                 >
                   Become a Client
