@@ -285,36 +285,98 @@ function ProductCard({
     <article
       className="
         group
+        relative
         w-[calc(25%-0.75vw)]
         min-w-[calc(25%-0.75vw)]
         snap-start
+        overflow-hidden
+        rounded-[1.1vw]
+        border
+        border-[var(--border)]
+        bg-[var(--surface)]
+        backdrop-blur-2xl
+        transition-all
+        duration-500
+
+        hover:border-[var(--primary)]/30
+        hover:bg-[var(--surface-hover)]
 
         max-lg:w-[calc(50%-0.375rem)]
         max-lg:min-w-[calc(50%-0.375rem)]
+        max-lg:rounded-[14px]
 
         max-sm:w-[82vw]
         max-sm:min-w-[82vw]
       "
     >
-      {/* ===================================================
+      {/* =================================================
+          SUBTLE GLASS GLOW
+      ================================================== */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -left-[20%]
+          -top-[15%]
+          z-0
+          h-[45%]
+          w-[55%]
+          rounded-full
+          bg-[var(--primary)]
+          opacity-[0.035]
+          blur-[70px]
+          transition-opacity
+          duration-500
+          group-hover:opacity-[0.07]
+          dark:opacity-[0.06]
+          dark:group-hover:opacity-[0.1]
+        "
+      />
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -right-[20%]
+          top-[25%]
+          z-0
+          h-[40%]
+          w-[50%]
+          rounded-full
+          bg-[var(--primary)]
+          opacity-[0.02]
+          blur-[80px]
+          transition-opacity
+          duration-500
+          group-hover:opacity-[0.05]
+          dark:opacity-[0.04]
+          dark:group-hover:opacity-[0.08]
+        "
+      />
+
+      {/* =================================================
           IMAGE
-      ==================================================== */}
+      ================================================== */}
 
       <div
         className="
           relative
+          z-10
           overflow-hidden
-          rounded-[1.1vw]
-          border
-          border-[var(--border)]
-          bg-[var(--surface)]
+          rounded-t-[1.1vw]
 
-          max-lg:rounded-[14px]
+          max-lg:rounded-t-[14px]
         "
       >
         <Link
           href={product.href}
-          className="relative block aspect-[0.86] overflow-hidden"
+          className="
+            relative
+            block
+            aspect-[0.86]
+            overflow-hidden
+          "
         >
           <img
             src={product.image}
@@ -386,6 +448,7 @@ function ProductCard({
             absolute
             right-3
             top-3
+            z-20
             flex
             h-8
             w-8
@@ -421,22 +484,26 @@ function ProductCard({
             bottom-3
             left-3
             right-3
+            z-20
             flex
             translate-y-2
             items-center
             justify-center
             gap-2
             rounded-[8px]
-            bg-white
+            border
+            border-white/10
+            bg-[var(--primary)]
             py-2.5
             text-[9px]
             font-bold
-            !text-[var(--primary)]
+            !text-white
             opacity-0
             shadow-xl
+            backdrop-blur-xl
             transition-all
             duration-300
-            bg-[var(--primary)]
+
             group-hover:translate-y-0
             group-hover:opacity-100
 
@@ -448,14 +515,37 @@ function ProductCard({
         </Link>
       </div>
 
-      {/* ===================================================
+      {/* =================================================
           PRODUCT INFO
-      ==================================================== */}
+      ================================================== */}
 
-      <div className="border-b border-[var(--border)] pb-4 pt-3">
+      <div
+        className="
+          relative
+          z-10
+          border-t
+          border-[var(--border)]
+          px-4
+          pb-4
+          pt-3
+
+          sm:px-4
+          sm:pb-5
+          sm:pt-4
+        "
+      >
         {/* Category */}
 
-        <p className="mb-1 text-[8px] font-medium uppercase tracking-[0.1em] text-[var(--text-tertiary)]">
+        <p
+          className="
+            mb-1
+            text-[8px]
+            font-medium
+            uppercase
+            tracking-[0.1em]
+            text-[var(--text-tertiary)]
+          "
+        >
           {product.category}
         </p>
 
@@ -484,34 +574,78 @@ function ProductCard({
 
         <div className="mt-2.5 flex items-end justify-between gap-3">
           <div className="flex min-w-0 items-baseline gap-2">
-            <span className="text-[15px] font-bold tracking-[-0.03em] text-[var(--text)]">
+            <span
+              className="
+                text-[15px]
+                font-bold
+                tracking-[-0.03em]
+                text-[var(--text)]
+              "
+            >
               {product.price}
             </span>
 
             {product.oldPrice && (
-              <span className="text-[9px] font-medium text-[var(--text-tertiary)] line-through">
+              <span
+                className="
+                  text-[9px]
+                  font-medium
+                  text-[var(--text-tertiary)]
+                  line-through
+                "
+              >
                 {product.oldPrice}
               </span>
             )}
           </div>
 
-          <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 py-1">
+          <div
+            className="
+              flex
+              shrink-0
+              items-center
+              gap-1.5
+              rounded-full
+              border
+              border-[var(--border)]
+              bg-[var(--bg-secondary)]
+              px-2
+              py-1
+            "
+          >
             <Star
               size={9}
               fill="currentColor"
               className="text-[var(--primary)]"
             />
+
             <span className="text-[9px] font-bold text-[var(--text)]">
               {product.rating}
             </span>
+
             <span className="text-[8px] text-[var(--text-tertiary)]">
               ({product.reviews})
             </span>
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between text-[8px] font-medium uppercase tracking-[0.08em] text-[var(--text-tertiary)]">
+        {/* Meta */}
+
+        <div
+          className="
+            mt-2
+            flex
+            items-center
+            justify-between
+            text-[8px]
+            font-medium
+            uppercase
+            tracking-[0.08em]
+            text-[var(--text-tertiary)]
+          "
+        >
           <span>{product.sold}</span>
+
           <span>Made to measure</span>
         </div>
       </div>

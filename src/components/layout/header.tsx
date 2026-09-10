@@ -35,6 +35,7 @@ const platformItems = [
 ];
 
 const shopItems = [
+  { label: "Explore All", href: "/shop" },
   { label: "Men", href: "/shop/men" },
   { label: "Women", href: "/shop/women" },
   { label: "Kids", href: "/shop/kids" },
