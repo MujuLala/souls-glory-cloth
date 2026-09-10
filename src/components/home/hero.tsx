@@ -692,7 +692,7 @@ export default function Hero() {
             number="02"
             title="Choose your experience"
             description="Ready-to-wear or custom-made"
-            bordered
+            
           />
 
           <PlatformBenefit
