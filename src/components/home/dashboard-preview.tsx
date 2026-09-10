@@ -104,7 +104,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.65,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -243,7 +243,7 @@ export default function DashboardPreview() {
           }}
           transition={{
             duration: 0.8,
-            ease: [0.22, 1, 0.36, 1],
+            ease: [0.22, 1, 0.36, 1] as const,
           }}
           className="
             relative
@@ -799,7 +799,7 @@ export default function DashboardPreview() {
                                 transition={{
                                   duration: 1,
                                   delay: 0.35 + index * 0.12,
-                                  ease: [0.22, 1, 0.36, 1],
+                                  ease: [0.22, 1, 0.36, 1] as const,
                                 }}
                                 className="
                                   h-full

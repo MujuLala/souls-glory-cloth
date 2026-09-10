@@ -97,16 +97,14 @@ export default function StudioHero() {
             {/* Buttons */}
             <div className="mt-[5vw] flex items-center justify-center gap-[2vw] sm:mt-[3vw] sm:gap-[1.2vw] lg:mt-[2vw] lg:gap-[0.6vw]">
 
-              <Button
-                asChild
-                className="group h-auto rounded-[7px] bg-[#ED1B2F] px-[5vw] py-[3.2vw] text-[3vw] font-medium text-white transition-all duration-300 hover:bg-[#ff263b] sm:px-[3.5vw] sm:py-[2vw] sm:text-[1.8vw] lg:px-[1.4vw] lg:py-[0.75vw] lg:text-[0.72vw]"
+              <Link
+                href="/contact"
+                className="group inline-flex h-auto items-center justify-center rounded-[7px] bg-[#ED1B2F] px-[5vw] py-[3.2vw] text-[3vw] font-medium text-white transition-all duration-300 hover:bg-[#ff263b] sm:px-[3.5vw] sm:py-[2vw] sm:text-[1.8vw] lg:px-[1.4vw] lg:py-[0.75vw] lg:text-[0.72vw]"
               >
-                <Link href="/contact" className="flex items-center gap-[0.5vw]">
-                  <span>Start Creating</span>
+                <span>Start Creating</span>
 
-                  <ArrowRight className="ml-[1.5vw] h-[3.5vw] w-[3.5vw] transition-transform duration-300 group-hover:translate-x-[0.2vw] sm:ml-[0.8vw] sm:h-[2.5vw] sm:w-[2.5vw] lg:ml-[0.45vw] lg:h-[0.8vw] lg:w-[0.8vw]" />
-                </Link>
-              </Button>
+                <ArrowRight className="ml-[1.5vw] h-[3.5vw] w-[3.5vw] transition-transform duration-300 group-hover:translate-x-[0.2vw] sm:ml-[0.8vw] sm:h-[2.5vw] sm:w-[2.5vw] lg:ml-[0.45vw] lg:h-[0.8vw] lg:w-[0.8vw]" />
+              </Link>
 
 
               <Link
