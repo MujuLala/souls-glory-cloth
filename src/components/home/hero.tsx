@@ -353,7 +353,7 @@ export default function Hero() {
               <div
                 className="
                   relative
-                  aspect-[0.9]
+                  aspect-[1.1]
                   overflow-hidden
                   rounded-[1.05vw]
                   bg-[#161616]

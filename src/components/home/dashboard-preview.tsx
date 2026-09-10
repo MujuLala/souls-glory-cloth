@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Ruler,
   Shirt,
+  Sparkles,
   Star,
   UserRound,
 } from "lucide-react";
@@ -28,21 +29,25 @@ const stats = [
     label: "Active orders",
     value: "02",
     icon: Shirt,
+    meta: "+1 this month",
   },
   {
     label: "Saved profiles",
     value: "03",
     icon: UserRound,
+    meta: "2 complete",
   },
   {
     label: "Wishlist",
     value: "08",
     icon: Heart,
+    meta: "3 new items",
   },
   {
-    label: "Pending reviews",
+    label: "Reviews",
     value: "04",
     icon: Star,
+    meta: "Waiting for you",
   },
 ];
 
@@ -53,7 +58,7 @@ const orders = [
     type: "Custom Made",
     status: "Stitching",
     progress: 72,
-    image: "/images/dashboard/kurta-placeholder.jpg",
+    placeholder: "KURTA",
   },
   {
     id: "#SG-1039",
@@ -61,7 +66,7 @@ const orders = [
     type: "Ready to Wear",
     status: "In Transit",
     progress: 88,
-    image: "/images/dashboard/suit-placeholder.jpg",
+    placeholder: "SUIT",
   },
 ];
 
@@ -70,6 +75,7 @@ const accountItems = [
     icon: Ruler,
     label: "Measurements",
     value: "3 profiles",
+    accent: true,
   },
   {
     icon: MapPin,
@@ -85,6 +91,7 @@ const accountItems = [
     icon: Star,
     label: "Reviews",
     value: "4 pending",
+    accent: true,
   },
 ];
 
@@ -92,7 +99,7 @@ const activities = [
   {
     icon: CheckCircle2,
     title: "Measurement profile updated",
-    time: "2 hours ago",
+    time: "2h ago",
   },
   {
     icon: Shirt,
@@ -102,7 +109,7 @@ const activities = [
   {
     icon: Star,
     title: "New review reminder",
-    time: "2 days ago",
+    time: "2d ago",
   },
 ];
 
@@ -112,115 +119,136 @@ const activities = [
 
 export default function DashboardPreview() {
   return (
-    <section className="relative overflow-hidden ">
+    <section className="relative overflow-hidden">
       {/* ------------------------------------------------------------------ */}
-      {/* BACKGROUND GLOW                                                     */}
+      {/* AMBIENT BACKGROUND                                                  */}
       {/* ------------------------------------------------------------------ */}
 
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-10%] top-[15%] h-[30vw] w-[30vw] rounded-full bg-[var(--primary)]/10 blur-[120px]" />
+        <div className="absolute left-[-12%] top-[18%] h-[26vw] w-[26vw] rounded-full bg-[var(--primary)]/8 blur-[110px]" />
 
-        <div className="absolute bottom-[-10%] right-[-10%] h-[28vw] w-[28vw] rounded-full bg-[var(--accent)]/5 blur-[120px]" />
+        <div className="absolute bottom-[-15%] right-[-8%] h-[24vw] w-[24vw] rounded-full bg-[var(--accent)]/5 blur-[110px]" />
       </div>
 
       <Container className="relative">
         {/* ---------------------------------------------------------------- */}
-        {/* SECTION HEADER                                                    */}
+        {/* SECTION INTRO                                                     */}
         {/* ---------------------------------------------------------------- */}
 
-        <div className="mb-[3vw] grid gap-[2vw] lg:grid-cols-[1.4fr_0.6fr] lg:items-end">
+        <div className="mb-[2.5vw] grid gap-[2vw] lg:grid-cols-[1.45fr_0.55fr] lg:items-end">
           <div>
-            <span className="mb-[0.7vw] block text-[clamp(10px,0.72vw,13px)] font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Your account
-            </span>
+            <div className="mb-[0.6vw] flex items-center gap-2">
+              <span className="h-[5px] w-[5px] rounded-full bg-[var(--primary)]" />
 
-            <h2 className="max-w-[850px] text-[clamp(40px,4.1vw,72px)] font-semibold leading-[0.97] tracking-[-0.055em] text-[var(--foreground)]">
+              <span className="text-[clamp(10px,0.65vw,12px)] font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
+                Your account
+              </span>
+            </div>
+
+            <h2 className="max-w-[850px] text-[clamp(38px,3.8vw,68px)] font-semibold leading-[0.97] tracking-[-0.055em] text-[var(--foreground)]">
               A dashboard built
               <br />
               for every client.
             </h2>
           </div>
 
-          <p className="max-w-[430px] text-[clamp(14px,0.95vw,17px)] leading-[1.55] text-[var(--muted-foreground)] lg:pb-[0.35vw]">
-            Your personal space for orders, measurements, appointments,
-            payments, saved styles and everything in between.
+          <p className="max-w-[400px] text-[clamp(13px,0.85vw,16px)] leading-[1.5] text-[var(--muted-foreground)] lg:pb-[0.2vw]">
+            Orders, measurements, appointments, payments and support — all
+            organized in one simple client space.
           </p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
-        {/* DASHBOARD WRAPPER                                                 */}
+        {/* DASHBOARD                                                         */}
         {/* ---------------------------------------------------------------- */}
 
-        <div className="overflow-hidden rounded-[1.35vw] border border-[var(--border)] bg-[var(--surface)] shadow-[0_25px_100px_rgba(0,0,0,0.2)] max-lg:rounded-[20px]">
-          {/* -------------------------------------------------------------- */}
-          {/* DASHBOARD TOP BAR                                               */}
-          {/* -------------------------------------------------------------- */}
+        <div className="overflow-hidden rounded-[1.2vw] border border-[var(--border)] bg-[var(--surface)] shadow-[0_30px_90px_rgba(0,0,0,0.22)] max-lg:rounded-[18px]">
+          {/* ================================================================ */}
+          {/* TOP BAR                                                          */}
+          {/* ================================================================ */}
 
-          <div className="flex items-center justify-between border-b border-[var(--border)] px-[1.35vw] py-[1vw] max-lg:px-5 max-lg:py-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--dropdown-bg)]">
-                <UserRound className="h-4 w-4 text-[var(--foreground)]" />
+          <div className="flex items-center justify-between border-b border-[var(--border)] px-[1.2vw] py-[0.8vw] max-lg:px-4 max-lg:py-3">
+            <div className="flex items-center gap-2.5">
+              <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)]">
+                <UserRound className="h-3.5 w-3.5 text-[var(--foreground)]" />
+
+                <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full border-2 border-[var(--surface)] bg-green-500" />
               </div>
 
               <div>
-                <p className="text-[clamp(13px,0.85vw,16px)] font-semibold text-[var(--foreground)]">
+                <p className="text-[clamp(12px,0.75vw,15px)] font-semibold text-[var(--foreground)]">
                   Good morning, Ahmed
                 </p>
 
-                <p className="mt-0.5 text-[11px] text-[var(--muted-foreground)]">
-                  Here&apos;s what&apos;s happening with your account.
+                <p className="mt-0.5 text-[9px] text-[var(--muted-foreground)]">
+                  Here&apos;s your latest account overview.
                 </p>
               </div>
             </div>
 
-            <div className="hidden items-center gap-2 sm:flex">
-              {/* Notification */}
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)]">
-                <Bell className="h-4 w-4 text-[var(--foreground)]" />
+            <div className="flex items-center gap-2">
+              <div className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)]">
+                <Bell className="h-3.5 w-3.5 text-[var(--foreground)]" />
 
-                <span className="absolute right-[7px] top-[6px] h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
+                <span className="absolute right-[6px] top-[5px] h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
               </div>
 
-              {/* Dashboard label */}
-              <span className="rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)] px-3 py-2 text-[10px] font-medium text-[var(--muted-foreground)]">
+              <span className="hidden rounded-full border border-[var(--border)] bg-[var(--dropdown-bg)] px-3 py-1.5 text-[9px] font-medium text-[var(--muted-foreground)] sm:block">
                 Client dashboard
               </span>
             </div>
           </div>
 
-          {/* -------------------------------------------------------------- */}
-          {/* DASHBOARD CONTENT                                               */}
-          {/* -------------------------------------------------------------- */}
+          {/* ================================================================ */}
+          {/* DASHBOARD GRID                                                   */}
+          {/* ================================================================ */}
 
-          <div className="grid items-stretch gap-[1vw] p-[1vw] max-lg:p-4 xl:grid-cols-[1.65fr_1fr]">
+          <div className="grid items-stretch gap-[0.8vw] p-[0.8vw] max-lg:p-3 xl:grid-cols-[1.65fr_1fr]">
             {/* ============================================================ */}
             {/* LEFT COLUMN                                                    */}
             {/* ============================================================ */}
 
-            <div className="flex h-full flex-col gap-[1vw] max-lg:gap-4">
+            <div className="flex min-w-0 flex-col gap-[0.8vw] max-lg:gap-3">
               {/* ---------------------------------------------------------- */}
-              {/* STAT CARDS                                                   */}
+              {/* STATS                                                        */}
               {/* ---------------------------------------------------------- */}
 
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-                {stats.map((stat) => {
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {stats.map((stat, index) => {
                   const Icon = stat.icon;
 
                   return (
                     <div
                       key={stat.label}
-                      className="group rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)]/40 max-lg:rounded-[14px] max-lg:p-4"
+                      className="group relative overflow-hidden rounded-[0.75vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.85vw] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)]/35 max-lg:rounded-[12px] max-lg:p-3"
                     >
-                      <div className="mb-[1vw] flex items-center justify-between max-lg:mb-4">
-                        <span className="text-[clamp(10px,0.65vw,13px)] font-medium text-[var(--muted-foreground)]">
-                          {stat.label}
-                        </span>
+                      {/* Decorative corner */}
+                      <div className="pointer-events-none absolute -right-5 -top-5 h-14 w-14 rounded-full border border-[var(--border)] opacity-40 transition-transform duration-500 group-hover:scale-125" />
 
-                        <Icon className="h-[0.9vw] w-[0.9vw] text-[var(--muted-foreground)] max-lg:h-4 max-lg:w-4" />
+                      <div className="relative flex items-start justify-between">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface)]">
+                          <Icon className="h-3.5 w-3.5 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
+                        </div>
+
+                        {index === 0 && (
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-green-500" />
+                        )}
                       </div>
 
-                      <div className="text-[clamp(27px,1.9vw,38px)] font-semibold leading-none tracking-[-0.04em] text-[var(--foreground)]">
-                        {stat.value}
+                      <div className="relative mt-[0.8vw] max-lg:mt-3">
+                        <p className="text-[clamp(9px,0.6vw,12px)] font-medium text-[var(--muted-foreground)]">
+                          {stat.label}
+                        </p>
+
+                        <div className="mt-1 flex items-end justify-between gap-2">
+                          <span className="text-[clamp(24px,1.65vw,34px)] font-semibold leading-none tracking-[-0.05em] text-[var(--foreground)]">
+                            {stat.value}
+                          </span>
+
+                          <span className="hidden text-right text-[8px] text-[var(--muted-foreground)] sm:block">
+                            {stat.meta}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -231,83 +259,102 @@ export default function DashboardPreview() {
               {/* RECENT ORDERS                                                */}
               {/* ---------------------------------------------------------- */}
 
-              <div className="rounded-[0.9vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[15px] max-lg:p-4">
-                <div className="mb-[1vw] flex items-center justify-between max-lg:mb-4">
+              <div className="rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
+                <div className="mb-[0.7vw] flex items-center justify-between max-lg:mb-3">
                   <div>
-                    <h3 className="text-[clamp(16px,1vw,20px)] font-semibold text-[var(--foreground)]">
-                      Recent orders
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-[clamp(15px,0.95vw,19px)] font-semibold text-[var(--foreground)]">
+                        Recent orders
+                      </h3>
 
-                    <p className="mt-1 text-[11px] text-[var(--muted-foreground)]">
+                      <span className="rounded-full bg-[var(--surface)] px-2 py-0.5 text-[8px] text-[var(--muted-foreground)]">
+                        2 active
+                      </span>
+                    </div>
+
+                    <p className="mt-1 text-[9px] text-[var(--muted-foreground)]">
                       Track your latest pieces.
                     </p>
                   </div>
 
-                  <button className="flex items-center gap-1 text-[11px] font-medium text-[var(--foreground)] transition-opacity hover:opacity-70">
+                  <button className="group flex items-center gap-1 text-[9px] font-medium text-[var(--foreground)]">
                     View all
-                    <ArrowUpRight className="h-3 w-3" />
+                    <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                   </button>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {orders.map((order) => (
                     <div
                       key={order.id}
-                      className="group grid grid-cols-[clamp(56px,4.8vw,78px)_minmax(0,1fr)_auto] items-center gap-3 rounded-[0.7vw] border border-[var(--border)] p-[0.65vw] transition-all duration-300 hover:bg-[var(--surface)] max-lg:rounded-[12px] max-lg:p-2.5"
+                      className="group grid grid-cols-[52px_minmax(0,1fr)_auto] items-center gap-3 rounded-[0.6vw] border border-[var(--border)] p-2 transition-all duration-300 hover:border-[var(--primary)]/25 hover:bg-[var(--surface)] max-lg:grid-cols-[52px_minmax(0,1fr)] max-lg:rounded-[10px]"
                     >
-                      {/* Product Image */}
-                      <div className="h-[4.8vw] w-[4.8vw] min-h-[56px] min-w-[56px] max-h-[78px] max-w-[78px] overflow-hidden rounded-[0.55vw] bg-[var(--surface)] max-lg:rounded-lg">
-                        <img
-                          src={order.image}
-                          alt={order.title}
-                          className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                          onError={(event) => {
-                            event.currentTarget.style.display = "none";
-                          }}
-                        />
+                      {/* ------------------------------------------------ */}
+                      {/* PRODUCT PLACEHOLDER                              */}
+                      {/* ------------------------------------------------ */}
+
+                      <div className="relative flex h-[52px] w-[52px] shrink-0 items-center justify-center overflow-hidden rounded-[9px] border border-[var(--border)] bg-[var(--surface)]">
+                        {/* Subtle tailoring pattern */}
+                        <div className="pointer-events-none absolute inset-0 opacity-40">
+                          <div className="absolute left-1/2 top-0 h-full w-px bg-[var(--border)]" />
+                          <div className="absolute left-0 top-1/2 h-px w-full bg-[var(--border)]" />
+                        </div>
+
+                        <div className="relative flex flex-col items-center">
+                          <Shirt className="mb-1 h-4 w-4 text-[var(--muted-foreground)]" />
+
+                          <span className="text-[6px] font-semibold tracking-[0.12em] text-[var(--muted-foreground)]">
+                            {order.placeholder}
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Product Info */}
+                      {/* ------------------------------------------------ */}
+                      {/* ORDER INFORMATION                                */}
+                      {/* ------------------------------------------------ */}
+
                       <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                          <h4 className="truncate text-[clamp(12px,0.78vw,15px)] font-semibold text-[var(--foreground)]">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <h4 className="truncate text-[clamp(11px,0.72vw,14px)] font-semibold text-[var(--foreground)]">
                             {order.title}
                           </h4>
 
-                          <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-[9px] font-medium text-[var(--primary)]">
+                          <span className="rounded-full bg-[var(--primary)]/10 px-1.5 py-0.5 text-[7px] font-semibold text-[var(--primary)]">
                             {order.status}
                           </span>
                         </div>
 
-                        <p className="mt-1 text-[10px] text-[var(--muted-foreground)]">
-                          Order {order.id} · {order.type}
+                        <p className="mt-1 text-[8px] text-[var(--muted-foreground)]">
+                          {order.id} · {order.type}
                         </p>
 
-                        {/* Progress */}
-                        <div className="mt-2 flex items-center gap-2">
-                          <div className="h-1 max-w-[260px] flex-1 overflow-hidden rounded-full bg-[var(--border)]">
+                        <div className="mt-2 flex max-w-[360px] items-center gap-2">
+                          <div className="h-[3px] flex-1 overflow-hidden rounded-full bg-[var(--border)]">
                             <div
-                              className="h-full rounded-full bg-[var(--primary)] transition-all duration-700"
+                              className="h-full rounded-full bg-[var(--primary)]"
                               style={{
                                 width: `${order.progress}%`,
                               }}
                             />
                           </div>
 
-                          <span className="text-[9px] font-medium text-[var(--muted-foreground)]">
+                          <span className="text-[8px] font-medium text-[var(--muted-foreground)]">
                             {order.progress}%
                           </span>
                         </div>
                       </div>
 
-                      {/* Desktop Status */}
-                      <div className="hidden text-right sm:block">
-                        <span className="text-[10px] text-[var(--muted-foreground)]">
-                          {order.progress}%
-                        </span>
+                      {/* ------------------------------------------------ */}
+                      {/* ORDER STATUS                                      */}
+                      {/* ------------------------------------------------ */}
 
-                        <p className="mt-1 text-[9px] text-[var(--muted-foreground)]">
-                          Complete
+                      <div className="hidden min-w-[55px] text-right sm:block">
+                        <p className="text-[8px] text-[var(--muted-foreground)]">
+                          Progress
+                        </p>
+
+                        <p className="mt-0.5 text-[10px] font-semibold text-[var(--foreground)]">
+                          {order.progress}%
                         </p>
                       </div>
                     </div>
@@ -316,66 +363,70 @@ export default function DashboardPreview() {
               </div>
 
               {/* ---------------------------------------------------------- */}
-              {/* BOTTOM CARDS                                                 */}
+              {/* APPOINTMENT + STYLE                                         */}
               {/* ---------------------------------------------------------- */}
 
-              <div className="grid flex-1 items-stretch gap-2.5 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {/* Appointment */}
-                <div className="h-full rounded-[0.9vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[15px] max-lg:p-4">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--surface)]">
-                      <CalendarDays className="h-4 w-4 text-[var(--primary)]" />
+                <div className="group relative overflow-hidden rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface)]">
+                      <CalendarDays className="h-3.5 w-3.5 text-[var(--primary)]" />
                     </div>
 
-                    <span className="flex items-center gap-1 text-[9px] font-medium text-[var(--primary)]">
+                    <span className="flex items-center gap-1 text-[8px] font-medium text-[var(--primary)]">
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
                       Upcoming
                     </span>
                   </div>
 
-                  <p className="text-[10px] text-[var(--muted-foreground)]">
-                    Next appointment
-                  </p>
+                  <div className="mt-3">
+                    <p className="text-[8px] text-[var(--muted-foreground)]">
+                      Next appointment
+                    </p>
 
-                  <h4 className="mt-1 text-[clamp(15px,0.95vw,18px)] font-semibold text-[var(--foreground)]">
-                    Final fitting session
-                  </h4>
+                    <h4 className="mt-1 text-[clamp(13px,0.8vw,16px)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+                      Final fitting session
+                    </h4>
 
-                  <div className="mt-3 flex items-center gap-2 text-[10px] text-[var(--muted-foreground)]">
-                    <Clock3 className="h-3.5 w-3.5" />
-                    Tomorrow · 04:30 PM
+                    <div className="mt-2 flex items-center gap-1.5 text-[8px] text-[var(--muted-foreground)]">
+                      <Clock3 className="h-3 w-3" />
+                      Tomorrow · 04:30 PM
+                    </div>
                   </div>
                 </div>
 
                 {/* Style Profile */}
-                <div className="h-full rounded-[0.9vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[15px] max-lg:p-4">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--surface)]">
-                      <Shirt className="h-4 w-4 text-[var(--foreground)]" />
+                <div className="group relative overflow-hidden rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--surface)]">
+                      <Sparkles className="h-3.5 w-3.5 text-[var(--foreground)]" />
                     </div>
 
-                    <span className="text-[10px] text-[var(--muted-foreground)]">
+                    <span className="text-[8px] text-[var(--muted-foreground)]">
                       92% complete
                     </span>
                   </div>
 
-                  <p className="text-[10px] text-[var(--muted-foreground)]">
-                    Style profile
-                  </p>
+                  <div className="mt-3">
+                    <p className="text-[8px] text-[var(--muted-foreground)]">
+                      Style profile
+                    </p>
 
-                  <h4 className="mt-1 text-[clamp(15px,0.95vw,18px)] font-semibold text-[var(--foreground)]">
-                    Classic & Contemporary
-                  </h4>
+                    <h4 className="mt-1 text-[clamp(13px,0.8vw,16px)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+                      Classic & Contemporary
+                    </h4>
 
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {["Formal", "Minimal", "Tailored"].map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-[var(--border)] px-2 py-1 text-[8px] text-[var(--muted-foreground)]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {["Formal", "Minimal", "Tailored"].map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full border border-[var(--border)] px-1.5 py-0.5 text-[7px] text-[var(--muted-foreground)]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -385,50 +436,61 @@ export default function DashboardPreview() {
             {/* RIGHT COLUMN                                                   */}
             {/* ============================================================ */}
 
-            <div className="flex h-full flex-col gap-[1vw] max-lg:gap-4">
+            <div className="flex min-w-0 flex-col gap-[0.8vw] max-lg:gap-3">
               {/* ---------------------------------------------------------- */}
-              {/* EVERYTHING IN ONE PLACE                                     */}
+              {/* ACCOUNT HUB                                                  */}
               {/* ---------------------------------------------------------- */}
 
-              <div className="rounded-[0.9vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1.2vw] max-lg:rounded-[15px] max-lg:p-4">
-                <div className="mb-[1vw] max-lg:mb-4">
+              <div className="rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[13px] max-lg:p-3.5">
+                <div className="mb-[0.8vw] max-lg:mb-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-[clamp(19px,1.35vw,26px)] font-semibold tracking-[-0.035em] text-[var(--foreground)]">
-                      Everything in one place.
-                    </h3>
+                    <div>
+                      <h3 className="text-[clamp(17px,1.25vw,24px)] font-semibold tracking-[-0.04em] text-[var(--foreground)]">
+                        Everything in one place.
+                      </h3>
 
-                    <div className="hidden h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] sm:flex">
-                      <ArrowUpRight className="h-3.5 w-3.5" />
+                      <p className="mt-1 text-[9px] leading-relaxed text-[var(--muted-foreground)]">
+                        Your profile, preferences and account details.
+                      </p>
+                    </div>
+
+                    <div className="hidden h-7 w-7 items-center justify-center rounded-full border border-[var(--border)] sm:flex">
+                      <ArrowUpRight className="h-3 w-3" />
                     </div>
                   </div>
-
-                  <p className="mt-1.5 max-w-[400px] text-[11px] leading-relaxed text-[var(--muted-foreground)]">
-                    Keep your fashion profile, measurements and communication
-                    organized from one simple dashboard.
-                  </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {accountItems.map((item) => {
                     const Icon = item.icon;
 
                     return (
                       <button
                         key={item.label}
-                        className="group flex w-full items-center justify-between rounded-[0.65vw] border border-[var(--border)] px-[0.85vw] py-[0.75vw] text-left transition-all duration-300 hover:border-[var(--primary)]/40 hover:bg-[var(--surface)] max-lg:rounded-[11px] max-lg:px-3 max-lg:py-3"
+                        className="group flex w-full items-center justify-between rounded-[9px] border border-[var(--border)] px-2.5 py-2 text-left transition-all duration-300 hover:border-[var(--primary)]/30 hover:bg-[var(--surface)]"
                       >
-                        <div className="flex items-center gap-2.5">
-                          <Icon className="h-4 w-4 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
+                        <div className="flex min-w-0 items-center gap-2.5">
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[var(--surface)]">
+                            <Icon className="h-3 w-3 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
+                          </div>
 
-                          <span className="text-[clamp(11px,0.7vw,14px)] font-medium text-[var(--foreground)]">
+                          <span className="truncate text-[clamp(10px,0.65vw,13px)] font-medium text-[var(--foreground)]">
                             {item.label}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1 text-[9px] text-[var(--muted-foreground)]">
-                          {item.value}
+                        <div className="flex shrink-0 items-center gap-1">
+                          <span
+                            className={`text-[8px] ${
+                              item.accent
+                                ? "font-medium text-[var(--primary)]"
+                                : "text-[var(--muted-foreground)]"
+                            }`}
+                          >
+                            {item.value}
+                          </span>
 
-                          <ChevronRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                          <ChevronRight className="h-3 w-3 text-[var(--muted-foreground)] transition-transform group-hover:translate-x-0.5" />
                         </div>
                       </button>
                     );
@@ -440,31 +502,34 @@ export default function DashboardPreview() {
               {/* SUPPORT CHAT                                                 */}
               {/* ---------------------------------------------------------- */}
 
-              <div className="rounded-[0.9vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[15px] max-lg:p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--surface)]">
-                      <MessageCircle className="h-4 w-4 text-[var(--primary)]" />
+              <div className="rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <div className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--surface)]">
+                      <MessageCircle className="h-3.5 w-3.5 text-[var(--primary)]" />
+
+                      <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-green-500" />
                     </div>
 
-                    <div>
-                      <h3 className="text-[clamp(15px,0.9vw,18px)] font-semibold text-[var(--foreground)]">
+                    <div className="min-w-0">
+                      <h3 className="truncate text-[clamp(13px,0.8vw,16px)] font-semibold text-[var(--foreground)]">
                         Chat with your tailor
                       </h3>
 
-                      <p className="mt-1 text-[10px] leading-relaxed text-[var(--muted-foreground)]">
-                        Questions about your order? Your tailor is online.
+                      <p className="mt-0.5 truncate text-[8px] text-[var(--muted-foreground)]">
+                        Questions about your order?
                       </p>
                     </div>
                   </div>
 
-                  <span className="mt-1 flex items-center gap-1.5 text-[9px] text-[var(--primary)]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
+                  {/* GREEN ONLINE */}
+                  <span className="flex shrink-0 items-center gap-1.5 text-[8px] font-medium text-green-500">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
                     Online
                   </span>
                 </div>
 
-                <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2.5 text-[10px] font-semibold text-[var(--background)] transition-opacity hover:opacity-85">
+                <button className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--foreground)] px-3 py-2 text-[8px] font-semibold text-[var(--background)] transition-all duration-300 hover:opacity-80">
                   Open conversation
                   <ArrowUpRight className="h-3 w-3" />
                 </button>
@@ -474,32 +539,44 @@ export default function DashboardPreview() {
               {/* RECENT ACTIVITY                                              */}
               {/* ---------------------------------------------------------- */}
 
-              <div className="flex-1 rounded-[0.9vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[1vw] max-lg:rounded-[15px] max-lg:p-4">
-                <div className="mb-4 flex items-center justify-between">
+              <div className="flex-1 rounded-[0.8vw] border border-[var(--border)] bg-[var(--dropdown-bg)] p-[0.9vw] max-lg:rounded-[13px] max-lg:p-3.5">
+                <div className="mb-[0.7vw] flex items-center justify-between max-lg:mb-3">
                   <div>
-                    <h3 className="text-[clamp(15px,0.9vw,18px)] font-semibold text-[var(--foreground)]">
+                    <h3 className="text-[clamp(13px,0.85vw,17px)] font-semibold text-[var(--foreground)]">
                       Recent activity
                     </h3>
 
-                    <p className="mt-1 text-[10px] text-[var(--muted-foreground)]">
-                      Your latest account updates.
+                    <p className="mt-0.5 text-[8px] text-[var(--muted-foreground)]">
+                      Latest account updates.
                     </p>
                   </div>
 
-                  <Bell className="h-4 w-4 text-[var(--muted-foreground)]" />
+                  <Bell className="h-3.5 w-3.5 text-[var(--muted-foreground)]" />
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-2.5">
                   {activities.map((activity) => {
                     const Icon = activity.icon;
 
                     return (
-                      <ActivityItem
+                      <div
                         key={activity.title}
-                        icon={<Icon />}
-                        title={activity.title}
-                        time={activity.time}
-                      />
+                        className="group flex items-center gap-2.5"
+                      >
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
+                          <Icon className="h-3 w-3 text-[var(--muted-foreground)] transition-colors group-hover:text-[var(--primary)]" />
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-[9px] font-medium text-[var(--foreground)]">
+                            {activity.title}
+                          </p>
+
+                          <p className="mt-0.5 text-[7px] text-[var(--muted-foreground)]">
+                            {activity.time}
+                          </p>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
@@ -509,37 +586,5 @@ export default function DashboardPreview() {
         </div>
       </Container>
     </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* ACTIVITY ITEM                                                              */
-/* -------------------------------------------------------------------------- */
-
-function ActivityItem({
-  icon,
-  title,
-  time,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  time: string;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--surface)] text-[var(--muted-foreground)]">
-        <span className="[&_svg]:h-3.5 [&_svg]:w-3.5">{icon}</span>
-      </div>
-
-      <div className="min-w-0">
-        <p className="truncate text-[11px] font-medium text-[var(--foreground)]">
-          {title}
-        </p>
-
-        <p className="mt-0.5 text-[9px] text-[var(--muted-foreground)]">
-          {time}
-        </p>
-      </div>
-    </div>
   );
 }

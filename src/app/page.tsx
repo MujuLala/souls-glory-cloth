@@ -4,6 +4,7 @@ import Hero from "@/components/home/hero";
  import ClientJourney from "@/components/home/client-journey";
 import FeaturedProducts from "@/components/home/featured-products";
 import DashboardPreview from "@/components/home/dashboard-preview";
+import Testimonial from "@/components/home/testimnial";
 // import CustomStudio from "@/components/home/custom-studio";
 // import Reviews from "@/components/home/reviews";
 // import FinalCTA from "@/components/home/final-cta";
@@ -16,6 +17,8 @@ export default function Home() {
       <ClientJourney />
       <FeaturedProducts />
       <DashboardPreview />
+      <Testimonial />
+      
 
       {/* <ClientJourney />
 
