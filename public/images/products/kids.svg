@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4b5965"/><stop offset="1" stop-color="#111"/></linearGradient></defs>
+<rect width="300" height="300" fill="url(#g)"/>
+<circle cx="150" cy="75" r="30" fill="#b44151" opacity=".9"/>
+<path d="M95 120 L150 100 L205 120 L220 270 L80 270 Z" fill="#d9d0bd"/>
+<path d="M150 105 L135 145 L150 175 L165 145 Z" fill="#b44151" opacity=".8"/>
+<path d="M115 122 L150 155 L185 122" fill="none" stroke="#b44151" stroke-width="7" opacity=".75"/>
+<text x="150" y="287" text-anchor="middle" fill="white" font-family="Arial" font-size="18" font-weight="700" opacity=".65">KIDS</text>
+</svg>

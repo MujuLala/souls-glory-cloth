@@ -7,6 +7,7 @@ import AnnouncementBar from "@/components/layout/announcement-bar";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import AmbientBackground from "@/components/ui/ambient-background";
+import SiteChrome from "@/components/layout/site-chrome";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,13 +31,13 @@ export default function RootLayout({
         <AmbientBackground />
 
         <div className="relative z-10">
-          <AnnouncementBar />
-
-          <Header />
-
-          <main>{children}</main>
-
-          <Footer />
+          <SiteChrome
+            announcement={<AnnouncementBar />}
+            header={<Header />}
+            footer={<Footer />}
+          >
+            {children}
+          </SiteChrome>
         </div>
       </body>
     </html>
