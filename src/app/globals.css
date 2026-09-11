@@ -199,7 +199,45 @@ html::-webkit-scrollbar-thumb:hover {
   outline: 2px solid var(--primary);
   outline-offset: 3px;
 }
+/* =========================================================
+   GLOBAL FORM & BUTTON FOCUS RESET
+   ========================================================= */
 
+input,
+textarea,
+select,
+button {
+  outline: none;
+}
+
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible,
+button:focus,
+button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Inputs */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  border-color: var(--border) !important;
+  background: var(--surface) !important;
+}
+
+/* Buttons */
+button:focus,
+button:focus-visible {
+  border-color: transparent !important;
+}
 /* =========================================================
    REDUCED MOTION
    ========================================================= */
