@@ -9,11 +9,13 @@ import ProductCard from "./ProductCard";
 import ShopFilters, {
   type ShopFiltersState,
 } from "./ShopFilters";
-import type { Product } from "./ShopData";
+
+import type { Product } from "../products/types";
+import { products as cmsProducts } from "../products/data";
 
 type ShopGridProps = {
-  products: readonly Product[];
-  filters: readonly string[];
+  products?: readonly Product[];
+  filters?: readonly string[];
   title?: string;
 };
 
@@ -21,9 +23,19 @@ const MAX_PRICE = 25000;
 
 function getCategoryFromPath(pathname: string) {
   if (pathname === "/shop") return "All";
-  if (pathname.startsWith("/shop/men")) return "Men";
-  if (pathname.startsWith("/shop/women")) return "Women";
-  if (pathname.startsWith("/shop/kids")) return "Kids";
+
+  if (pathname.startsWith("/shop/men")) {
+    return "Men";
+  }
+
+  if (pathname.startsWith("/shop/women")) {
+    return "Women";
+  }
+
+  if (pathname.startsWith("/shop/kids")) {
+    return "Kids";
+  }
+
   if (pathname.startsWith("/shop/ready-to-wear")) {
     return "Ready to Wear";
   }
@@ -32,8 +44,8 @@ function getCategoryFromPath(pathname: string) {
 }
 
 export default function ShopGrid({
-  products,
-  filters,
+  products = cmsProducts,
+  filters = [],
   title = "Featured Products",
 }: ShopGridProps) {
   const pathname = usePathname();
@@ -56,14 +68,11 @@ export default function ShopGrid({
     });
 
   /*
-   * URL/category change hone par selected category sync karo.
-   *
-   * IMPORTANT:
-   * Yahan router.push(), router.replace(), ya window.location
-   * use nahi karna.
-   *
-   * Isliye filters change karne se slug/URL change nahi hoga.
-   */
+  |--------------------------------------------------------------------------
+  | Sync URL category with filters
+  |--------------------------------------------------------------------------
+  */
+
   useEffect(() => {
     setFilterState((prev) => ({
       ...prev,
@@ -71,32 +80,81 @@ export default function ShopGrid({
     }));
   }, [routeCategory]);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Filtering
+  |--------------------------------------------------------------------------
+  */
+
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      // Search
+    return products.filter((product: Product) => {
+      /* ============================================================
+         SEARCH
+      ============================================================ */
+
       if (filterState.search.trim()) {
-        const search = filterState.search.toLowerCase().trim();
+        const search =
+          filterState.search.toLowerCase().trim();
 
         const matchesSearch =
-          product.name.toLowerCase().includes(search) ||
-          product.category.toLowerCase().includes(search) ||
-          product.subcategory.toLowerCase().includes(search) ||
-          product.tags.some((tag) =>
+          product.name
+            .toLowerCase()
+            .includes(search) ||
+          product.sku
+            .toLowerCase()
+            .includes(search) ||
+          product.category
+            .toLowerCase()
+            .includes(search) ||
+          (product.subcategory || "")
+            .toLowerCase()
+            .includes(search) ||
+          (product.tags || []).some((tag: string) =>
             tag.toLowerCase().includes(search)
+          ) ||
+          (product.colors || []).some((color: string) =>
+            color.toLowerCase().includes(search)
+          ) ||
+          (product.sizes || []).some((size: string) =>
+            size.toLowerCase().includes(search)
           );
 
-        if (!matchesSearch) return false;
+        if (!matchesSearch) {
+          return false;
+        }
       }
 
-      // Category
-      if (
-        filterState.category !== "All" &&
-        product.category !== filterState.category
-      ) {
-        return false;
+      /* ============================================================
+         CATEGORY
+      ============================================================ */
+
+      if (filterState.category !== "All") {
+        const selectedCategory =
+          filterState.category.toLowerCase();
+
+        const productCategory =
+          product.category.toLowerCase();
+
+        const productSubcategory =
+          (product.subcategory || "").toLowerCase();
+
+        const categoryMatches =
+          productCategory === selectedCategory ||
+          productCategory.replace(
+            " collection",
+            ""
+          ) === selectedCategory ||
+          productSubcategory === selectedCategory;
+
+        if (!categoryMatches) {
+          return false;
+        }
       }
 
-      // Price
+      /* ============================================================
+         PRICE
+      ============================================================ */
+
       if (product.price < filterState.minPrice) {
         return false;
       }
@@ -105,39 +163,91 @@ export default function ShopGrid({
         return false;
       }
 
-      // Tags
+      /* ============================================================
+         TAGS
+      ============================================================ */
+
       if (filterState.tags.length > 0) {
-        const matchesTags = filterState.tags.some((tag) =>
-          product.tags.includes(tag)
+        const productTags = product.tags || [];
+
+        const matchesTags = filterState.tags.some(
+          (tag: string) =>
+            productTags.some(
+              (productTag: string) =>
+                productTag.toLowerCase() ===
+                tag.toLowerCase()
+            )
         );
 
-        if (!matchesTags) return false;
+        if (!matchesTags) {
+          return false;
+        }
       }
 
-      // Sizes
+      /* ============================================================
+         SIZES
+      ============================================================ */
+
       if (filterState.sizes.length > 0) {
-        const matchesSize = filterState.sizes.some((size) =>
-          product.sizes.includes(size)
+        const productSizes = product.sizes || [];
+
+        const matchesSize = filterState.sizes.some(
+          (size: string) =>
+            productSizes.some(
+              (productSize: string) =>
+                productSize.toLowerCase() ===
+                size.toLowerCase()
+            )
         );
 
-        if (!matchesSize) return false;
+        if (!matchesSize) {
+          return false;
+        }
       }
 
-      // Colors
+      /* ============================================================
+         COLORS
+      ============================================================ */
+
       if (filterState.colors.length > 0) {
-        const matchesColor = filterState.colors.some((color) =>
-          product.colors.includes(color)
+        const productColors = product.colors || [];
+
+        const matchesColor = filterState.colors.some(
+          (color: string) =>
+            productColors.some(
+              (productColor: string) =>
+                productColor.toLowerCase() ===
+                color.toLowerCase()
+            )
         );
 
-        if (!matchesColor) return false;
+        if (!matchesColor) {
+          return false;
+        }
       }
 
-      // Availability
-      if (
-        filterState.availability !== "all" &&
-        product.availability !== filterState.availability
-      ) {
-        return false;
+      /* ============================================================
+         AVAILABILITY
+      ============================================================ */
+
+      if (filterState.availability !== "all") {
+        const isInStock =
+          product.stock > 0 &&
+          product.status !== "Out of Stock";
+
+        if (
+          filterState.availability === "in-stock" &&
+          !isInStock
+        ) {
+          return false;
+        }
+
+        if (
+          filterState.availability === "out-of-stock" &&
+          isInStock
+        ) {
+          return false;
+        }
       }
 
       return true;
@@ -149,6 +259,8 @@ export default function ShopGrid({
       id="products"
       className="relative border-t border-[var(--border)] py-16 sm:py-20 lg:py-24"
     >
+      {/* Background Grid */}
+
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
@@ -159,8 +271,10 @@ export default function ShopGrid({
       />
 
       <Container className="relative">
+        {/* ============================================================
+            HEADER
+        ============================================================ */}
 
-        {/* Header */}
         <div className="mb-8 border-b border-[var(--border)] pb-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -177,10 +291,13 @@ export default function ShopGrid({
               </h2>
 
               <p className="mt-3 max-w-xl text-xs leading-6 text-[var(--text-secondary)] sm:text-sm">
-                Browse our complete collection and discover pieces
-                designed around your style, occasion, and everyday needs.
+                Browse our complete collection and discover
+                pieces designed around your style, occasion,
+                and everyday needs.
               </p>
             </div>
+
+            {/* Product Count */}
 
             <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-right">
               <span className="block text-lg font-semibold tracking-tight text-[var(--text)]">
@@ -194,7 +311,10 @@ export default function ShopGrid({
           </div>
         </div>
 
-        {/* Mobile */}
+        {/* ============================================================
+            MOBILE FILTER BUTTON
+        ============================================================ */}
+
         <div className="mb-5 flex items-center justify-between lg:hidden">
           <span className="text-[9px] uppercase tracking-[0.15em] text-[var(--text-secondary)]">
             Browse products
@@ -213,13 +333,20 @@ export default function ShopGrid({
             className="flex h-9 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 text-[9px] font-semibold uppercase tracking-[0.08em] text-[var(--text)]"
           >
             <SlidersHorizontal size={12} />
+
             Filters
           </button>
         </div>
 
-        <div className="grid items-start gap-6 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[270px_minmax(0,1fr)]">
+        {/* ============================================================
+            CONTENT
+        ============================================================ */}
 
-          {/* Filters */}
+        <div className="grid items-start gap-6 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[270px_minmax(0,1fr)]">
+          {/* ========================================================
+              FILTERS
+          ======================================================== */}
+
           <aside className="lg:block">
             <div className="sticky top-24">
               <ShopFilters
@@ -229,8 +356,12 @@ export default function ShopGrid({
             </div>
           </aside>
 
-          {/* Products */}
+          {/* ========================================================
+              PRODUCTS
+          ======================================================== */}
+
           <div className="min-w-0">
+            {/* Product Toolbar */}
 
             <div className="mb-5 flex items-center justify-between border-b border-[var(--border)] pb-4">
               <div>
@@ -251,29 +382,34 @@ export default function ShopGrid({
               </div>
             </div>
 
+            {/* ======================================================
+                PRODUCT GRID
+            ====================================================== */}
+
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5 sm:gap-y-12 xl:grid-cols-3 2xl:grid-cols-4">
-                {filteredProducts.map((product, index) => (
-                  <ProductCard
-                    key={
-                      product.id ||
-                      product.slug ||
-                      `${product.name}-${index}`
-                    }
-                    product={product}
-                  />
-                ))}
+                {filteredProducts.map(
+                  (product: Product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                    />
+                  )
+                )}
               </div>
             ) : (
               <EmptyProducts />
             )}
-
           </div>
         </div>
       </Container>
     </section>
   );
 }
+
+/* ==========================================================================
+   EMPTY PRODUCTS
+============================================================================= */
 
 function EmptyProducts() {
   return (
@@ -287,7 +423,8 @@ function EmptyProducts() {
       </h3>
 
       <p className="mt-2 max-w-sm text-xs leading-6 text-[var(--text-secondary)]">
-        Try changing your filters or exploring another collection.
+        Try changing your filters or exploring another
+        collection.
       </p>
     </div>
   );

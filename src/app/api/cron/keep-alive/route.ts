@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { sql } from "@neondatabase/serverless";
+import { neon } from "@neondatabase/serverless";
 
-const db = sql(process.env.DATABASE_URL!);
+const sql = neon(process.env.DATABASE_URL!);
 
 export async function GET(request: Request) {
   try {
@@ -9,13 +9,16 @@ export async function GET(request: Request) {
 
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json(
-        { success: false, message: "Unauthorized" },
+        {
+          success: false,
+          message: "Unauthorized",
+        },
         { status: 401 }
       );
     }
 
     // Keep Neon database active
-    const result = await db`SELECT 1`;
+    const result = await sql`SELECT 1`;
 
     return NextResponse.json({
       success: true,

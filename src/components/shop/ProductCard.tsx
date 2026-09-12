@@ -2,13 +2,16 @@
 
 import { ArrowUpRight, Heart, ShoppingBag } from "lucide-react";
 import { useState } from "react";
-import type { Product } from "./ShopData";
+
+import type { Product } from "../products/types";
+
+type ProductCardProps = {
+  product: Product;
+};
 
 export default function ProductCard({
   product,
-}: {
-  product: Product;
-}) {
+}: ProductCardProps) {
   const [liked, setLiked] = useState(false);
 
   return (
@@ -31,59 +34,75 @@ export default function ProductCard({
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--primary)]/[0.035] blur-3xl transition-all duration-700 group-hover:bg-[var(--primary)]/[0.07]" />
 
         {/* ============================================================
-            PLACEHOLDER
+            PRODUCT IMAGE
         ============================================================ */}
-        <div className="absolute inset-5 flex items-center justify-center rounded-[12px] border border-dashed border-[var(--border)]">
-          <div className="flex flex-col items-center text-center">
-            {/* Placeholder Icon */}
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] transition-all duration-500 group-hover:border-[var(--primary)]/30 group-hover:bg-[var(--primary)]/[0.05]">
-              <svg
-                width="19"
-                height="19"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-[var(--text-secondary)] transition-colors duration-500 group-hover:text-[var(--primary)]"
-              >
-                <rect
-                  x="3"
-                  y="3"
-                  width="18"
-                  height="18"
-                  rx="2"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <circle
-                  cx="8.5"
-                  cy="8.5"
-                  r="1.5"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <path
-                  d="M21 15L16 10L5 21"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
 
-            <span className="mt-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
-              Product Image
-            </span>
-
-            <span className="mt-1 text-[8px] text-[var(--text-secondary)]/50">
-              Place image here
-            </span>
+        {product.image ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
           </div>
-        </div>
+        ) : (
+          /* ============================================================
+             PLACEHOLDER
+          ============================================================ */
+          <div className="absolute inset-5 flex items-center justify-center rounded-[12px] border border-dashed border-[var(--border)]">
+            <div className="flex flex-col items-center text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] transition-all duration-500 group-hover:border-[var(--primary)]/30 group-hover:bg-[var(--primary)]/[0.05]">
+                <svg
+                  width="19"
+                  height="19"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-[var(--text-secondary)] transition-colors duration-500 group-hover:text-[var(--primary)]"
+                >
+                  <rect
+                    x="3"
+                    y="3"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+
+                  <circle
+                    cx="8.5"
+                    cy="8.5"
+                    r="1.5"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+
+                  <path
+                    d="M21 15L16 10L5 21"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <span className="mt-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
+                Product Image
+              </span>
+
+              <span className="mt-1 text-[8px] text-[var(--text-secondary)]/50">
+                Place image here
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* ============================================================
             BADGE
         ============================================================ */}
+
         {product.badge && (
           <span className="absolute left-4 top-4 z-10 rounded-full border border-[var(--border)] bg-[var(--surface)]/90 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[var(--text)] backdrop-blur-md">
             {product.badge}
@@ -91,12 +110,23 @@ export default function ProductCard({
         )}
 
         {/* ============================================================
+            OUT OF STOCK BADGE
+        ============================================================ */}
+
+        {product.status === "Out of Stock" && (
+          <span className="absolute bottom-4 left-4 z-10 rounded-full border border-white/10 bg-black/75 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">
+            Out of Stock
+          </span>
+        )}
+
+        {/* ============================================================
             WISHLIST
         ============================================================ */}
+
         <button
           type="button"
           aria-label={`Wishlist ${product.name}`}
-          onClick={() => setLiked(!liked)}
+          onClick={() => setLiked((current) => !current)}
           className={`absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 ${
             liked
               ? "border-[var(--primary)]/40 bg-[var(--primary)] text-white"
@@ -113,17 +143,21 @@ export default function ProductCard({
         {/* ============================================================
             HOVER QUICK ADD
         ============================================================ */}
+
         <div className="absolute bottom-4 left-4 right-4 z-20 translate-y-3 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
           <button
             type="button"
-            className="group/button flex h-11 w-full items-center justify-between rounded-[10px] bg-[var(--primary)] px-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:brightness-110"
+            disabled={product.status === "Out of Stock" || product.stock <= 0}
+            className="group/button flex h-11 w-full items-center justify-between rounded-[10px] bg-[var(--primary)] px-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="flex items-center gap-2">
               <ShoppingBag size={13} strokeWidth={1.7} />
-              Quick Add
+
+              {product.status === "Out of Stock" || product.stock <= 0
+                ? "Out of Stock"
+                : "Quick Add"}
             </span>
 
-            {/* Homepage-style arrow */}
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover/button:bg-white group-hover/button:text-[var(--primary)]">
               <ArrowUpRight
                 size={13}
@@ -141,6 +175,7 @@ export default function ProductCard({
       {/* ============================================================
           PRODUCT DETAILS
       ============================================================ */}
+
       <div className="pt-4">
         <div className="flex items-start justify-between gap-4">
           {/* Left */}
@@ -157,7 +192,7 @@ export default function ProductCard({
           {/* Price */}
           <div className="shrink-0 text-right">
             <p className="text-sm font-semibold tracking-[-0.02em] text-[var(--text)]">
-              {product.price}
+              ${product.price.toLocaleString()}
             </p>
           </div>
         </div>
@@ -165,7 +200,9 @@ export default function ProductCard({
         {/* Bottom Info */}
         <div className="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-3">
           <span className="text-[9px] text-[var(--text-secondary)]">
-            Made for you
+            {product.stock > 0
+              ? `${product.stock} available`
+              : "Currently unavailable"}
           </span>
 
           <span className="flex items-center gap-1 text-[9px] font-medium uppercase tracking-[0.1em] text-[var(--primary)] opacity-0 transition-all duration-300 group-hover:opacity-100">

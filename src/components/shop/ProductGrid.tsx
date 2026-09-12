@@ -7,9 +7,10 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 
-import ProductCard, {
-  Product,
-} from "./ProductCard";
+import ProductCard from "./ProductCard";
+
+import type { Product } from "../products/types";
+import { products as cmsProducts } from "../products/data";
 
 import type { ShopFiltersState } from "./ShopFilters";
 
@@ -30,220 +31,8 @@ const DEFAULT_FILTERS: ShopFiltersState = {
   availability: "all",
 };
 
-/*
-|--------------------------------------------------------------------------
-| Demo Products
-|--------------------------------------------------------------------------
-| Replace these with your actual database / Shopify / API products.
-|
-| Images are expected at:
-| /images/products/...
-|--------------------------------------------------------------------------
-*/
-
-const DEFAULT_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    name: "Classic Navy Shalwar Kameez",
-    slug: "classic-navy-shalwar-kameez",
-    category: "Men",
-    price: 8999,
-    compareAtPrice: 10999,
-    image: "/images/products/navy-shalwar-kameez.jpg",
-    hoverImage: "/images/products/navy-shalwar-kameez-2.jpg",
-    rating: 4.9,
-    reviews: 42,
-    tags: ["Bestseller", "Premium", "Formal"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Navy"],
-    availability: "in-stock",
-    badge: "Bestseller",
-  },
-  {
-    id: "2",
-    name: "Midnight Formal Kurta",
-    slug: "midnight-formal-kurta",
-    category: "Men",
-    price: 7499,
-    compareAtPrice: 8999,
-    image: "/images/products/black-kurta.jpg",
-    hoverImage: "/images/products/black-kurta-2.jpg",
-    rating: 4.8,
-    reviews: 31,
-    tags: ["Featured", "Formal"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Black"],
-    availability: "in-stock",
-    badge: "Featured",
-  },
-  {
-    id: "3",
-    name: "Classic Black Suit",
-    slug: "classic-black-suit",
-    category: "Formal",
-    price: 15999,
-    compareAtPrice: 18999,
-    image: "/images/products/black-suit.jpg",
-    hoverImage: "/images/products/black-suit-2.jpg",
-    rating: 4.9,
-    reviews: 27,
-    tags: ["Premium", "Formal"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Black"],
-    availability: "in-stock",
-    badge: "Premium",
-  },
-  {
-    id: "4",
-    name: "Wedding Signature Suit",
-    slug: "wedding-signature-suit",
-    category: "Wedding",
-    price: 24999,
-    image: "/images/products/wedding-suit.jpg",
-    hoverImage: "/images/products/wedding-suit-2.jpg",
-    rating: 5,
-    reviews: 18,
-    tags: ["Wedding", "Premium", "Limited Edition"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Brown", "Beige"],
-    availability: "in-stock",
-    badge: "New",
-  },
-  {
-    id: "5",
-    name: "Everyday Cotton Kurta",
-    slug: "everyday-cotton-kurta",
-    category: "Casual",
-    price: 4999,
-    compareAtPrice: 5999,
-    image: "/images/products/cotton-kurta.jpg",
-    hoverImage: "/images/products/cotton-kurta-2.jpg",
-    rating: 4.7,
-    reviews: 63,
-    tags: ["Casual", "Bestseller"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["White", "Green", "Grey"],
-    availability: "in-stock",
-    badge: "Bestseller",
-  },
-  {
-    id: "6",
-    name: "Premium Wool Waistcoat",
-    slug: "premium-wool-waistcoat",
-    category: "Formal",
-    price: 6999,
-    image: "/images/products/waistcoat.jpg",
-    hoverImage: "/images/products/waistcoat-2.jpg",
-    rating: 4.8,
-    reviews: 21,
-    tags: ["Premium", "Formal"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Black", "Navy", "Brown"],
-    availability: "in-stock",
-    badge: "Premium",
-  },
-  {
-    id: "7",
-    name: "Rose Wedding Ensemble",
-    slug: "rose-wedding-ensemble",
-    category: "Women",
-    price: 13999,
-    compareAtPrice: 16999,
-    image: "/images/products/women-pink.jpg",
-    hoverImage: "/images/products/women-pink-2.jpg",
-    rating: 4.9,
-    reviews: 36,
-    tags: ["Wedding", "Featured"],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    colors: ["Beige", "Maroon"],
-    availability: "in-stock",
-    badge: "Sale",
-  },
-  {
-    id: "8",
-    name: "Signature White Kurta",
-    slug: "signature-white-kurta",
-    category: "New Arrivals",
-    price: 5999,
-    image: "/images/products/white-kurta.jpg",
-    hoverImage: "/images/products/white-kurta-2.jpg",
-    rating: 4.8,
-    reviews: 14,
-    tags: ["New Arrivals", "Premium"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["White"],
-    availability: "in-stock",
-    badge: "New",
-  },
-  {
-    id: "9",
-    name: "Heritage Maroon Waistcoat",
-    slug: "heritage-maroon-waistcoat",
-    category: "Wedding",
-    price: 7999,
-    image: "/images/products/maroon-waistcoat.jpg",
-    hoverImage: "/images/products/maroon-waistcoat-2.jpg",
-    rating: 4.7,
-    reviews: 16,
-    tags: ["Wedding", "Featured"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Maroon"],
-    availability: "in-stock",
-    badge: "Featured",
-  },
-  {
-    id: "10",
-    name: "Relaxed Linen Set",
-    slug: "relaxed-linen-set",
-    category: "Casual",
-    price: 8499,
-    image: "/images/products/linen-set.jpg",
-    hoverImage: "/images/products/linen-set-2.jpg",
-    rating: 4.6,
-    reviews: 12,
-    tags: ["Casual", "New Arrivals"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Beige", "White"],
-    availability: "in-stock",
-    badge: "New",
-  },
-  {
-    id: "11",
-    name: "Executive Charcoal Suit",
-    slug: "executive-charcoal-suit",
-    category: "Formal",
-    price: 18999,
-    compareAtPrice: 21999,
-    image: "/images/products/charcoal-suit.jpg",
-    hoverImage: "/images/products/charcoal-suit-2.jpg",
-    rating: 4.9,
-    reviews: 29,
-    tags: ["Premium", "Formal", "Bestseller"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: ["Grey"],
-    availability: "in-stock",
-    badge: "Bestseller",
-  },
-  {
-    id: "12",
-    name: "Minimal Black Essential",
-    slug: "minimal-black-essential",
-    category: "New Arrivals",
-    price: 6499,
-    image: "/images/products/black-essential.jpg",
-    hoverImage: "/images/products/black-essential-2.jpg",
-    rating: 4.8,
-    reviews: 19,
-    tags: ["New Arrivals", "Casual"],
-    sizes: ["S", "M", "L", "XL"],
-    colors: ["Black"],
-    availability: "out-of-stock",
-    badge: "New",
-  },
-];
-
 export default function ProductGrid({
-  products = DEFAULT_PRODUCTS,
+  products = cmsProducts,
   filters = DEFAULT_FILTERS,
   onMobileFilter,
 }: ProductGridProps) {
@@ -258,14 +47,20 @@ export default function ProductGrid({
   const filteredProducts = useMemo(() => {
     const search = filters.search.trim().toLowerCase();
 
-    const result = products.filter((product) => {
-      /* Search */
+    const result = products.filter((product: Product) => {
+      /* ============================================================
+         SEARCH
+      ============================================================ */
+
       if (search) {
         const searchableText = [
           product.name,
+          product.sku,
           product.category,
+          product.subcategory || "",
           ...(product.tags || []),
           ...(product.colors || []),
+          ...(product.sizes || []),
         ]
           .join(" ")
           .toLowerCase();
@@ -275,16 +70,53 @@ export default function ProductGrid({
         }
       }
 
-      /* Category */
-      if (
-        filters.category !== "All" &&
-        product.category.toLowerCase() !==
-          filters.category.toLowerCase()
-      ) {
-        return false;
+      /* ============================================================
+         CATEGORY
+      ============================================================ */
+
+      if (filters.category !== "All") {
+        const selectedCategory =
+          filters.category.toLowerCase();
+
+        const productCategory =
+          product.category.toLowerCase();
+
+        const productSubcategory =
+          (product.subcategory || "").toLowerCase();
+
+        /*
+         * Supports both:
+         *
+         * Men
+         * Men Collection
+         *
+         * Women
+         * Women Collection
+         *
+         * Kids
+         * Kids Collection
+         *
+         * And subcategories such as:
+         * Kurta
+         * Suits
+         * Formal
+         */
+
+        const categoryMatches =
+          productCategory === selectedCategory ||
+          productCategory.replace(" collection", "") ===
+            selectedCategory ||
+          productSubcategory === selectedCategory;
+
+        if (!categoryMatches) {
+          return false;
+        }
       }
 
-      /* Price */
+      /* ============================================================
+         PRICE
+      ============================================================ */
+
       if (product.price < filters.minPrice) {
         return false;
       }
@@ -293,14 +125,20 @@ export default function ProductGrid({
         return false;
       }
 
-      /* Tags */
+      /* ============================================================
+         TAGS
+      ============================================================ */
+
       if (filters.tags.length > 0) {
         const productTags = product.tags || [];
 
-        const hasMatchingTag = filters.tags.some((tag) =>
-          productTags
-            .map((item) => item.toLowerCase())
-            .includes(tag.toLowerCase())
+        const hasMatchingTag = filters.tags.some(
+          (tag: string) =>
+            productTags.some(
+              (productTag: string) =>
+                productTag.toLowerCase() ===
+                tag.toLowerCase()
+            )
         );
 
         if (!hasMatchingTag) {
@@ -308,14 +146,20 @@ export default function ProductGrid({
         }
       }
 
-      /* Sizes */
+      /* ============================================================
+         SIZES
+      ============================================================ */
+
       if (filters.sizes.length > 0) {
         const productSizes = product.sizes || [];
 
-        const hasMatchingSize = filters.sizes.some((size) =>
-          productSizes
-            .map((item) => item.toLowerCase())
-            .includes(size.toLowerCase())
+        const hasMatchingSize = filters.sizes.some(
+          (size: string) =>
+            productSizes.some(
+              (productSize: string) =>
+                productSize.toLowerCase() ===
+                size.toLowerCase()
+            )
         );
 
         if (!hasMatchingSize) {
@@ -323,14 +167,20 @@ export default function ProductGrid({
         }
       }
 
-      /* Colors */
+      /* ============================================================
+         COLORS
+      ============================================================ */
+
       if (filters.colors.length > 0) {
         const productColors = product.colors || [];
 
-        const hasMatchingColor = filters.colors.some((color) =>
-          productColors
-            .map((item) => item.toLowerCase())
-            .includes(color.toLowerCase())
+        const hasMatchingColor = filters.colors.some(
+          (color: string) =>
+            productColors.some(
+              (productColor: string) =>
+                productColor.toLowerCase() ===
+                color.toLowerCase()
+            )
         );
 
         if (!hasMatchingColor) {
@@ -338,12 +188,28 @@ export default function ProductGrid({
         }
       }
 
-      /* Availability */
-      if (
-        filters.availability !== "all" &&
-        product.availability !== filters.availability
-      ) {
-        return false;
+      /* ============================================================
+         AVAILABILITY
+      ============================================================ */
+
+      if (filters.availability !== "all") {
+        const isInStock =
+          product.stock > 0 &&
+          product.status !== "Out of Stock";
+
+        if (
+          filters.availability === "in-stock" &&
+          !isInStock
+        ) {
+          return false;
+        }
+
+        if (
+          filters.availability === "out-of-stock" &&
+          isInStock
+        ) {
+          return false;
+        }
       }
 
       return true;
@@ -358,17 +224,20 @@ export default function ProductGrid({
     switch (sort) {
       case "price-low":
         return [...result].sort(
-          (a, b) => a.price - b.price
+          (a: Product, b: Product) =>
+            a.price - b.price
         );
 
       case "price-high":
         return [...result].sort(
-          (a, b) => b.price - a.price
+          (a: Product, b: Product) =>
+            b.price - a.price
         );
 
       case "rating":
         return [...result].sort(
-          (a, b) => (b.rating || 0) - (a.rating || 0)
+          (a: Product, b: Product) =>
+            (b.rating || 0) - (a.rating || 0)
         );
 
       case "newest":
@@ -382,9 +251,13 @@ export default function ProductGrid({
 
   return (
     <div className="min-w-0">
-      {/* Toolbar */}
+      {/* ============================================================
+          TOOLBAR
+      ============================================================ */}
+
       <div className="mb-5 flex flex-col gap-3 border-b border-white/[0.06] pb-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Result Info */}
+
         <div>
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#ed1c2e]" />
@@ -403,8 +276,10 @@ export default function ProductGrid({
         </div>
 
         {/* Controls */}
+
         <div className="flex items-center gap-2">
           {/* Mobile Filters */}
+
           {onMobileFilter && (
             <button
               type="button"
@@ -412,15 +287,19 @@ export default function ProductGrid({
               className="inline-flex h-9 items-center gap-2 rounded-md border border-white/[0.08] bg-white/[0.025] px-3 text-[9px] font-semibold uppercase tracking-[0.08em] text-white/55 transition-colors hover:border-white/15 hover:text-white lg:hidden"
             >
               <SlidersHorizontal size={12} />
+
               Filters
             </button>
           )}
 
           {/* Sort */}
+
           <div className="relative">
             <select
               value={sort}
-              onChange={(e) => setSort(e.target.value)}
+              onChange={(event) =>
+                setSort(event.target.value)
+              }
               className="h-9 appearance-none rounded-md border border-white/[0.08] bg-[#0a0a0a] pl-3 pr-8 text-[9px] font-medium uppercase tracking-[0.06em] text-white/55 outline-none transition-colors hover:border-white/15 focus:border-[#ed1c2e]/40"
             >
               <option value="featured">
@@ -452,21 +331,29 @@ export default function ProductGrid({
         </div>
       </div>
 
-      {/* Product Grid */}
+      {/* ============================================================
+          PRODUCT GRID
+      ============================================================ */}
+
       {filteredProducts.length > 0 ? (
         <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-10 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
-          ))}
+          {filteredProducts.map(
+            (product: Product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+            )
+          )}
         </div>
       ) : (
         <EmptyState />
       )}
 
-      {/* Bottom Count */}
+      {/* ============================================================
+          BOTTOM COUNT
+      ============================================================ */}
+
       {filteredProducts.length > 0 && (
         <div className="mt-12 border-t border-white/[0.06] pt-5 text-center">
           <span className="text-[8px] uppercase tracking-[0.15em] text-white/20">
@@ -479,9 +366,9 @@ export default function ProductGrid({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Empty State                                                                */
-/* -------------------------------------------------------------------------- */
+/* ==========================================================================
+   EMPTY STATE
+============================================================================= */
 
 function EmptyState() {
   return (
