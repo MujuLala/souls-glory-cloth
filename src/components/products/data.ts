@@ -1,4 +1,14 @@
-import type { Product } from "./types";
+import type {
+  Category,
+  Collection,
+  Product,
+  ProductAttribute,
+  ProductTag,
+} from "./types";
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
 
 export const products: Product[] = [
   {
@@ -12,16 +22,13 @@ export const products: Product[] = [
     stock: 25,
     status: "Active",
     image: "/images/products/classic-suit.svg",
-
     tags: ["Premium", "Formal", "Featured"],
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: ["Black", "Navy", "Grey"],
-
     badge: "Featured",
     rating: 4.9,
     reviews: 20,
   },
-
   {
     id: 2,
     name: "Premium Kurta",
@@ -33,16 +40,13 @@ export const products: Product[] = [
     stock: 12,
     status: "Active",
     image: "/images/products/premium-kurta.svg",
-
     tags: ["Premium", "Traditional", "Featured"],
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: ["White", "Black", "Navy", "Green"],
-
     badge: "Premium",
     rating: 4.8,
     reviews: 16,
   },
-
   {
     id: 3,
     name: "Ladies Formal Dress",
@@ -54,16 +58,13 @@ export const products: Product[] = [
     stock: 0,
     status: "Out of Stock",
     image: "/images/products/formal-dress.svg",
-
     tags: ["Formal", "Premium"],
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Black", "Maroon", "Beige"],
-
     badge: "Sold Out",
     rating: 4.9,
     reviews: 12,
   },
-
   {
     id: 4,
     name: "Cotton Fabric (1 Meter)",
@@ -75,16 +76,13 @@ export const products: Product[] = [
     stock: 50,
     status: "Active",
     image: "/images/products/fabric.svg",
-
     tags: ["Fabric", "Cotton", "Featured"],
     sizes: ["1 Meter", "2 Meter", "3 Meter"],
     colors: ["White", "Black", "Navy", "Grey"],
-
     badge: "Popular",
     rating: 4.7,
     reviews: 34,
   },
-
   {
     id: 5,
     name: "Kids Shalwar Kameez",
@@ -96,13 +94,371 @@ export const products: Product[] = [
     stock: 8,
     status: "Low Stock",
     image: "/images/products/kids.svg",
-
     tags: ["Kids", "Traditional", "Featured"],
     sizes: ["XS", "S", "M", "L"],
     colors: ["White", "Navy", "Beige", "Green"],
-
     badge: "Low Stock",
     rating: 4.8,
     reviews: 9,
+  },
+];
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+export const categories: Category[] = [
+  {
+    id: 1,
+    name: "Men Collection",
+    slug: "men-collection",
+    description: "Men's clothing and formal wear.",
+    parent: null,
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Women Collection",
+    slug: "women-collection",
+    description: "Women's clothing and fashion.",
+    parent: null,
+    status: "Active",
+  },
+  {
+    id: 3,
+    name: "Traditional Wear",
+    slug: "traditional-wear",
+    description: "Traditional clothing and cultural wear.",
+    parent: null,
+    status: "Active",
+  },
+  {
+    id: 4,
+    name: "Fabrics",
+    slug: "fabrics",
+    description: "Premium fabrics and materials.",
+    parent: null,
+    status: "Active",
+  },
+  {
+    id: 5,
+    name: "Kids Collection",
+    slug: "kids-collection",
+    description: "Clothing for kids.",
+    parent: null,
+    status: "Active",
+  },
+  {
+    id: 6,
+    name: "Suits",
+    slug: "suits",
+    description: "Men's suits and tailored formal wear.",
+    parent: "Men Collection",
+    status: "Active",
+  },
+  {
+    id: 7,
+    name: "Formal",
+    slug: "formal",
+    description: "Formal dresses and occasion wear.",
+    parent: "Women Collection",
+    status: "Active",
+  },
+  {
+    id: 8,
+    name: "Kurta",
+    slug: "kurta",
+    description: "Traditional kurta collection.",
+    parent: "Traditional Wear",
+    status: "Active",
+  },
+  {
+    id: 9,
+    name: "Cotton",
+    slug: "cotton",
+    description: "Cotton fabrics.",
+    parent: "Fabrics",
+    status: "Active",
+  },
+  {
+    id: 10,
+    name: "Shalwar Kameez",
+    slug: "shalwar-kameez",
+    description: "Traditional kids shalwar kameez.",
+    parent: "Kids Collection",
+    status: "Active",
+  },
+];
+
+/* =========================================================
+   COLLECTIONS
+========================================================= */
+
+export const collections: Collection[] = [
+  {
+    id: 1,
+    name: "New Arrivals",
+    slug: "new-arrivals",
+    description: "Our latest products and newest arrivals.",
+    status: "Active",
+    productIds: [1, 2, 3],
+  },
+  {
+    id: 2,
+    name: "Premium Collection",
+    slug: "premium-collection",
+    description: "Premium products crafted with quality materials.",
+    status: "Active",
+    productIds: [1, 2, 3],
+  },
+  {
+    id: 3,
+    name: "Formal Wear",
+    slug: "formal-wear",
+    description: "Elegant clothing for formal occasions.",
+    status: "Active",
+    productIds: [1, 3],
+  },
+  {
+    id: 4,
+    name: "Traditional Collection",
+    slug: "traditional-collection",
+    description: "Traditional clothing inspired by timeless styles.",
+    status: "Active",
+    productIds: [2, 5],
+  },
+  {
+    id: 5,
+    name: "Featured Products",
+    slug: "featured-products",
+    description: "Our most popular and featured products.",
+    status: "Active",
+    productIds: [1, 2, 4, 5],
+  },
+  {
+    id: 6,
+    name: "Winter Collection",
+    slug: "winter-collection",
+    description: "Clothing and fabrics for the winter season.",
+    status: "Draft",
+    productIds: [],
+  },
+];
+
+/* =========================================================
+   TAGS
+========================================================= */
+
+export const tags: ProductTag[] = [
+  {
+    id: 1,
+    name: "Premium",
+    slug: "premium",
+    description: "Premium quality products.",
+  },
+  {
+    id: 2,
+    name: "Formal",
+    slug: "formal",
+    description: "Formal and occasion wear.",
+  },
+  {
+    id: 3,
+    name: "Featured",
+    slug: "featured",
+    description: "Featured products shown prominently in the store.",
+  },
+  {
+    id: 4,
+    name: "Traditional",
+    slug: "traditional",
+    description: "Traditional clothing and styles.",
+  },
+  {
+    id: 5,
+    name: "Fabric",
+    slug: "fabric",
+    description: "Fabric and textile products.",
+  },
+  {
+    id: 6,
+    name: "Cotton",
+    slug: "cotton",
+    description: "Cotton products and fabrics.",
+  },
+  {
+    id: 7,
+    name: "Kids",
+    slug: "kids",
+    description: "Products designed for kids.",
+  },
+  {
+    id: 8,
+    name: "Popular",
+    slug: "popular",
+    description: "Popular products.",
+  },
+  {
+    id: 9,
+    name: "Luxury",
+    slug: "luxury",
+    description: "Luxury and high-end products.",
+  },
+  {
+    id: 10,
+    name: "Sale",
+    slug: "sale",
+    description: "Products currently on sale.",
+  },
+];
+
+/* =========================================================
+   ATTRIBUTES
+========================================================= */
+
+export const attributes: ProductAttribute[] = [
+  {
+    id: 1,
+    name: "Size",
+    slug: "size",
+    type: "Select",
+    description: "Available product sizes.",
+    values: ["XS", "S", "M", "L", "XL", "XXL"],
+  },
+  {
+    id: 2,
+    name: "Color",
+    slug: "color",
+    type: "Color",
+    description: "Available product colors.",
+    values: [
+      "Black",
+      "White",
+      "Navy",
+      "Grey",
+      "Green",
+      "Beige",
+      "Maroon",
+      "Brown",
+    ],
+  },
+  {
+    id: 3,
+    name: "Fabric",
+    slug: "fabric",
+    type: "Select",
+    description: "Available fabric types.",
+    values: [
+      "Cotton",
+      "Linen",
+      "Wool",
+      "Silk",
+      "Khaddar",
+      "Wash & Wear",
+    ],
+  },
+  {
+    id: 4,
+    name: "Fit",
+    slug: "fit",
+    type: "Select",
+    description: "Product fitting options.",
+    values: ["Slim", "Regular", "Relaxed", "Oversized"],
+  },
+  {
+    id: 5,
+    name: "Pattern",
+    slug: "pattern",
+    type: "Select",
+    description: "Available clothing patterns.",
+    values: [
+      "Plain",
+      "Striped",
+      "Checked",
+      "Printed",
+      "Embroidered",
+    ],
+  },
+  {
+    id: 6,
+    name: "Material",
+    slug: "material",
+    type: "Text",
+    description: "Product material information.",
+    values: ["Premium", "Organic", "Handmade"],
+  },
+];
+export const reviews: ProductReview[] = [
+  {
+    id: 1,
+    customerName: "Ahmed Khan",
+    customerEmail: "ahmed@example.com",
+    productId: 1,
+    rating: 5,
+    title: "Excellent quality",
+    comment:
+      "The suit quality is excellent and the fitting was perfect. Very happy with the purchase.",
+    status: "Approved",
+    date: "2026-09-10",
+  },
+  {
+    id: 2,
+    customerName: "Sara Ahmed",
+    customerEmail: "sara@example.com",
+    productId: 2,
+    rating: 5,
+    title: "Beautiful Kurta",
+    comment:
+      "The fabric feels premium and the stitching is very neat. Highly recommended.",
+    status: "Approved",
+    date: "2026-09-08",
+  },
+  {
+    id: 3,
+    customerName: "Usman Ali",
+    customerEmail: "usman@example.com",
+    productId: 3,
+    rating: 4,
+    title: "Good dress",
+    comment:
+      "The dress looks great and the material is good. Delivery was also quick.",
+    status: "Pending",
+    date: "2026-09-07",
+  },
+  {
+    id: 4,
+    customerName: "Ayesha Malik",
+    customerEmail: "ayesha@example.com",
+    productId: 4,
+    rating: 5,
+    title: "Great fabric",
+    comment:
+      "Very soft cotton fabric with excellent quality. I will definitely order again.",
+    status: "Approved",
+    date: "2026-09-05",
+  },
+  {
+    id: 5,
+    customerName: "Bilal Hussain",
+    customerEmail: "bilal@example.com",
+    productId: 5,
+    rating: 3,
+    title: "Decent quality",
+    comment:
+      "The product is good overall but I expected slightly better finishing.",
+    status: "Pending",
+    date: "2026-09-03",
+  },
+  {
+    id: 6,
+    customerName: "Hassan Raza",
+    customerEmail: "hassan@example.com",
+    productId: 1,
+    rating: 5,
+    title: "Perfect fitting",
+    comment:
+      "The suit arrived exactly as expected. Perfect fitting and excellent stitching.",
+    status: "Approved",
+    date: "2026-09-01",
   },
 ];

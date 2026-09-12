@@ -29,3 +29,16 @@ export type Product = {
   rating?: number;
   reviews?: number;
 };
+export type ReviewStatus = "Approved" | "Pending" | "Rejected";
+
+export type ProductReview = {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  productId: number;
+  rating: number;
+  title: string;
+  comment: string;
+  status: ReviewStatus;
+  date: string;
+};

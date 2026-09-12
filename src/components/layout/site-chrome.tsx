@@ -18,7 +18,24 @@ export default function SiteChrome({
   const pathname = usePathname();
 
   const hideSiteChrome =
-    pathname === "/products" || pathname.startsWith("/products/");
+    pathname === "/products" ||
+    pathname.startsWith("/products/") ||
+    pathname === "/orders" ||
+    pathname.startsWith("/orders/") ||
+    pathname === "/customers" ||
+    pathname.startsWith("/customers/") ||
+    pathname === "/inventory" ||
+    pathname.startsWith("/inventory/") ||
+    pathname === "/marketing" ||
+    pathname.startsWith("/marketing/") ||
+    pathname === "/reports" ||
+    pathname.startsWith("/reports/") ||
+    pathname === "/custom-studio" ||
+    pathname.startsWith("/custom-studio/") ||
+    pathname === "/settings" ||
+    pathname.startsWith("/settings/") ||
+    pathname === "/help-support" ||
+    pathname.startsWith("/help-support/");
 
   if (hideSiteChrome) {
     return <>{children}</>;
