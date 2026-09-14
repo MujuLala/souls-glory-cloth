@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -16,9 +16,13 @@ import {
   Layers3,
   DollarSign,
   Boxes,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
 
 import Breadcrumbs from "./Breadcrumbs";
+import { createProduct } from "@/actions/products";
 
 type Variant = {
   id: number;
@@ -28,8 +32,68 @@ type Variant = {
   stock: string;
 };
 
+type ProductImage = {
+  url: string;
+  name: string;
+};
+
+const inputClass =
+  "h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#ff1638]/50 focus:ring-1 focus:ring-[#ff1638]/20";
+
+const selectClass =
+  "h-11 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:border-[#ff1638]/50";
+
 export default function AddProduct() {
-  const [images, setImages] = useState<string[]>([]);
+  /* =========================================
+     BASIC PRODUCT DATA
+  ========================================== */
+
+  const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [description, setDescription] = useState("");
+
+  /* =========================================
+     PRICING
+  ========================================== */
+
+  const [price, setPrice] = useState("");
+  const [salePrice, setSalePrice] = useState("");
+  const [costPrice, setCostPrice] = useState("");
+  const [compareAtPrice, setCompareAtPrice] = useState("");
+
+  /* =========================================
+     INVENTORY
+  ========================================== */
+
+  const [sku, setSku] = useState("");
+  const [stock, setStock] = useState("0");
+  const [lowStockThreshold, setLowStockThreshold] = useState("10");
+  const [trackInventory, setTrackInventory] = useState(true);
+
+  /* =========================================
+     ORGANIZATION
+  ========================================== */
+
+  const [categoryId, setCategoryId] = useState("");
+  const [collectionId, setCollectionId] = useState("");
+  const [tagsInput, setTagsInput] = useState("");
+
+  /* =========================================
+     STATUS
+  ========================================== */
+
+  const [status, setStatus] = useState("Active");
+
+  /* =========================================
+     IMAGES
+  ========================================== */
+
+  const [images, setImages] = useState<ProductImage[]>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
+
+  /* =========================================
+     VARIANTS
+  ========================================== */
 
   const [variants, setVariants] = useState<Variant[]>([
     {
@@ -41,7 +105,37 @@ export default function AddProduct() {
     },
   ]);
 
-  const [status, setStatus] = useState("Active");
+  /* =========================================
+     SAVE STATE
+  ========================================== */
+
+  const [saving, setSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  /* =========================================
+     AUTO SLUG
+  ========================================== */
+
+  useEffect(() => {
+    if (!name.trim()) {
+      setSlug("");
+      return;
+    }
+
+    const generatedSlug = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+
+    setSlug(generatedSlug);
+  }, [name]);
+
+  /* =========================================
+     VARIANTS
+  ========================================== */
 
   const addVariant = () => {
     setVariants((prev) => [
@@ -79,38 +173,380 @@ export default function AddProduct() {
     );
   };
 
-  const handleImageUpload = (
+  /* =========================================
+     IMAGE UPLOAD
+  ========================================== */
+
+  const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
 
-    if (!files) return;
+    if (!files || files.length === 0) {
+      return;
+    }
 
-    const newImages = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
+    setErrorMessage("");
+    setSuccessMessage("");
+    setUploadingImages(true);
 
-    setImages((prev) => [...prev, ...newImages]);
+    try {
+      const uploadedImages: ProductImage[] = [];
+
+      for (const file of Array.from(files)) {
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+          throw new Error(
+            `${file.name}: Only JPG, PNG and WEBP images are allowed.`
+          );
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+          throw new Error(
+            `${file.name}: Image must be smaller than 10MB.`
+          );
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !data.url) {
+          throw new Error(
+            data.error || `Failed to upload ${file.name}`
+          );
+        }
+
+        uploadedImages.push({
+          url: data.url,
+          name: file.name,
+        });
+      }
+
+      setImages((prev) => [...prev, ...uploadedImages]);
+    } catch (error) {
+      console.error("Image upload error:", error);
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Failed to upload image."
+      );
+    } finally {
+      setUploadingImages(false);
+
+      // Allow selecting the same file again.
+      event.target.value = "";
+    }
   };
 
   const removeImage = (index: number) => {
     setImages((prev) =>
-      prev.filter((_, i) => i !== index)
+      prev.filter((_, imageIndex) => imageIndex !== index)
+    );
+  };
+
+  /* =========================================
+     SAVE PRODUCT
+  ========================================== */
+
+  const handleSaveProduct = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    /* -----------------------------------------
+       VALIDATION
+    ------------------------------------------ */
+
+    if (!name.trim()) {
+      setErrorMessage("Product name is required.");
+      return;
+    }
+
+    if (!slug.trim()) {
+      setErrorMessage("Product slug is required.");
+      return;
+    }
+
+    if (!sku.trim()) {
+      setErrorMessage("Product SKU is required.");
+      return;
+    }
+
+    if (!price.trim()) {
+      setErrorMessage("Regular price is required.");
+      return;
+    }
+
+    const parsedPrice = Number(price);
+
+    if (!Number.isFinite(parsedPrice) || parsedPrice < 0) {
+      setErrorMessage("Please enter a valid regular price.");
+      return;
+    }
+
+    const parsedSalePrice =
+      salePrice.trim() === ""
+        ? undefined
+        : Number(salePrice);
+
+    const parsedCostPrice =
+      costPrice.trim() === ""
+        ? undefined
+        : Number(costPrice);
+
+    const parsedCompareAtPrice =
+      compareAtPrice.trim() === ""
+        ? undefined
+        : Number(compareAtPrice);
+
+    const parsedStock = Number(stock || 0);
+    const parsedLowStockThreshold = Number(
+      lowStockThreshold || 10
+    );
+
+    if (!Number.isFinite(parsedStock) || parsedStock < 0) {
+      setErrorMessage("Please enter a valid stock quantity.");
+      return;
+    }
+
+    if (
+      !Number.isFinite(parsedLowStockThreshold) ||
+      parsedLowStockThreshold < 0
+    ) {
+      setErrorMessage("Please enter a valid low stock threshold.");
+      return;
+    }
+
+    if (
+      parsedSalePrice !== undefined &&
+      (!Number.isFinite(parsedSalePrice) || parsedSalePrice < 0)
+    ) {
+      setErrorMessage("Please enter a valid sale price.");
+      return;
+    }
+
+    if (
+      parsedCostPrice !== undefined &&
+      (!Number.isFinite(parsedCostPrice) || parsedCostPrice < 0)
+    ) {
+      setErrorMessage("Please enter a valid cost price.");
+      return;
+    }
+
+    if (
+      parsedCompareAtPrice !== undefined &&
+      (!Number.isFinite(parsedCompareAtPrice) ||
+        parsedCompareAtPrice < 0)
+    ) {
+      setErrorMessage("Please enter a valid compare at price.");
+      return;
+    }
+
+    if (uploadingImages) {
+      setErrorMessage(
+        "Please wait until image uploads are finished."
+      );
+      return;
+    }
+
+    /* -----------------------------------------
+       VARIANTS
+    ------------------------------------------ */
+
+    const validVariants = variants
+      .filter(
+        (variant) =>
+          variant.name.trim() ||
+          variant.sku.trim() ||
+          variant.price.trim() ||
+          variant.stock.trim()
+      )
+      .map((variant) => ({
+        name: variant.name.trim(),
+        sku: variant.sku.trim(),
+        price: Number(variant.price || price),
+        stock: Number(variant.stock || 0),
+      }));
+
+    for (const variant of validVariants) {
+      if (!variant.name) {
+        setErrorMessage("Every variant needs a name.");
+        return;
+      }
+
+      if (!variant.sku) {
+        setErrorMessage(
+          `Variant "${variant.name}" needs a SKU.`
+        );
+        return;
+      }
+
+      if (!Number.isFinite(variant.price) || variant.price < 0) {
+        setErrorMessage(
+          `Variant "${variant.name}" has an invalid price.`
+        );
+        return;
+      }
+
+      if (!Number.isFinite(variant.stock) || variant.stock < 0) {
+        setErrorMessage(
+          `Variant "${variant.name}" has an invalid stock quantity.`
+        );
+        return;
+      }
+    }
+
+    /* -----------------------------------------
+       TAGS
+
+       Currently the Tags field accepts comma-separated
+       names. Until the Tags management API is connected,
+       we don't send tag IDs to Prisma.
+    ------------------------------------------ */
+
+    const tags = tagsInput
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+
+    console.log("Product tags:", tags);
+
+    /* -----------------------------------------
+       SAVE
+    ------------------------------------------ */
+
+    setSaving(true);
+
+    try {
+      const result = await createProduct({
+        name: name.trim(),
+        slug: slug.trim(),
+        sku: sku.trim(),
+        description: description.trim() || undefined,
+
+        price: parsedPrice,
+        salePrice: parsedSalePrice,
+        costPrice: parsedCostPrice,
+        compareAtPrice: parsedCompareAtPrice,
+
+        stock: parsedStock,
+        lowStockThreshold: parsedLowStockThreshold,
+        trackInventory,
+
+        status,
+
+        categoryId: categoryId
+          ? Number(categoryId)
+          : undefined,
+
+        collectionId: collectionId
+          ? Number(collectionId)
+          : undefined,
+
+        images: images.map((image) => ({
+          imageUrl: image.url,
+        })),
+
+        variants: validVariants,
+
+        sizes: [],
+        colors: [],
+
+        tagIds: [],
+      });
+
+      if (!result.success) {
+        throw new Error(
+          result.error || "Failed to create product."
+        );
+      }
+
+      setSuccessMessage(
+        "Product created successfully."
+      );
+
+      /* -----------------------------------------
+         RESET FORM
+      ------------------------------------------ */
+
+      setName("");
+      setSlug("");
+      setDescription("");
+
+      setPrice("");
+      setSalePrice("");
+      setCostPrice("");
+      setCompareAtPrice("");
+
+      setSku("");
+      setStock("0");
+      setLowStockThreshold("10");
+      setTrackInventory(true);
+
+      setCategoryId("");
+      setCollectionId("");
+      setTagsInput("");
+
+      setStatus("Active");
+
+      setImages([]);
+
+      setVariants([
+        {
+          id: Date.now(),
+          name: "",
+          sku: "",
+          price: "",
+          stock: "",
+        },
+      ]);
+    } catch (error) {
+      console.error("Save product error:", error);
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Failed to create product."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  /* =========================================
+     PREVIEW
+  ========================================== */
+
+  const handlePreview = () => {
+    setErrorMessage("");
+
+    if (!name.trim()) {
+      setErrorMessage(
+        "Enter a product name before previewing."
+      );
+      return;
+    }
+
+    window.open(
+      `/shop/product/${slug}`,
+      "_blank",
+      "noopener,noreferrer"
     );
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#050505] text-[#f7f7f7]">
-
-      {/* EXACT SAME AS ProductDashboard */}
-      <main className="w-full md:w-[100%] pl-8 pr-8">
-
-        {/* EXACT SAME CONTAINER AS ProductDashboard */}
+    <div className="min-h-screen w-full bg-[#050505] text-[#f7f7f7]">
+      <main className="w-full pl-8 pr-8 md:w-[100%]">
         <div className="mx-auto w-full max-w-[92vw] px-0 py-5 sm:py-6">
 
           {/* =========================================
               BREADCRUMBS
-              EXACT SAME POSITION AS DASHBOARD
           ========================================== */}
 
           <Breadcrumbs
@@ -131,10 +567,7 @@ export default function AddProduct() {
 
           <section className="mb-5 flex w-full flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 
-            {/* Heading area */}
             <div className="flex items-start gap-3">
-
-              {/* Back button - separate from breadcrumb */}
               <Link
                 href="/products"
                 aria-label="Back to products"
@@ -144,25 +577,22 @@ export default function AddProduct() {
               </Link>
 
               <div>
-                {/* SAME HEADING SIZE AS DASHBOARD */}
                 <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                   Add New Product
                 </h1>
 
-                {/* SAME DESCRIPTION SIZE AS DASHBOARD */}
                 <p className="mt-2 text-xs text-neutral-500 sm:text-sm">
                   Create and manage a new product for your store.
                 </p>
               </div>
-
             </div>
 
-            {/* Actions */}
             <div className="flex w-full gap-2 sm:w-auto">
-
               <button
                 type="button"
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-xs font-bold text-neutral-300 transition hover:bg-white/[0.06] hover:text-white sm:flex-none"
+                onClick={handlePreview}
+                disabled={saving}
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-xs font-bold text-neutral-300 transition hover:bg-white/[0.06] hover:text-white disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
               >
                 <Eye size={17} />
                 Preview
@@ -170,15 +600,41 @@ export default function AddProduct() {
 
               <button
                 type="button"
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ff1638] px-4 py-3 text-xs font-bold text-white shadow-lg shadow-[#ff1638]/10 transition hover:bg-[#ff2948] sm:flex-none"
+                onClick={handleSaveProduct}
+                disabled={saving || uploadingImages}
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ff1638] px-4 py-3 text-xs font-bold text-white shadow-lg shadow-[#ff1638]/10 transition hover:bg-[#ff2948] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
               >
-                <Save size={17} />
-                Save Product
+                {saving ? (
+                  <Loader2
+                    size={17}
+                    className="animate-spin"
+                  />
+                ) : (
+                  <Save size={17} />
+                )}
+
+                {saving ? "Saving..." : "Save Product"}
               </button>
-
             </div>
-
           </section>
+
+          {/* =========================================
+              STATUS MESSAGES
+          ========================================== */}
+
+          {successMessage && (
+            <div className="mb-4 flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+              <CheckCircle2 size={18} />
+              <span>{successMessage}</span>
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="mb-4 flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              <AlertCircle size={18} />
+              <span>{errorMessage}</span>
+            </div>
+          )}
 
           {/* =========================================
               MAIN CONTENT
@@ -192,9 +648,9 @@ export default function AddProduct() {
 
             <div className="min-w-0 space-y-4">
 
-              {/* Basic Information */}
-              <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
+              {/* BASIC INFORMATION */}
 
+              <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
                 <SectionHeader
                   icon={<Package size={19} />}
                   title="Basic Information"
@@ -206,6 +662,8 @@ export default function AddProduct() {
                   <InputField
                     label="Product Name"
                     placeholder="e.g. Premium Custom Suit"
+                    value={name}
+                    onChange={setName}
                   />
 
                   <div>
@@ -215,8 +673,12 @@ export default function AddProduct() {
 
                     <input
                       type="text"
+                      value={slug}
+                      onChange={(e) =>
+                        setSlug(e.target.value)
+                      }
                       placeholder="premium-custom-suit"
-                      className="h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#ff1638]/50 focus:ring-1 focus:ring-[#ff1638]/20"
+                      className={inputClass}
                     />
 
                     <p className="mt-2 text-xs text-neutral-600">
@@ -231,6 +693,10 @@ export default function AddProduct() {
 
                     <textarea
                       rows={6}
+                      value={description}
+                      onChange={(e) =>
+                        setDescription(e.target.value)
+                      }
                       placeholder="Write a detailed description of your product..."
                       className="w-full resize-none rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#ff1638]/50 focus:ring-1 focus:ring-[#ff1638]/20"
                     />
@@ -239,9 +705,9 @@ export default function AddProduct() {
                 </div>
               </section>
 
-              {/* Product Images */}
-              <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
+              {/* PRODUCT IMAGES */}
 
+              <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
                 <SectionHeader
                   icon={<ImagePlus size={19} />}
                   title="Product Images"
@@ -252,18 +718,20 @@ export default function AddProduct() {
 
                   {images.map((image, index) => (
                     <div
-                      key={image}
+                      key={`${image.url}-${index}`}
                       className="group relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-black/30"
                     >
                       <img
-                        src={image}
+                        src={image.url}
                         alt={`Product ${index + 1}`}
                         className="h-full w-full object-cover"
                       />
 
                       <button
                         type="button"
-                        onClick={() => removeImage(index)}
+                        onClick={() =>
+                          removeImage(index)
+                        }
                         className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/70 text-white transition hover:bg-[#ff1638]"
                       >
                         <X size={15} />
@@ -279,10 +747,19 @@ export default function AddProduct() {
 
                   <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-white/15 bg-black/20 text-white/35 transition hover:border-[#ff1638]/50 hover:bg-[#ff1638]/5 hover:text-white/70">
 
-                    <Upload size={22} />
+                    {uploadingImages ? (
+                      <Loader2
+                        size={22}
+                        className="animate-spin text-[#ff1638]"
+                      />
+                    ) : (
+                      <Upload size={22} />
+                    )}
 
                     <span className="mt-2 text-xs font-medium">
-                      Upload Image
+                      {uploadingImages
+                        ? "Uploading..."
+                        : "Upload Image"}
                     </span>
 
                     <span className="mt-1 text-[10px] text-white/20">
@@ -293,18 +770,18 @@ export default function AddProduct() {
                       type="file"
                       accept="image/png,image/jpeg,image/webp"
                       multiple
+                      disabled={uploadingImages}
                       className="hidden"
                       onChange={handleImageUpload}
                     />
-
                   </label>
 
                 </div>
               </section>
 
-              {/* Pricing */}
-              <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
+              {/* PRICING */}
 
+              <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
                 <SectionHeader
                   icon={<DollarSign size={19} />}
                   title="Pricing"
@@ -316,28 +793,40 @@ export default function AddProduct() {
                   <InputField
                     label="Regular Price"
                     placeholder="0.00"
+                    type="number"
+                    value={price}
+                    onChange={setPrice}
                   />
 
                   <InputField
                     label="Sale Price"
                     placeholder="0.00"
+                    type="number"
+                    value={salePrice}
+                    onChange={setSalePrice}
                   />
 
                   <InputField
                     label="Cost Price"
                     placeholder="0.00"
+                    type="number"
+                    value={costPrice}
+                    onChange={setCostPrice}
                   />
 
                   <InputField
                     label="Compare at Price"
                     placeholder="0.00"
+                    type="number"
+                    value={compareAtPrice}
+                    onChange={setCompareAtPrice}
                   />
 
                 </div>
-
               </section>
 
-              {/* Variants */}
+              {/* VARIANTS */}
+
               <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-6">
 
                 <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -447,7 +936,6 @@ export default function AddProduct() {
                   ))}
 
                 </div>
-
               </section>
 
             </div>
@@ -458,7 +946,8 @@ export default function AddProduct() {
 
             <aside className="min-w-0 space-y-4">
 
-              {/* Product Status */}
+              {/* PRODUCT STATUS */}
+
               <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-5">
 
                 <SectionHeader
@@ -473,7 +962,7 @@ export default function AddProduct() {
                   onChange={(e) =>
                     setStatus(e.target.value)
                   }
-                  className="h-11 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:border-[#ff1638]/50"
+                  className={selectClass}
                 >
                   <option value="Active">
                     Active
@@ -490,7 +979,8 @@ export default function AddProduct() {
 
               </section>
 
-              {/* Inventory */}
+              {/* INVENTORY */}
+
               <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-5">
 
                 <SectionHeader
@@ -505,22 +995,36 @@ export default function AddProduct() {
                   <InputField
                     label="SKU"
                     placeholder="PROD-001"
+                    value={sku}
+                    onChange={setSku}
                   />
 
                   <InputField
                     label="Stock Quantity"
                     placeholder="0"
+                    type="number"
+                    value={stock}
+                    onChange={setStock}
                   />
 
                   <InputField
                     label="Low Stock Threshold"
                     placeholder="10"
+                    type="number"
+                    value={lowStockThreshold}
+                    onChange={setLowStockThreshold}
                   />
 
                   <label className="flex cursor-pointer items-center gap-3">
 
                     <input
                       type="checkbox"
+                      checked={trackInventory}
+                      onChange={(e) =>
+                        setTrackInventory(
+                          e.target.checked
+                        )
+                      }
                       className="h-4 w-4 rounded border-white/20 bg-black accent-[#ff1638]"
                     />
 
@@ -534,7 +1038,8 @@ export default function AddProduct() {
 
               </section>
 
-              {/* Organization */}
+              {/* ORGANIZATION */}
+
               <section className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 sm:p-5">
 
                 <SectionHeader
@@ -546,47 +1051,118 @@ export default function AddProduct() {
 
                 <div className="space-y-4">
 
-                  <SelectField
-                    label="Category"
-                    options={[
-                      "Select category",
-                      "Suits",
-                      "Kurtas",
-                      "Dresses",
-                      "Shirts",
-                      "Kids",
-                    ]}
-                  />
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-white/75">
+                      Category
+                    </label>
 
-                  <SelectField
-                    label="Collection"
-                    options={[
-                      "Select collection",
-                      "New Arrivals",
-                      "Premium Collection",
-                      "Formal",
-                      "Casual",
-                    ]}
-                  />
+                    <select
+                      value={categoryId}
+                      onChange={(e) =>
+                        setCategoryId(e.target.value)
+                      }
+                      className={selectClass}
+                    >
+                      <option value="">
+                        Select category
+                      </option>
+
+                      {/* Temporary IDs.
+                          Replace with dynamic categories API
+                          once Category management is connected. */}
+                      <option value="1">
+                        Suits
+                      </option>
+
+                      <option value="2">
+                        Kurtas
+                      </option>
+
+                      <option value="3">
+                        Dresses
+                      </option>
+
+                      <option value="4">
+                        Shirts
+                      </option>
+
+                      <option value="5">
+                        Kids
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-white/75">
+                      Collection
+                    </label>
+
+                    <select
+                      value={collectionId}
+                      onChange={(e) =>
+                        setCollectionId(e.target.value)
+                      }
+                      className={selectClass}
+                    >
+                      <option value="">
+                        Select collection
+                      </option>
+
+                      <option value="1">
+                        New Arrivals
+                      </option>
+
+                      <option value="2">
+                        Premium Collection
+                      </option>
+
+                      <option value="3">
+                        Formal
+                      </option>
+
+                      <option value="4">
+                        Casual
+                      </option>
+                    </select>
+                  </div>
 
                   <InputField
                     label="Tags"
                     placeholder="suit, premium, formal"
+                    value={tagsInput}
+                    onChange={setTagsInput}
                   />
+
+                  <p className="text-[10px] text-neutral-600">
+                    Separate tags with commas.
+                  </p>
 
                 </div>
 
               </section>
 
-              {/* Mobile Save */}
+              {/* MOBILE SAVE */}
+
               <div className="sticky bottom-3 rounded-2xl border border-white/10 bg-[#0b0b0b]/95 p-3 backdrop-blur-xl xl:hidden">
 
                 <button
                   type="button"
-                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#ff1638] text-sm font-bold transition hover:bg-[#ff2948]"
+                  onClick={handleSaveProduct}
+                  disabled={saving || uploadingImages}
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#ff1638] text-sm font-bold transition hover:bg-[#ff2948] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <Save size={17} />
-                  Save Product
+                  {saving ? (
+                    <Loader2
+                      size={17}
+                      className="animate-spin"
+                    />
+                  ) : (
+                    <Save size={17} />
+                  )}
+
+                  {saving
+                    ? "Saving..."
+                    : "Save Product"}
                 </button>
 
               </div>
@@ -596,7 +1172,6 @@ export default function AddProduct() {
           </div>
 
         </div>
-
       </main>
     </div>
   );
@@ -665,9 +1240,15 @@ function SectionHeader({
 function InputField({
   label,
   placeholder,
+  value,
+  onChange,
+  type = "text",
 }: {
   label: string;
   placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: "text" | "number";
 }) {
   return (
     <div>
@@ -676,9 +1257,15 @@ function InputField({
       </label>
 
       <input
-        type="text"
+        type={type}
+        value={value}
         placeholder={placeholder}
-        className="h-12 w-full rounded-xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-[#ff1638]/50 focus:ring-1 focus:ring-[#ff1638]/20"
+        min={type === "number" ? "0" : undefined}
+        step={type === "number" ? "0.01" : undefined}
+        onChange={(e) =>
+          onChange(e.target.value)
+        }
+        className={inputClass}
       />
     </div>
   );
@@ -706,45 +1293,28 @@ function VariantInput({
       </label>
 
       <input
-        type="text"
+        type={
+          label === "Price" || label === "Stock"
+            ? "number"
+            : "text"
+        }
         value={value}
         placeholder={placeholder}
+        min={
+          label === "Price" || label === "Stock"
+            ? "0"
+            : undefined
+        }
+        step={
+          label === "Price"
+            ? "0.01"
+            : undefined
+        }
         onChange={(e) =>
           onChange(e.target.value)
         }
-        className="h-10 w-full rounded-lg border border-white/10 bg-black/30 px-3 text-xs text-white outline-none transition placeholder:text-white/20 focus:border-[#ff1638]/50"
+        className="h-10 w-full rounded-lg border border-white/[0.08] bg-black/30 px-3 text-xs text-white outline-none placeholder:text-white/15 focus:border-[#ff1638]/40"
       />
-    </div>
-  );
-}
-
-/* =========================================
-   SELECT
-========================================= */
-
-function SelectField({
-  label,
-  options,
-}: {
-  label: string;
-  options: string[];
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-xs font-medium text-neutral-500">
-        {label}
-      </label>
-
-      <select className="h-11 w-full rounded-xl border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:border-[#ff1638]/50">
-        {options.map((option) => (
-          <option
-            key={option}
-            value={option}
-          >
-            {option}
-          </option>
-        ))}
-      </select>
     </div>
   );
 }

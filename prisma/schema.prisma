@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String
+  slug        String  @unique
+  description String?
+  image       String?
+  status      String  @default("Active")
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Collection {
+  id          Int     @id @default(autoincrement())
+  name        String
+  slug        String  @unique
+  description String?
+  image       String?
+  status      String  @default("Active")
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+  slug String @unique
+
+  products ProductTag[]
+
+  createdAt DateTime @default(now())
+}
+
+model Attribute {
+  id   Int    @id @default(autoincrement())
+  name String
+  slug String @unique
+
+  values AttributeValue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AttributeValue {
+  id    Int    @id @default(autoincrement())
+  value String
+
+  attributeId Int
+  attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime           @default(now())
+  productAttributes ProductAttribute[]
+
+  @@index([attributeId])
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  name String
+  sku  String @unique
+  slug String @unique
+
+  description String?
+
+  // Pricing
+  price          Decimal  @db.Decimal(12, 2)
+  salePrice      Decimal? @db.Decimal(12, 2)
+  costPrice      Decimal? @db.Decimal(12, 2)
+  compareAtPrice Decimal? @db.Decimal(12, 2)
+
+  // Inventory
+  stock             Int     @default(0)
+  lowStockThreshold Int     @default(10)
+  trackInventory    Boolean @default(true)
+
+  // Product status
+  status   String  @default("Draft")
+  badge    String?
+  featured Boolean @default(false)
+
+  // Category
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  // Collection
+  collectionId Int?
+  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+
+  subcategory String?
+
+  // Relations
+  images     ProductImage[]
+  tags       ProductTag[]
+  sizes      ProductSize[]
+  colors     ProductColor[]
+  attributes ProductAttribute[]
+  reviews    ProductReview[]
+  variants   ProductVariant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([collectionId])
+  @@index([status])
+  @@index([featured])
+}
+
+model ProductVariant {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  name  String
+  sku   String  @unique
+  price Decimal @db.Decimal(12, 2)
+  stock Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model ProductImage {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  imageUrl  String
+  sortOrder Int     @default(0)
+  isHover   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+model ProductSize {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  size String
+
+  @@unique([productId, size])
+}
+
+model ProductColor {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  color String
+
+  @@unique([productId, color])
+}
+
+model ProductTag {
+  productId Int
+  tagId     Int
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+}
+
+model ProductAttribute {
+  id Int @id @default(autoincrement())
+
+  productId        Int
+  attributeValueId Int
+
+  product        Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  attributeValue AttributeValue @relation(fields: [attributeValueId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, attributeValueId])
+}
+
+model ProductReview {
+  id Int @id @default(autoincrement())
+
+  customerName  String
+  customerEmail String
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  rating  Int
+  title   String
+  comment String
+
+  status String @default("Pending")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([status])
+}
