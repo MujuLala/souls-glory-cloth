@@ -1,47 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-  Loader2,
-} from "lucide-react";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 
+import AuthInput from "./AuthInput";
+import AuthShell from "./AuthShell";
+import Button from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
-export default function LoginForm() {
+/* =========================================================
+   LOGIN
+
+   `variant="admin"` is the same authentication with staff
+   framing and a staff landing page — the role check itself
+   happens server-side in the dashboard layout.
+========================================================= */
+
+export default function LoginForm({
+  variant = "customer",
+}: {
+  variant?: "customer" | "admin";
+}) {
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const isAdmin = variant === "admin";
+  const destination = isAdmin ? "/dashboard" : "/account";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
 
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     setError("");
 
     const cleanEmail = email.trim();
 
-    if (!cleanEmail) {
-      setError("Please enter your email address.");
-      return;
-    }
-
-    if (!password) {
-      setError("Please enter your password.");
+    if (!cleanEmail || !password) {
+      setError("Enter your email address and password.");
       return;
     }
 
@@ -55,262 +57,152 @@ export default function LoginForm() {
       });
 
       if (result.error) {
-        setError(
-          result.error.message || "Invalid email or password."
-        );
+        setError(result.error.message || "Invalid email or password.");
         return;
       }
 
-      router.push("/dashboard");
+      router.push(destination);
       router.refresh();
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Unable to sign in. Please try again.");
+    } catch (caught) {
+      console.error("Login error:", caught);
+      setError("Unable to sign in right now. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogle = async () => {
     setError("");
     setGoogleLoading(true);
 
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: destination,
       });
-    } catch (err) {
-      console.error("Google login error:", err);
+    } catch (caught) {
+      console.error("Google login error:", caught);
       setError("Google sign in failed. Please try again.");
       setGoogleLoading(false);
     }
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-6 text-[var(--text)]">
-      <div className="w-full max-w-[820px]">
-        <div className="rounded-[20px] border border-[var(--border)] bg-[var(--bg-secondary)] px-5 py-7 shadow-[0_20px_70px_rgba(0,0,0,0.14)] sm:px-8 sm:py-8 lg:px-10">
-
-          {/* Top navigation */}
-          <div className="mb-6 flex items-center justify-between">
-            <Link
-              href="/"
-              className="group inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--text-tertiary)] transition hover:text-[var(--text)]"
-            >
-              <ArrowLeft
-                size={13}
-                className="transition-transform group-hover:-translate-x-0.5"
-              />
-              Home
+    <AuthShell
+      eyebrow={isAdmin ? "Staff access" : "Welcome back"}
+      title={isAdmin ? "Sign in to the console" : "Sign in to your account"}
+      subtitle={
+        isAdmin
+          ? "For admins, managers, tailors and cashiers. Customers should use the storefront sign in."
+          : "Track orders, manage measurements for your family, and pick up your chat where you left off."
+      }
+      footer={
+        isAdmin ? (
+          <>
+            Not staff?{" "}
+            <Link href="/sign-in" className="font-semibold text-ink hover:text-primary">
+              Customer sign in
             </Link>
-
-            <span className="text-[9px] font-medium uppercase tracking-[0.14em] text-[var(--text-tertiary)]">
-              Sign in
-            </span>
-          </div>
-
-          {/* Heading */}
-          <div className="mx-auto mb-7 max-w-[480px] text-center">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--primary)]/20 bg-[var(--primary)]/7 px-3 py-1.5">
-              <span className="size-1.5 rounded-full bg-[var(--primary)]" />
-
-              <span className="text-[8px] font-bold uppercase tracking-[0.17em] text-[var(--primary)]">
-                Welcome back
-              </span>
-            </div>
-
-            <h1 className="text-[28px] font-semibold leading-tight tracking-[-0.04em] sm:text-[32px]">
-              Sign in to your account
-            </h1>
-
-            <p className="mx-auto mt-2 max-w-[400px] text-[11px] leading-5 text-[var(--text-secondary)]">
-              Sign in to access your tailoring workspace and continue where
-              you left off.
-            </p>
-          </div>
-
-          {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="mx-auto max-w-[720px]"
+          </>
+        ) : (
+          <>
+            Don&apos;t have an account?{" "}
+            <Link href="/sign-up" className="font-semibold text-ink hover:text-primary">
+              Create one
+            </Link>
+          </>
+        )
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <p
+            role="alert"
+            className="rounded-xl border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-[11.5px] leading-4 text-danger"
           >
-            {/* Error */}
-            {error && (
-              <div
-                role="alert"
-                className="mb-4 rounded-[11px] border border-[var(--primary)]/20 bg-[var(--primary)]/8 px-4 py-3 text-[10px] leading-4 text-[var(--primary)]"
-              >
-                {error}
-              </div>
-            )}
+            {error}
+          </p>
+        )}
 
-            {/* Fields */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <AuthInput
+          id="email"
+          label="Email address"
+          type="email"
+          value={email}
+          onChange={setEmail}
+          placeholder="you@example.com"
+          icon={<Mail size={15} />}
+          autoComplete="email"
+          disabled={loading}
+          required
+        />
 
-              {/* Email */}
-              <label className="block">
-                <span className="mb-1.5 block text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--text-secondary)]">
-                  Email address
-                </span>
+        <AuthInput
+          id="password"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={setPassword}
+          placeholder="Your password"
+          icon={<LockKeyhole size={15} />}
+          autoComplete="current-password"
+          disabled={loading}
+          required
+        />
 
-                <div className="relative">
-                  <Mail
-                    size={15}
-                    className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]"
-                  />
+        <div className="flex items-center justify-between">
+          <label className="flex cursor-pointer items-center gap-2">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(event) => setRememberMe(event.target.checked)}
+              disabled={loading}
+              className="size-3.5 rounded border-line accent-[var(--primary)]"
+            />
 
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="you@example.com"
-                    autoComplete="email"
-                    disabled={loading}
-                    className="h-[46px] w-full rounded-[11px] border border-[var(--border)] bg-[var(--surface)] pl-10 pr-3 text-[12px] text-[var(--text)] outline-none transition-all placeholder:text-[var(--text-tertiary)] hover:border-[var(--surface-hover)] focus:border-[var(--primary)]/60 focus:bg-[var(--surface-hover)] focus:ring-4 focus:ring-[var(--primary)]/6 disabled:cursor-not-allowed disabled:opacity-60"
-                  />
-                </div>
-              </label>
+            <span className="text-[11px] text-muted">Keep me signed in</span>
+          </label>
 
-              {/* Password */}
-              <label className="block">
-                <span className="mb-1.5 block text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--text-secondary)]">
-                  Password
-                </span>
-
-                <div className="relative">
-                  <LockKeyhole
-                    size={15}
-                    className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)]"
-                  />
-
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Enter your password"
-                    autoComplete="current-password"
-                    disabled={loading}
-                    className="h-[46px] w-full rounded-[11px] border border-[var(--border)] bg-[var(--surface)] pl-10 pr-10 text-[12px] text-[var(--text)] outline-none transition-all placeholder:text-[var(--text-tertiary)] hover:border-[var(--surface-hover)] focus:border-[var(--primary)]/60 focus:bg-[var(--surface-hover)] focus:ring-4 focus:ring-[var(--primary)]/6 disabled:cursor-not-allowed disabled:opacity-60"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                    disabled={loading}
-                    className="absolute right-1.5 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg text-[var(--text-tertiary)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--text)] disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    {showPassword ? (
-                      <EyeOff size={15} />
-                    ) : (
-                      <Eye size={15} />
-                    )}
-                  </button>
-                </div>
-              </label>
-            </div>
-
-            {/* Remember + Forgot */}
-            <div className="mt-4 flex items-center justify-between">
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(event) =>
-                    setRememberMe(event.target.checked)
-                  }
-                  disabled={loading}
-                  className="size-[14px] rounded border-[var(--border)] bg-[var(--surface)] accent-[var(--primary)]"
-                />
-
-                <span className="text-[10px] text-[var(--text-secondary)]">
-                  Remember me
-                </span>
-              </label>
-
-              <Link
-                href="/forgot-password"
-                className="text-[10px] font-semibold text-[var(--text-secondary)] transition hover:text-[var(--primary)]"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
-            {/* Sign In */}
-            <button
-              type="submit"
-              disabled={loading || googleLoading}
-              className="mt-5 flex h-[47px] w-full items-center justify-center gap-2 rounded-[11px] bg-[var(--primary)] text-[10px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:bg-[var(--primary-hover)] hover:shadow-[0_10px_28px_color-mix(in_srgb,var(--primary)_23%,transparent)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={14} className="animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign in"
-              )}
-            </button>
-
-            {/* Divider */}
-            <div className="my-5 flex items-center gap-3">
-              <span className="h-px flex-1 bg-[var(--border)]" />
-
-              <span className="text-[8px] font-bold tracking-[0.18em] text-[var(--text-tertiary)]">
-                OR
-              </span>
-
-              <span className="h-px flex-1 bg-[var(--border)]" />
-            </div>
-
-            {/* Google */}
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={loading || googleLoading}
-              className="flex h-[45px] w-full items-center justify-center gap-2.5 rounded-[11px] border border-[var(--border)] bg-[var(--surface)] text-[11px] font-semibold text-[var(--text)] transition hover:border-[var(--text-tertiary)] hover:bg-[var(--surface-hover)] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {googleLoading ? (
-                <>
-                  <Loader2 size={14} className="animate-spin" />
-                  Connecting...
-                </>
-              ) : (
-                <>
-                  <span className="grid size-5 place-items-center rounded-md border border-[var(--border)] bg-[var(--bg)] text-[10px] font-bold">
-                    G
-                  </span>
-
-                  Continue with Google
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Footer */}
-          <div className="mt-5 text-center">
-            <p className="text-[10px] text-[var(--text-tertiary)]">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/signup"
-                className="font-semibold text-[var(--text)] transition hover:text-[var(--primary)]"
-              >
-                Create an account
-              </Link>
-            </p>
-          </div>
-
-          {/* Bottom */}
-          <div className="mt-4 text-center">
-            <p className="text-[8px] font-medium uppercase tracking-[0.14em] text-[var(--text-tertiary)]">
-              Soul&apos;s Glory Cloth
-            </p>
-          </div>
+          <Link
+            href="/forgot-password"
+            className="text-[11px] font-semibold text-muted transition-colors hover:text-primary"
+          >
+            Forgot password?
+          </Link>
         </div>
-      </div>
-    </main>
+
+        <Button type="submit" fullWidth size="lg" loading={loading}>
+          {isAdmin && <ShieldCheck size={16} />}
+          Sign in
+        </Button>
+
+        <div className="flex items-center gap-3">
+          <span className="h-px flex-1 bg-[var(--border)]" />
+
+          <span className="text-[9px] font-bold tracking-[0.18em] text-faint">
+            OR
+          </span>
+
+          <span className="h-px flex-1 bg-[var(--border)]" />
+        </div>
+
+        <Button
+          type="button"
+          variant="secondary"
+          fullWidth
+          size="lg"
+          loading={googleLoading}
+          disabled={loading}
+          onClick={handleGoogle}
+        >
+          {!googleLoading && (
+            <span className="grid size-5 place-items-center rounded-md border border-line bg-bg text-[10px] font-bold">
+              G
+            </span>
+          )}
+          Continue with Google
+        </Button>
+      </form>
+    </AuthShell>
   );
 }

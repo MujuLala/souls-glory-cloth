@@ -45,6 +45,7 @@ export default function TaxonomyManager({
   singular,
   plural,
   emptyHint,
+  countLabel = "Products",
   withDescription = true,
   withStatus = true,
   onSave,
@@ -54,6 +55,8 @@ export default function TaxonomyManager({
   singular: string;
   plural: string;
   emptyHint: string;
+  /* What the count column counts — products, customers, … */
+  countLabel?: string;
   withDescription?: boolean;
   withStatus?: boolean;
   onSave: (input: SaveInput) => Promise<Result>;
@@ -174,7 +177,7 @@ export default function TaxonomyManager({
       : []),
     {
       key: "products",
-      header: "Products",
+      header: countLabel,
       align: "right",
       render: (row) => <Badge tone="neutral">{row.productCount}</Badge>,
     },
@@ -259,7 +262,8 @@ export default function TaxonomyManager({
                 </p>
 
                 <p className="mt-0.5 truncate text-[11px] text-faint">
-                  /{row.slug} · {row.productCount} product
+                  /{row.slug} · {row.productCount}{" "}
+                  {countLabel.toLowerCase().replace(/s$/, "")}
                   {row.productCount === 1 ? "" : "s"}
                 </p>
 
@@ -380,9 +384,7 @@ export default function TaxonomyManager({
         title={`Delete ${deleting?.name ?? ""}?`}
         message={
           deleting && deleting.productCount > 0
-            ? `${deleting.productCount} product${
-                deleting.productCount === 1 ? " is" : "s are"
-              } still linked. They stay in the catalogue but lose this ${singular.toLowerCase()}.`
+            ? `${deleting.productCount} ${countLabel.toLowerCase()} still linked. They keep their record but lose this ${singular.toLowerCase()}.`
             : `This removes the ${singular.toLowerCase()} permanently.`
         }
       />
