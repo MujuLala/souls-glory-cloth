@@ -141,6 +141,7 @@ export type TemplateWithFields = {
   slug: string;
   gender: string;
   description: string | null;
+  isActive?: boolean;
   fields: {
     id: number;
     key: string;
