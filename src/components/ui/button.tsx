@@ -81,6 +81,7 @@ export default function Button({
         className={classes}
         title={title}
         aria-label={ariaLabel}
+        onClick={onClick}
       >
         {children}
       </Link>

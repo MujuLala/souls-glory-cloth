@@ -1,55 +1,30 @@
-"use client";
-
-import { useState } from "react";
-
 import ShopHero from "@/components/shop/ShopHero";
-import ShopFilters, {
-  ShopFiltersState,
-} from "@/components/shop/ShopFilters";
-import ProductGrid from "@/components/shop/ProductGrid";
+import ShopCatalog from "@/components/shop/ShopCatalog";
+import ShopCTA from "@/components/shop/ShopCTA";
+import { Shell } from "@/components/ui/page";
+import { buildFacets, getStorefrontProducts } from "@/data/storefront";
 
-const DEFAULT_FILTERS: ShopFiltersState = {
-  search: "",
-  category: "All",
-  minPrice: 0,
-  maxPrice: 25000,
-  tags: [],
-  sizes: [],
-  colors: [],
-  availability: "all",
+export const metadata = {
+  title: "Shop",
+  description:
+    "Browse ready-to-wear pieces and made-to-measure designs from Soul's Glory Cloth.",
 };
 
-export default function ShopPage() {
-  const [filters, setFilters] =
-    useState<ShopFiltersState>(DEFAULT_FILTERS);
+export default async function ShopPage() {
+  const products = await getStorefrontProducts();
+  const facets = buildFacets(products);
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <>
       <ShopHero />
 
-      <section
-        id="products"
-        className="border-t border-white/[0.06] py-10 sm:py-14"
-      >
-        <div className="mx-auto max-w-[1400px] px-5">
-          <div className="grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-            {/* Desktop Filters */}
-            <div className="hidden lg:block">
-              <div className="sticky top-24">
-                <ShopFilters
-                  value={filters}
-                  onChange={setFilters}
-                />
-              </div>
-            </div>
-
-            {/* Products */}
-            <ProductGrid
-              filters={filters}
-            />
-          </div>
-        </div>
+      <section id="products" className="border-t border-line-subtle py-10 sm:py-14">
+        <Shell>
+          <ShopCatalog products={products} facets={facets} />
+        </Shell>
       </section>
-    </main>
+
+      <ShopCTA />
+    </>
   );
 }

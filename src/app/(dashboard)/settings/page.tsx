@@ -1,149 +1,133 @@
 import Link from "next/link";
 import {
-  ArrowLeft,
-  Settings as SettingsIcon,
-  User,
-  Store,
   Bell,
-  Shield,
   CreditCard,
   Globe,
+  MessageSquare,
+  Package,
+  Ruler,
+  Shield,
+  Store,
+  User,
+  Users,
 } from "lucide-react";
 
-import CMSPageContainer from "@/components/products/CMSPageContainer";
+import { Card } from "@/components/ui/card";
+import { Breadcrumbs, PageHeader, PageShell } from "@/components/ui/page";
+import { prisma } from "@/lib/prisma";
+import { formatMoney } from "@/lib/format";
+import { SHIPPING_FLAT, TAILORING_FEE } from "@/lib/constants";
 
-export default function SettingsPage() {
-  const settings = [
+export const metadata = { title: "Settings" };
+
+export default async function SettingsPage() {
+  const [staffCount, templateCount, productCount, openChats] =
+    await Promise.all([
+      prisma.appUser.count({ where: { role: { not: "Customer" } } }),
+      prisma.measurementTemplate.count(),
+      prisma.product.count(),
+      prisma.conversation.count({ where: { status: "Open" } }),
+    ]);
+
+  const sections = [
     {
-      title: "General Settings",
-      description: "Manage your store name, contact information and basic details.",
-      icon: <Store size={18} />,
+      title: "Team & roles",
+      description: `${staffCount} staff account${staffCount === 1 ? "" : "s"} — admins, tailors and cashiers.`,
+      icon: <Users size={18} />,
+      href: "/settings/team",
     },
     {
-      title: "Account Settings",
-      description: "Update your admin profile and account information.",
+      title: "Measurement types",
+      description: `${templateCount} garment template${templateCount === 1 ? "" : "s"} used when recording measurements.`,
+      icon: <Ruler size={18} />,
+      href: "/tailoring/templates",
+    },
+    {
+      title: "Catalogue",
+      description: `${productCount} product${productCount === 1 ? "" : "s"}, plus categories, collections and tags.`,
+      icon: <Package size={18} />,
+      href: "/products",
+    },
+    {
+      title: "Chat & questions",
+      description: `${openChats} open conversation${openChats === 1 ? "" : "s"}. Configure the questions chat asks per product.`,
+      icon: <MessageSquare size={18} />,
+      href: "/tailoring/questions",
+    },
+    {
+      title: "Pricing defaults",
+      description: `Tailoring ${formatMoney(TAILORING_FEE)} · delivery ${formatMoney(SHIPPING_FLAT)} (free above Rs 15,000).`,
+      icon: <CreditCard size={18} />,
+      href: "/settings/commerce",
+    },
+    {
+      title: "Store profile",
+      description: "Name, contact details and the address printed on receipts.",
+      icon: <Store size={18} />,
+      href: "/settings/store",
+    },
+    {
+      title: "Your account",
+      description: "Name, email and password for your own login.",
       icon: <User size={18} />,
+      href: "/settings/account",
     },
     {
       title: "Notifications",
-      description: "Configure email and dashboard notification preferences.",
+      description: "Which events email you, and which stay in the dashboard.",
       icon: <Bell size={18} />,
+      href: "/settings/notifications",
     },
     {
       title: "Security",
-      description: "Manage passwords, authentication and account security.",
+      description: "Sessions, admin access and audit of recent sign-ins.",
       icon: <Shield size={18} />,
+      href: "/settings/security",
     },
     {
-      title: "Payments",
-      description: "Configure payment methods and transaction settings.",
-      icon: <CreditCard size={18} />,
-    },
-    {
-      title: "Localization",
-      description: "Manage currency, timezone and language preferences.",
+      title: "Localisation",
+      description: "Currency (PKR), timezone and measurement units.",
       icon: <Globe size={18} />,
+      href: "/settings/localisation",
     },
   ];
 
   return (
-    <div className="min-h-screen w-full bg-[#050505] text-[#f7f7f7]">
-      <main className="w-full px-8">
-        <CMSPageContainer>
-          {/* Breadcrumb */}
-          <div className="mb-5 flex items-center gap-2 text-xs text-neutral-600">
+    <PageShell>
+      <Breadcrumbs
+        items={[{ label: "Dashboard", href: "/dashboard" }, { label: "Settings" }]}
+      />
+
+      <PageHeader
+        title="Settings"
+        description="Everything that shapes how the workspace behaves — your team, your catalogue defaults, and how customers reach you."
+      />
+
+      <Card className="overflow-hidden">
+        <div className="grid divide-y divide-line-subtle sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-3">
+          {sections.map((section) => (
             <Link
-              href="/dashboard"
-              className="transition hover:text-white"
+              key={section.title}
+              href={section.href}
+              className="group flex items-start gap-3.5 border-line-subtle p-5 transition-colors hover:bg-surface sm:border-b sm:[&:nth-child(2n)]:border-l lg:[&:nth-child(2n)]:border-l-0 lg:[&:not(:nth-child(3n+1))]:border-l"
             >
-              Dashboard
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-surface text-faint transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                {section.icon}
+              </span>
+
+              <span className="min-w-0">
+                <span className="block text-[13px] font-semibold text-ink">
+                  {section.title}
+                </span>
+
+                <span className="mt-1 block text-[11px] leading-5 text-faint">
+                  {section.description}
+                </span>
+              </span>
             </Link>
-
-            <span>/</span>
-
-            <span className="text-neutral-400">
-              Settings
-            </span>
-          </div>
-
-          {/* Header */}
-          <section className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="flex items-start gap-3">
-              <Link
-                href="/dashboard"
-                aria-label="Back to dashboard"
-                className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-neutral-500 transition hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-white"
-              >
-                <ArrowLeft size={16} />
-              </Link>
-
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                  Settings
-                </h1>
-
-                <p className="mt-2 text-xs text-neutral-500 sm:text-sm">
-                  Manage your store and dashboard settings.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Settings Card */}
-          <section className="overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.025]">
-            <div className="border-b border-white/[0.07] p-4 sm:p-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ff1638]/10 text-[#ff1638]">
-                  <SettingsIcon size={18} />
-                </div>
-
-                <div>
-                  <h2 className="text-sm font-semibold">
-                    Store Settings
-                  </h2>
-
-                  <p className="mt-1 text-xs text-neutral-600">
-                    Configure your store preferences.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Settings Items */}
-            <div className="grid grid-cols-1 divide-y divide-white/[0.06] sm:grid-cols-2 sm:divide-y-0">
-              {settings.map((setting, index) => (
-                <button
-                  key={setting.title}
-                  type="button"
-                  className={[
-                    "group flex w-full items-start gap-4 p-5 text-left transition hover:bg-white/[0.025]",
-                    index % 2 === 0
-                      ? "sm:border-r sm:border-white/[0.06]"
-                      : "",
-                    index >= 2
-                      ? "sm:border-t sm:border-white/[0.06]"
-                      : "",
-                  ].join(" ")}
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.04] text-neutral-500 transition group-hover:bg-[#ff1638]/10 group-hover:text-[#ff1638]">
-                    {setting.icon}
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-semibold text-neutral-200 transition group-hover:text-white">
-                      {setting.title}
-                    </h3>
-
-                    <p className="mt-1 text-xs leading-5 text-neutral-600">
-                      {setting.description}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-        </CMSPageContainer>
-      </main>
-    </div>
+          ))}
+        </div>
+      </Card>
+    </PageShell>
   );
 }

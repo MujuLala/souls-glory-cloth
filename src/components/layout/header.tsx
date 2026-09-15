@@ -1,167 +1,69 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import {
-  Search,
-  ShoppingBag,
-  UserRound,
-  Menu,
-  X,
-  ChevronDown,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { ChevronDown, Menu, Search, UserRound, X } from "lucide-react";
 
-import Container from "@/components/ui/container";
-import Button from "@/components/ui/button";
+import ThemeToggle from "@/components/theme/theme-toggle";
+import CartButton from "@/components/shop/CartButton";
+import { Shell } from "@/components/ui/page";
+import { cn } from "@/components/ui/cn";
 
-const platformItems = [
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+type NavLink = { label: string; href: string; description?: string };
+
+const platformItems: NavLink[] = [
   {
-    label: "How It Works",
-    description: "See how Soul's Glory works",
-    href: "/how-it-works",
+    label: "Custom Studio",
+    description: "Design a piece from scratch",
+    href: "/custom-studio",
   },
   {
-    label: "Client Dashboard",
-    description: "Manage your fashion journey",
+    label: "Your account",
+    description: "Orders, measurements and family profiles",
     href: "/account",
   },
   {
     label: "Measurements",
-    description: "Save your personal fit",
+    description: "Save a fit for everyone you order for",
     href: "/account/measurements",
   },
 ];
 
-const shopItems = [
-  { label: "Explore All", href: "/shop" },
-  { label: "Men", href: "/shop/men" },
-  { label: "Women", href: "/shop/women" },
-  { label: "Kids", href: "/shop/kids" },
-  { label: "Ready to Wear", href: "/shop/ready-to-wear" },
+const mainLinks: NavLink[] = [
+  { label: "Collections", href: "/collections" },
+  { label: "Support", href: "/support" },
 ];
 
-const mainLinks = [
-  {
-    label: "Custom Studio",
-    href: "/custom-studio",
-  },
-  {
-    label: "Collections",
-    href: "/collections",
-  },
-  {
-    label: "Support",
-    href: "/support",
-  },
-];
+export default function Header({
+  categories = [],
+}: {
+  categories?: { name: string; slug: string }[];
+}) {
+  const pathname = usePathname();
 
-/* =========================================================
-   SHARED NAV TYPOGRAPHY
-   IMPORTANT:
-   All navigation items use the exact same color.
-========================================================= */
-
-const navTextClass = `
-  text-[13px]
-  xl:text-[14px]
-  2xl:text-[15px]
-  font-medium
-  leading-none
-  tracking-[-0.015em]
-  !text-[#d6d6d6]
-  transition-colors
-  duration-200
-  hover:!text-[var(--primary)]
-`;
-
-/* =========================================================
-   DROPDOWN MAIN TEXT
-========================================================= */
-
-const dropdownTitleClass = `
-  text-[14px]
-  font-medium
-  leading-none
-  !text-[#d6d6d6]
-  transition-colors
-  duration-200
-  group-hover:!text-[var(--primary)]
-`;
-
-/* =========================================================
-   DROPDOWN SIMPLE ITEM
-========================================================= */
-
-const dropdownItemClass = `
-  block
-  rounded-[8px]
-  px-3
-  py-3
-  text-[14px]
-  font-medium
-  leading-none
-  !text-[#d6d6d6]
-  transition-all
-  duration-200
-  hover:bg-[var(--surface-hover)]
-  hover:!text-[var(--primary)]
-`;
-
-/* =========================================================
-   ICON BUTTON
-========================================================= */
-
-const iconButtonClass = `
-  flex
-  h-[38px]
-  w-[38px]
-  shrink-0
-  items-center
-  justify-center
-  rounded-[8px]
-  border
-  border-[var(--border)]
-  bg-[var(--surface)]
-  !text-[var(--text-secondary)]
-  transition-all
-  duration-200
-  hover:border-[var(--primary)]
-  hover:bg-[var(--surface-hover)]
-  hover:!text-[var(--text)]
-  active:scale-[0.97]
-  sm:h-[40px]
-  sm:w-[40px]
-`;
-
-export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [platformOpen, setPlatformOpen] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
+  const [openMenu, setOpenMenu] = useState<"platform" | "shop" | null>(null);
 
   const headerRef = useRef<HTMLElement>(null);
 
-  /* =========================================================
-     INITIAL THEME
-  ========================================================= */
+  const shopItems: NavLink[] = [
+    { label: "Everything", href: "/shop" },
+    ...categories.map((category) => ({
+      label: category.name,
+      href: `/shop/${category.slug}`,
+    })),
+  ];
 
+  /* Close menus when the route changes or focus leaves. */
   useEffect(() => {
-    const savedTheme = localStorage.getItem("soul-glory-theme");
-
-    if (savedTheme === "light") {
-      setDarkMode(false);
-      document.documentElement.setAttribute("data-theme", "light");
-    } else {
-      setDarkMode(true);
-      document.documentElement.setAttribute("data-theme", "dark");
-    }
-  }, []);
-
-  /* =========================================================
-     CLOSE DROPDOWNS OUTSIDE
-  ========================================================= */
+    setMobileOpen(false);
+    setOpenMenu(null);
+  }, [pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -169,670 +71,260 @@ export default function Header() {
         headerRef.current &&
         !headerRef.current.contains(event.target as Node)
       ) {
-        setPlatformOpen(false);
-        setShopOpen(false);
+        setOpenMenu(null);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  /* =========================================================
-     THEME
-  ========================================================= */
+  /* Lock the page while the mobile drawer is open. */
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
 
-  const toggleTheme = () => {
-    const nextTheme = darkMode ? "light" : "dark";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    localStorage.setItem("soul-glory-theme", nextTheme);
-
-    setDarkMode(!darkMode);
-  };
-
-  /* =========================================================
-     CLOSE MOBILE
-  ========================================================= */
-
-  const closeMobileMenu = () => {
-    setMobileOpen(false);
-    setPlatformOpen(false);
-    setShopOpen(false);
-  };
+  const linkClass = (active: boolean) =>
+    cn(
+      "text-[13px] font-medium leading-none tracking-[-0.015em] transition-colors xl:text-[14px]",
+      active ? "text-primary" : "text-muted hover:text-primary",
+    );
 
   return (
     <header
       ref={headerRef}
-      className="
-        sticky
-        top-0
-        z-[100]
-        w-full
-        border-b
-        border-[var(--border)]
-        bg-[var(--header-bg)]
-        backdrop-blur-2xl
-      "
+      className="sticky top-0 z-[100] w-full border-b border-line bg-[var(--header-bg)] backdrop-blur-2xl"
     >
-      {/* =====================================================
-          MAIN HEADER
-      ====================================================== */}
-
-      <Container
-        className="
-          flex
-          h-[64px]
-          items-center
-          justify-between
-          sm:h-[68px]
-          lg:h-[72px]
-          xl:h-[74px]
-        "
-      >
-        {/* =================================================
+      <Shell className="flex h-16 items-center justify-between gap-4 lg:h-[72px]">
+        {/* =============================================
             LOGO
-        ================================================== */}
+        ============================================= */}
 
         <Link
           href="/"
           aria-label="Soul's Glory Cloth home"
-          onClick={closeMobileMenu}
-          className="
-            group
-            flex
-            shrink-0
-            items-center
-          "
+          className="shrink-0 text-[18px] font-bold leading-[0.86] tracking-[-0.065em] text-ink lg:text-[20px]"
         >
-          <div
-            className="
-              text-[18px]
-              font-bold
-              leading-[0.86]
-              tracking-[-0.065em]
-              text-[var(--text)]
-              sm:text-[19px]
-              lg:text-[20px]
-              xl:text-[21px]
-            "
-          >
-            Soul&apos;s
-            <br />
-
-            <span className="text-[var(--primary)]">
-              Glory
-            </span>
-          </div>
+          Soul&apos;s
+          <br />
+          <span className="text-primary">Glory</span>
         </Link>
 
-        {/* =================================================
-            DESKTOP NAVIGATION
-        ================================================== */}
+        {/* =============================================
+            DESKTOP NAV
+        ============================================= */}
 
         <nav
           aria-label="Main navigation"
-          className="
-            hidden
-            items-center
-            gap-5
-            lg:flex
-            xl:gap-7
-            2xl:gap-8
-          "
+          className="hidden items-center gap-6 lg:flex xl:gap-8"
         >
-          {/* =================================================
-              PLATFORM
-          ================================================== */}
+          <Dropdown
+            label="Platform"
+            open={openMenu === "platform"}
+            onToggle={() =>
+              setOpenMenu((current) =>
+                current === "platform" ? null : "platform",
+              )
+            }
+            items={platformItems}
+            withDescriptions
+          />
 
-          <div className="relative">
-            <button
-              type="button"
-              aria-expanded={platformOpen}
-              aria-haspopup="menu"
-              onClick={() => {
-                setPlatformOpen((value) => !value);
-                setShopOpen(false);
-              }}
-              className={`
-                flex
-                items-center
-                gap-1.5
-                ${navTextClass}
-              `}
-            >
-              <span>Platform</span>
+          <Dropdown
+            label="Shop"
+            open={openMenu === "shop"}
+            onToggle={() =>
+              setOpenMenu((current) => (current === "shop" ? null : "shop"))
+            }
+            items={shopItems}
+          />
 
-              <ChevronDown
-                size={14}
-                strokeWidth={1.8}
-                className={`
-                  shrink-0
-                  !text-[#d6d6d6]
-                  transition-all
-                  duration-200
-                  ${platformOpen ? "rotate-180" : ""}
-                `}
-              />
-            </button>
-
-            {platformOpen && (
-              <div
-                role="menu"
-                className="
-                  absolute
-                  left-1/2
-                  top-[calc(100%+40px)]
-                  z-[110]
-                  w-[260px]
-                  -translate-x-1/2
-                  rounded-[12px]
-                  border
-                  border-[var(--border)]
-                  bg-[var(--dropdown-bg)]
-                  p-2
-                  shadow-2xl
-                  backdrop-blur-2xl
-                "
-              >
-                {platformItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    role="menuitem"
-                    onClick={() => setPlatformOpen(false)}
-                    className="
-                      group
-                      block
-                      rounded-[8px]
-                      px-3
-                      py-3
-                      transition-colors
-                      duration-200
-                      hover:bg-[var(--surface-hover)]
-                    "
-                  >
-                    <div className={dropdownTitleClass}>
-                      {item.label}
-                    </div>
-
-                    <div
-                      className="
-                        mt-1.5
-                        text-[12px]
-                        font-normal
-                        leading-[1.35]
-                        !text-[#999999]
-                      "
-                    >
-                      {item.description}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* =================================================
-              SHOP
-          ================================================== */}
-
-          <div className="relative">
-            <button
-              type="button"
-              aria-expanded={shopOpen}
-              aria-haspopup="menu"
-              onClick={() => {
-                setShopOpen((value) => !value);
-                setPlatformOpen(false);
-              }}
-              className={`
-                flex
-                items-center
-                gap-1.5
-                ${navTextClass}
-              `}
-            >
-              <span>Shop</span>
-
-              <ChevronDown
-                size={14}
-                strokeWidth={1.8}
-                className={`
-                  shrink-0
-                  !text-[#d6d6d6]
-                  transition-all
-                  duration-200
-                  ${shopOpen ? "rotate-180" : ""}
-                `}
-              />
-            </button>
-
-            {shopOpen && (
-              <div
-                role="menu"
-                className="
-                  absolute
-                  left-1/2
-                  top-[calc(100%+40px)]
-                  z-[110]
-                  w-[200px]
-                  -translate-x-1/2
-                  rounded-[12px]
-                  border
-                  border-[var(--border)]
-                  bg-[var(--dropdown-bg)]
-                  p-2
-                  shadow-2xl
-                  backdrop-blur-2xl
-                "
-              >
-                {shopItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    role="menuitem"
-                    onClick={() => setShopOpen(false)}
-                    className={dropdownItemClass}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* =================================================
-              MAIN LINKS
-          ================================================== */}
-
-          {mainLinks.map((item) => (
+          {mainLinks.map((link) => (
             <Link
-              key={item.href}
-              href={item.href}
-              className={navTextClass}
+              key={link.href}
+              href={link.href}
+              className={linkClass(pathname.startsWith(link.href))}
             >
-              {item.label}
+              {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* =================================================
-            RIGHT ACTIONS
-        ================================================== */}
+        {/* =============================================
+            ACTIONS
+        ============================================= */}
 
-        <div
-          className="
-            flex
-            items-center
-            gap-1.5
-            sm:gap-2
-          "
-        >
-          {/* SEARCH */}
-
+        <div className="flex shrink-0 items-center gap-2">
           <Link
-            href="/search"
-            aria-label="Search"
-            className={iconButtonClass}
+            href="/shop"
+            aria-label="Search the shop"
+            title="Search"
+            className="hidden size-9 place-items-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-primary hover:text-ink sm:grid"
           >
-            <Search size={16} strokeWidth={1.8} />
+            <Search size={16} />
           </Link>
 
-          {/* LOGIN */}
+          <ThemeToggle />
 
-          <Link
-            href="/sign-in"
-            className="
-              hidden
-              px-2
-              py-2
-              text-[13px]
-              font-semibold
-              leading-none
-              !text-[#d6d6d6]
-              transition-colors
-              duration-200
-              hover:!text-[var(--primary)]
-              xl:block
-              2xl:text-[14px]
-            "
-          >
-            Log in
-          </Link>
-
-          {/* BECOME CLIENT */}
-
-          <Button
-            href="/sign-up"
-            variant="primary"
-            className="
-              hidden
-              h-[40px]
-              rounded-[8px]
-              px-4
-              text-[13px]
-              font-semibold
-              leading-none
-              lg:inline-flex
-              xl:px-5
-              xl:text-[14px]
-            "
-          >
-            Become a Client
-          </Button>
-
-          {/* THEME */}
-
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label={
-              darkMode
-                ? "Switch to light mode"
-                : "Switch to dark mode"
-            }
-            className={iconButtonClass}
-          >
-            {darkMode ? (
-              <Sun size={16} strokeWidth={1.8} />
-            ) : (
-              <Moon size={16} strokeWidth={1.8} />
-            )}
-          </button>
-
-          {/* ACCOUNT */}
+          <CartButton />
 
           <Link
             href="/account"
-            aria-label="My account"
-            className={`
-              ${iconButtonClass}
-              hidden
-              md:flex
-            `}
+            aria-label="Your account"
+            title="Account"
+            className="hidden size-9 place-items-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-primary hover:text-ink sm:grid"
           >
-            <UserRound size={16} strokeWidth={1.8} />
+            <UserRound size={16} />
           </Link>
-
-          {/* CART */}
-
-          <Link
-            href="/cart"
-            aria-label="Shopping cart"
-            className={`
-              ${iconButtonClass}
-              relative
-            `}
-          >
-            <ShoppingBag size={16} strokeWidth={1.8} />
-
-            <span
-              className="
-                absolute
-                -right-1
-                -top-1
-                flex
-                h-[15px]
-                min-w-[15px]
-                items-center
-                justify-center
-                rounded-full
-                bg-[var(--primary)]
-                px-1
-                text-[9px]
-                font-bold
-                leading-none
-                text-white
-              "
-            >
-              0
-            </span>
-          </Link>
-
-          {/* MOBILE MENU */}
 
           <button
             type="button"
-            onClick={() => {
-              setMobileOpen((value) => !value);
-              setPlatformOpen(false);
-              setShopOpen(false);
-            }}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            className={`
-              ${iconButtonClass}
-              lg:hidden
-            `}
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+            className="grid size-9 place-items-center rounded-lg border border-line bg-surface text-muted transition-colors hover:text-ink lg:hidden"
           >
-            {mobileOpen ? (
-              <X size={19} />
-            ) : (
-              <Menu size={19} />
-            )}
+            <Menu size={17} />
           </button>
         </div>
-      </Container>
+      </Shell>
 
-      {/* =====================================================
-          MOBILE MENU
-      ====================================================== */}
+      {/* =============================================
+          MOBILE DRAWER
+      ============================================= */}
 
       {mobileOpen && (
-        <div
-          className="
-            border-t
-            border-[var(--border)]
-            bg-[var(--header-bg)]
-            backdrop-blur-2xl
-            lg:hidden
-          "
-        >
-          <Container className="py-4 sm:py-5">
-            <nav className="flex flex-col">
+        <div className="fixed inset-0 z-[110] lg:hidden">
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setMobileOpen(false)}
+            className="absolute inset-0 bg-overlay backdrop-blur-sm"
+          />
 
-              {/* =================================================
-                  PLATFORM
-              ================================================== */}
+          <div className="absolute inset-y-0 right-0 flex w-[86vw] max-w-[340px] flex-col border-l border-line bg-bg-secondary">
+            <div className="flex items-center justify-between border-b border-line-subtle px-4 py-4">
+              <span className="text-[13px] font-bold text-ink">Menu</span>
 
-              <div className="border-b border-[var(--border)]">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setPlatformOpen((value) => !value)
-                  }
-                  className="
-                    flex
-                    min-h-[52px]
-                    w-full
-                    items-center
-                    justify-between
-                    text-left
-                    text-[15px]
-                    font-semibold
-                    leading-none
-                    !text-[#d6d6d6]
-                    transition-colors
-                    duration-200
-                    hover:!text-[var(--primary)]
-                  "
-                >
-                  Platform
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+                className="grid size-8 place-items-center rounded-lg text-faint hover:bg-surface hover:text-ink"
+              >
+                <X size={17} />
+              </button>
+            </div>
 
-                  <ChevronDown
-                    size={17}
-                    className={`
-                      !text-[#d6d6d6]
-                      transition-transform
-                      duration-200
-                      ${platformOpen ? "rotate-180" : ""}
-                    `}
-                  />
-                </button>
-
-                {platformOpen && (
-                  <div className="pb-3">
-                    {platformItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={closeMobileMenu}
-                        className="
-                          block
-                          rounded-[8px]
-                          px-3
-                          py-3
-                          text-[13px]
-                          font-medium
-                          leading-none
-                          !text-[#d6d6d6]
-                          transition-all
-                          duration-200
-                          hover:bg-[var(--surface-hover)]
-                          hover:!text-[var(--primary)]
-                        "
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* =================================================
-                  SHOP
-              ================================================== */}
-
-              <div className="border-b border-[var(--border)]">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShopOpen((value) => !value)
-                  }
-                  className="
-                    flex
-                    min-h-[52px]
-                    w-full
-                    items-center
-                    justify-between
-                    text-left
-                    text-[15px]
-                    font-semibold
-                    leading-none
-                    !text-[#d6d6d6]
-                    transition-colors
-                    duration-200
-                    hover:!text-[var(--primary)]
-                  "
-                >
-                  Shop
-
-                  <ChevronDown
-                    size={17}
-                    className={`
-                      !text-[#d6d6d6]
-                      transition-transform
-                      duration-200
-                      ${shopOpen ? "rotate-180" : ""}
-                    `}
-                  />
-                </button>
-
-                {shopOpen && (
-                  <div className="pb-3">
-                    {shopItems.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={closeMobileMenu}
-                        className="
-                          block
-                          rounded-[8px]
-                          px-3
-                          py-3
-                          text-[13px]
-                          font-medium
-                          leading-none
-                          !text-[#d6d6d6]
-                          transition-all
-                          duration-200
-                          hover:bg-[var(--surface-hover)]
-                          hover:!text-[var(--primary)]
-                        "
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* =================================================
-                  MAIN LINKS
-              ================================================== */}
-
-              {mainLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeMobileMenu}
-                  className="
-                    flex
-                    min-h-[52px]
-                    items-center
-                    border-b
-                    border-[var(--border)]
-                    text-[15px]
-                    font-semibold
-                    leading-none
-                    !text-[#d6d6d6]
-                    transition-colors
-                    duration-200
-                    hover:!text-[var(--primary)]
-                  "
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              {/* =================================================
-                  ACCOUNT ACTIONS
-              ================================================== */}
-
-              <div className="mt-5 grid grid-cols-2 gap-2.5">
-                <Button
-                  href="/sign-in"
-                  variant="secondary"
-                  className="
-                    h-[46px]
-                    w-full
-                    px-3
-                    text-[14px]
-                  "
-                >
-                  Log in
-                </Button>
-
-                <Button
-                  href="/sign-up"
-                  variant="primary"
-                  className="
-                    h-[46px]
-                    w-full
-                    px-3
-                    text-[14px]
-                  "
-                >
-                  Become a Client
-                </Button>
-              </div>
+            <nav className="flex-1 overflow-y-auto scrollbar-thin px-3 py-4">
+              <MobileGroup title="Shop" items={shopItems} />
+              <MobileGroup title="Platform" items={platformItems} />
+              <MobileGroup title="More" items={mainLinks} />
             </nav>
-          </Container>
+
+            <div className="border-t border-line-subtle p-3">
+              <Link
+                href="/account"
+                className="flex h-11 items-center justify-center gap-2 rounded-lg bg-primary text-[13px] font-bold text-[var(--primary-contrast)]"
+              >
+                <UserRound size={16} />
+                Your account
+              </Link>
+            </div>
+          </div>
         </div>
       )}
     </header>
+  );
+}
+
+/* =========================================================
+   DESKTOP DROPDOWN
+========================================================= */
+
+function Dropdown({
+  label,
+  open,
+  onToggle,
+  items,
+  withDescriptions = false,
+}: {
+  label: string;
+  open: boolean;
+  onToggle: () => void;
+  items: NavLink[];
+  withDescriptions?: boolean;
+}) {
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        onClick={onToggle}
+        className="flex items-center gap-1.5 text-[13px] font-medium leading-none tracking-[-0.015em] text-muted transition-colors hover:text-primary xl:text-[14px]"
+      >
+        {label}
+
+        <ChevronDown
+          size={14}
+          className={cn("transition-transform duration-200", open && "rotate-180")}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-1/2 top-[calc(100%+22px)] z-[110] w-[260px] -translate-x-1/2 rounded-xl border border-line bg-[var(--dropdown-bg)] p-2 shadow-float backdrop-blur-2xl"
+        >
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              role="menuitem"
+              className="group block rounded-lg px-3 py-2.5 transition-colors hover:bg-surface-hover"
+            >
+              <span className="block text-[13.5px] font-medium leading-none text-ink transition-colors group-hover:text-primary">
+                {item.label}
+              </span>
+
+              {withDescriptions && item.description && (
+                <span className="mt-1.5 block text-[11.5px] leading-4 text-faint">
+                  {item.description}
+                </span>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* =========================================================
+   MOBILE GROUP
+========================================================= */
+
+function MobileGroup({ title, items }: { title: string; items: NavLink[] }) {
+  return (
+    <div className="mb-5 last:mb-0">
+      <p className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-faint">
+        {title}
+      </p>
+
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className="block rounded-lg px-3 py-2.5 text-[13px] text-muted transition-colors hover:bg-surface hover:text-ink"
+        >
+          {item.label}
+        </Link>
+      ))}
+    </div>
   );
 }

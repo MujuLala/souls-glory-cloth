@@ -855,3 +855,12 @@ model StockAdjustment {
   @@index([productId])
   @@index([createdAt])
 }
+
+model StoreSetting {
+  // Namespaced key, e.g. "store.profile" or "commerce.pricing"
+  key   String @id
+  value Json
+
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}

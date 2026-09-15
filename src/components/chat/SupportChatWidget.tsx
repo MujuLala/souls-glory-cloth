@@ -98,6 +98,39 @@ export default function SupportChatWidget() {
     setUnread(Math.max(0, incoming - seenCountRef.current));
   }, [messages, open]);
 
+  /* "Ask about this piece" on a product page opens the panel
+     with that product already attached. */
+  useEffect(() => {
+    const handleAsk = (event: Event) => {
+      const detail = (event as CustomEvent<{ productId: number }>).detail;
+
+      if (!detail?.productId) {
+        return;
+      }
+
+      togglePanel(true);
+      setView("chat");
+
+      void fetch(`/api/chat/products?id=${detail.productId}`, {
+        cache: "no-store",
+      })
+        .then((response) => response.json())
+        .then((data: { products: PickerProduct[] }) => {
+          const match = data.products[0];
+
+          if (match) {
+            void attachProduct(match);
+          }
+        })
+        .catch(() => undefined);
+    };
+
+    window.addEventListener("sg:chat-product", handleAsk);
+
+    return () => window.removeEventListener("sg:chat-product", handleAsk);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /* Keep the newest message in view. */
   useEffect(() => {
     if (open && view === "chat" && scrollRef.current) {

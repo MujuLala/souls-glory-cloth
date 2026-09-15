@@ -1,214 +1,159 @@
 "use client";
 
-import { ArrowUpRight, Heart, ShoppingBag } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import { ArrowUpRight, Heart, ImageIcon, ShoppingBag, Star } from "lucide-react";
 
-import type { Product } from "../products/types";
-
-type ProductCardProps = {
-  product: Product;
-};
+import { cn } from "@/components/ui/cn";
+import { formatMoney } from "@/lib/format";
+import type { StorefrontProduct } from "@/types/catalog";
 
 export default function ProductCard({
   product,
-}: ProductCardProps) {
+}: {
+  product: StorefrontProduct;
+}) {
   const [liked, setLiked] = useState(false);
+
+  const activePrice = product.salePrice ?? product.price;
+  const wasPrice = product.salePrice ? product.price : product.compareAtPrice;
 
   return (
     <article className="group relative min-w-0">
-      {/* ============================================================
-          PRODUCT IMAGE / PLACEHOLDER
-      ============================================================ */}
-      <div className="relative aspect-square overflow-hidden rounded-[16px] border border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_72%,transparent)] shadow-[0_20px_70px_rgba(0,0,0,.14)] backdrop-blur-xl transition-all duration-500 group-hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--border))] group-hover:shadow-[0_25px_80px_rgba(0,0,0,.24)]">
-        {/* Background Pattern */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035]"
-          style={{
-            backgroundImage:
-              "linear-gradient(var(--text) 1px, transparent 1px), linear-gradient(90deg, var(--text) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
+      <Link
+        href={`/product/${product.slug}`}
+        className="block"
+        aria-label={product.name}
+      >
+        <div className="relative aspect-square overflow-hidden rounded-2xl border border-line bg-surface transition-colors duration-300 group-hover:border-primary/35">
+          {product.image ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={product.image}
+                alt={product.name}
+                loading="lazy"
+                className={cn(
+                  "size-full object-cover transition-all duration-500",
+                  product.hoverImage
+                    ? "group-hover:opacity-0"
+                    : "group-hover:scale-[1.03]",
+                )}
+              />
 
-        {/* Soft center glow */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--primary)]/[0.035] blur-3xl transition-all duration-700 group-hover:bg-[var(--primary)]/[0.07]" />
+              {product.hoverImage && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={product.hoverImage}
+                  alt=""
+                  loading="lazy"
+                  aria-hidden
+                  className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                />
+              )}
+            </>
+          ) : (
+            <div className="flex size-full flex-col items-center justify-center gap-2 text-faint">
+              <ImageIcon size={22} strokeWidth={1.4} />
 
-        {/* ============================================================
-            PRODUCT IMAGE
-        ============================================================ */}
-
-        {product.image ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-            />
-          </div>
-        ) : (
-          /* ============================================================
-             PLACEHOLDER
-          ============================================================ */
-          <div className="absolute inset-5 flex items-center justify-center rounded-[12px] border border-dashed border-[var(--border)]">
-            <div className="flex flex-col items-center text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] transition-all duration-500 group-hover:border-[var(--primary)]/30 group-hover:bg-[var(--primary)]/[0.05]">
-                <svg
-                  width="19"
-                  height="19"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-[var(--text-secondary)] transition-colors duration-500 group-hover:text-[var(--primary)]"
-                >
-                  <rect
-                    x="3"
-                    y="3"
-                    width="18"
-                    height="18"
-                    rx="2"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-
-                  <circle
-                    cx="8.5"
-                    cy="8.5"
-                    r="1.5"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                  />
-
-                  <path
-                    d="M21 15L16 10L5 21"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-
-              <span className="mt-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--text-secondary)]">
-                Product Image
-              </span>
-
-              <span className="mt-1 text-[8px] text-[var(--text-secondary)]/50">
-                Place image here
+              <span className="text-[9px] font-semibold uppercase tracking-[0.18em]">
+                No image yet
               </span>
             </div>
+          )}
+
+          {/* BADGES */}
+          <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+            {product.badge && (
+              <span className="rounded-full bg-primary px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--primary-contrast)]">
+                {product.badge}
+              </span>
+            )}
+
+            {product.salePrice && (
+              <span className="rounded-full border border-line bg-bg-secondary/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-ink backdrop-blur">
+                Sale
+              </span>
+            )}
           </div>
-        )}
 
-        {/* ============================================================
-            BADGE
-        ============================================================ */}
-
-        {product.badge && (
-          <span className="absolute left-4 top-4 z-10 rounded-full border border-[var(--border)] bg-[var(--surface)]/90 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[var(--text)] backdrop-blur-md">
-            {product.badge}
-          </span>
-        )}
-
-        {/* ============================================================
-            OUT OF STOCK BADGE
-        ============================================================ */}
-
-        {product.status === "Out of Stock" && (
-          <span className="absolute bottom-4 left-4 z-10 rounded-full border border-white/10 bg-black/75 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">
-            Out of Stock
-          </span>
-        )}
-
-        {/* ============================================================
-            WISHLIST
-        ============================================================ */}
-
-        <button
-          type="button"
-          aria-label={`Wishlist ${product.name}`}
-          onClick={() => setLiked((current) => !current)}
-          className={`absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-300 ${
-            liked
-              ? "border-[var(--primary)]/40 bg-[var(--primary)] text-white"
-              : "border-[var(--border)] bg-[var(--surface)]/90 text-[var(--text-secondary)] hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
-          }`}
-        >
-          <Heart
-            size={14}
-            strokeWidth={1.6}
-            fill={liked ? "currentColor" : "none"}
-          />
-        </button>
-
-        {/* ============================================================
-            HOVER QUICK ADD
-        ============================================================ */}
-
-        <div className="absolute bottom-4 left-4 right-4 z-20 translate-y-3 opacity-0 transition-all duration-400 group-hover:translate-y-0 group-hover:opacity-100">
-          <button
-            type="button"
-            disabled={product.status === "Out of Stock" || product.stock <= 0}
-            className="group/button flex h-11 w-full items-center justify-between rounded-[10px] bg-[var(--primary)] px-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_10px_30px_rgba(0,0,0,.25)] transition-all duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <span className="flex items-center gap-2">
-              <ShoppingBag size={13} strokeWidth={1.7} />
-
-              {product.status === "Out of Stock" || product.stock <= 0
-                ? "Out of Stock"
-                : "Quick Add"}
+          {!product.inStock && (
+            <span className="absolute bottom-3 left-3 rounded-full border border-line bg-bg-secondary/90 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-muted backdrop-blur">
+              Sold out
             </span>
-
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-all duration-300 group-hover/button:bg-white group-hover/button:text-[var(--primary)]">
-              <ArrowUpRight
-                size={13}
-                strokeWidth={1.7}
-                className="transition-transform duration-300 group-hover/button:translate-x-0.5 group-hover/button:-translate-y-0.5"
-              />
-            </span>
-          </button>
+          )}
         </div>
+      </Link>
 
-        {/* Bottom subtle gradient */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/[0.18] to-transparent" />
-      </div>
+      {/* WISHLIST */}
+      <button
+        type="button"
+        aria-label={
+          liked ? `Remove ${product.name} from wishlist` : `Save ${product.name}`
+        }
+        onClick={() => setLiked((value) => !value)}
+        className={cn(
+          "absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full border backdrop-blur transition-colors",
+          liked
+            ? "border-primary bg-primary text-[var(--primary-contrast)]"
+            : "border-line bg-bg-secondary/85 text-muted hover:text-primary",
+        )}
+      >
+        <Heart size={14} fill={liked ? "currentColor" : "none"} />
+      </button>
 
-      {/* ============================================================
-          PRODUCT DETAILS
-      ============================================================ */}
-
-      <div className="pt-4">
-        <div className="flex items-start justify-between gap-4">
-          {/* Left */}
+      {/* DETAILS */}
+      <div className="pt-3.5">
+        <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">
-              {product.category}
+            <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-faint">
+              {product.category ?? "Atelier"}
             </p>
 
-            <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold leading-5 tracking-[-0.02em] text-[var(--text)] transition-colors duration-300 group-hover:text-[var(--primary)]">
-              {product.name}
+            <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold leading-5 text-ink transition-colors group-hover:text-primary">
+              <Link href={`/product/${product.slug}`}>{product.name}</Link>
             </h3>
           </div>
 
-          {/* Price */}
           <div className="shrink-0 text-right">
-            <p className="text-sm font-semibold tracking-[-0.02em] text-[var(--text)]">
-              ${product.price.toLocaleString()}
+            <p className="text-sm font-bold text-ink">
+              {formatMoney(activePrice)}
             </p>
+
+            {wasPrice && wasPrice > activePrice && (
+              <s className="text-[11px] text-faint">{formatMoney(wasPrice)}</s>
+            )}
           </div>
         </div>
 
-        {/* Bottom Info */}
-        <div className="mt-4 flex items-center justify-between border-t border-[var(--border)] pt-3">
-          <span className="text-[9px] text-[var(--text-secondary)]">
-            {product.stock > 0
-              ? `${product.stock} available`
-              : "Currently unavailable"}
-          </span>
+        <div className="mt-3 flex items-center justify-between border-t border-line-subtle pt-2.5">
+          {product.reviewCount > 0 ? (
+            <span className="flex items-center gap-1 text-[10px] text-muted">
+              <Star size={11} className="text-warning" fill="currentColor" />
+              {product.rating.toFixed(1)}
+              <span className="text-faint">({product.reviewCount})</span>
+            </span>
+          ) : (
+            <span className="text-[10px] text-faint">
+              {product.inStock ? "Made to order" : "Currently unavailable"}
+            </span>
+          )}
 
-          <span className="flex items-center gap-1 text-[9px] font-medium uppercase tracking-[0.1em] text-[var(--primary)] opacity-0 transition-all duration-300 group-hover:opacity-100">
-            View
+          <Link
+            href={`/product/${product.slug}`}
+            className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-primary"
+          >
+            {product.inStock ? (
+              <>
+                <ShoppingBag size={11} />
+                View
+              </>
+            ) : (
+              "Details"
+            )}
+
             <ArrowUpRight size={11} />
-          </span>
+          </Link>
         </div>
       </div>
     </article>

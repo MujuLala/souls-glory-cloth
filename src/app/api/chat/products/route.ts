@@ -17,9 +17,14 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const term = (url.searchParams.get("q") ?? "").trim();
 
+    /* `id` fetches one specific product — used when a product
+       page hands the conversation its own piece. */
+    const id = Number(url.searchParams.get("id") ?? 0);
+
     const products = await prisma.product.findMany({
       where: {
         status: { not: "Archived" },
+        ...(id ? { id } : {}),
         ...(term
           ? {
               OR: [
