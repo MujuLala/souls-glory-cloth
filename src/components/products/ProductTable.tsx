@@ -24,6 +24,7 @@ const tabs: Array<{ name: Tab; count: number }> = [
   { name: "Draft", count: 8 },
   { name: "Out of Stock", count: 6 },
   { name: "Low Stock", count: 10 },
+  { name: "Archived", count: 0 },
 ];
 
 export default function ProductTable() {
@@ -206,15 +207,18 @@ function PageButton({ children, active }: { children: React.ReactNode; active?: 
 }
 
 function Status({ status }: { status: ProductStatus }) {
-  const classes = {
+  const classes: Record<ProductStatus, string> = {
     Active: "bg-[#082317] text-[#29dc7c]",
     Draft: "bg-[#202020] text-neutral-400",
     "Out of Stock": "bg-[#280c11] text-[#ff4a60]",
     "Low Stock": "bg-[#2b1d07] text-[#ffb01b]",
+    Archived: "bg-[#252525] text-neutral-500",
   };
 
   return (
-    <span className={`inline-flex rounded-full px-2.5 py-1 text-[9px] font-bold ${classes[status]}`}>
+    <span
+      className={`inline-flex rounded-full px-2.5 py-1 text-[9px] font-bold ${classes[status]}`}
+    >
       {status}
     </span>
   );

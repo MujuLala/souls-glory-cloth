@@ -1,52 +1,144 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Loader2 } from "lucide-react";
+
+import { cn } from "./cn";
 
 type ButtonVariant =
   | "primary"
   | "secondary"
-  | "ghost";
+  | "ghost"
+  | "danger"
+  | "subtle";
+
+type ButtonSize = "sm" | "md" | "lg";
 
 type ButtonProps = {
   children: ReactNode;
   href?: string;
   variant?: ButtonVariant;
+  size?: ButtonSize;
   className?: string;
-  type?: "button" | "submit";
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  fullWidth?: boolean;
+  title?: string;
+  "aria-label"?: string;
 };
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--primary)] text-white shadow-[0_10px_35px_rgba(229,30,50,0.18)] hover:bg-[var(--primary-hover)]",
+    "bg-primary text-[var(--primary-contrast)] hover:bg-primary-hover active:bg-primary-active shadow-[0_8px_24px_color-mix(in_srgb,var(--primary)_22%,transparent)]",
 
   secondary:
-    "border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:border-[var(--primary)] hover:bg-[var(--surface-hover)]",
+    "border border-line bg-surface text-ink hover:border-primary/50 hover:bg-surface-hover",
 
-  ghost:
-    "text-[var(--text-secondary)] hover:text-[var(--text)]",
+  subtle: "bg-surface text-muted hover:bg-surface-hover hover:text-ink",
+
+  ghost: "text-muted hover:bg-surface hover:text-ink",
+
+  danger:
+    "border border-danger/30 bg-danger/10 text-danger hover:bg-danger/18",
 };
 
-const baseStyles =
-  "inline-flex items-center justify-center gap-2 rounded-[9px] font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]";
+const sizes: Record<ButtonSize, string> = {
+  sm: "h-9 px-3 text-xs",
+  md: "h-11 px-4 text-[13px]",
+  lg: "h-12 px-5 text-sm",
+};
+
+const base =
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-lg font-semibold transition-colors duration-200 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-55";
 
 export default function Button({
   children,
   href,
   variant = "primary",
-  className = "",
+  size = "md",
+  className,
   type = "button",
+  onClick,
+  disabled = false,
+  loading = false,
+  fullWidth = false,
+  title,
+  "aria-label": ariaLabel,
 }: ButtonProps) {
-  const classes = `${baseStyles} ${variants[variant]} ${className}`;
+  const classes = cn(
+    base,
+    variants[variant],
+    sizes[size],
+    fullWidth && "w-full",
+    className,
+  );
 
-  if (href) {
+  if (href && !disabled && !loading) {
     return (
-      <Link href={href} className={classes}>
+      <Link
+        href={href}
+        className={classes}
+        title={title}
+        aria-label={ariaLabel}
+      >
         {children}
       </Link>
     );
   }
 
   return (
-    <button type={type} className={classes}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled || loading}
+      className={classes}
+      title={title}
+      aria-label={ariaLabel}
+    >
+      {loading && <Loader2 size={15} className="animate-spin" />}
+      {children}
+    </button>
+  );
+}
+
+/* =========================================================
+   ICON BUTTON
+   Square action button used in table rows and toolbars.
+========================================================= */
+
+export function IconButton({
+  children,
+  onClick,
+  label,
+  tone = "neutral",
+  disabled = false,
+  className,
+  type = "button",
+}: {
+  children: ReactNode;
+  onClick?: () => void;
+  label: string;
+  tone?: "neutral" | "danger";
+  disabled?: boolean;
+  className?: string;
+  type?: "button" | "submit";
+}) {
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      title={label}
+      className={cn(
+        "grid h-8 w-8 shrink-0 place-items-center rounded-lg text-faint transition-colors disabled:pointer-events-none disabled:opacity-50",
+        tone === "danger"
+          ? "hover:bg-danger/12 hover:text-danger"
+          : "hover:bg-surface hover:text-ink",
+        className,
+      )}
+    >
       {children}
     </button>
   );

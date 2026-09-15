@@ -8,13 +8,11 @@ export type CreateProductInput = {
   sku: string;
   description?: string;
 
-  // Pricing
   price: number;
   salePrice?: number;
   costPrice?: number;
   compareAtPrice?: number;
 
-  // Inventory
   stock: number;
   lowStockThreshold: number;
   trackInventory: boolean;
@@ -43,36 +41,179 @@ export type CreateProductInput = {
   tagIds: number[];
 };
 
+/* =========================================
+   GET CATEGORIES
+========================================= */
+
+export async function getProductCategories() {
+  try {
+    const categories = await prisma.category.findMany({
+      where: {
+        status: "Active",
+      },
+      orderBy: {
+        name: "asc",
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+      },
+    });
+
+    return {
+      success: true as const,
+      categories,
+    };
+  } catch (error) {
+    console.error("Get categories error:", error);
+
+    return {
+      success: false as const,
+      categories: [],
+      error: "Failed to load categories.",
+    };
+  }
+}
+
+/* =========================================
+   GET COLLECTIONS
+========================================= */
+
+export async function getProductCollections() {
+  try {
+    const collections = await prisma.collection.findMany({
+      where: {
+        status: "Active",
+      },
+      orderBy: {
+        name: "asc",
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+      },
+    });
+
+    return {
+      success: true as const,
+      collections,
+    };
+  } catch (error) {
+    console.error("Get collections error:", error);
+
+    return {
+      success: false as const,
+      collections: [],
+      error: "Failed to load collections.",
+    };
+  }
+}
+
+/* =========================================
+   CREATE PRODUCT
+========================================= */
+
 export async function createProduct(input: CreateProductInput) {
   try {
+    /* -----------------------------------------
+       VALIDATE CATEGORY
+    ------------------------------------------ */
+
+    let validCategoryId: number | null = null;
+
+    if (input.categoryId !== undefined) {
+      const category = await prisma.category.findUnique({
+        where: {
+          id: input.categoryId,
+        },
+        select: {
+          id: true,
+          status: true,
+        },
+      });
+
+      if (!category) {
+        return {
+          success: false as const,
+          error: `Category with ID ${input.categoryId} does not exist.`,
+        };
+      }
+
+      if (category.status !== "Active") {
+        return {
+          success: false as const,
+          error: "Selected category is not active.",
+        };
+      }
+
+      validCategoryId = category.id;
+    }
+
+    /* -----------------------------------------
+       VALIDATE COLLECTION
+    ------------------------------------------ */
+
+    let validCollectionId: number | null = null;
+
+    if (input.collectionId !== undefined) {
+      const collection = await prisma.collection.findUnique({
+        where: {
+          id: input.collectionId,
+        },
+        select: {
+          id: true,
+          status: true,
+        },
+      });
+
+      if (!collection) {
+        return {
+          success: false as const,
+          error: `Collection with ID ${input.collectionId} does not exist.`,
+        };
+      }
+
+      if (collection.status !== "Active") {
+        return {
+          success: false as const,
+          error: "Selected collection is not active.",
+        };
+      }
+
+      validCollectionId = collection.id;
+    }
+
+    /* -----------------------------------------
+       CREATE PRODUCT
+    ------------------------------------------ */
+
     const product = await prisma.product.create({
       data: {
         name: input.name,
         slug: input.slug,
         sku: input.sku,
+
         description: input.description || null,
 
-        // Pricing
         price: input.price,
         salePrice: input.salePrice ?? null,
         costPrice: input.costPrice ?? null,
         compareAtPrice: input.compareAtPrice ?? null,
 
-        // Inventory
         stock: input.stock,
         lowStockThreshold: input.lowStockThreshold,
         trackInventory: input.trackInventory,
 
-        // Product status
         status: input.status,
         badge: input.badge || null,
 
-        // Organization
-        categoryId: input.categoryId || null,
-        collectionId: input.collectionId || null,
+        categoryId: validCategoryId,
+        collectionId: validCollectionId,
+
         subcategory: input.subcategory || null,
 
-        // Images
         images: {
           create: input.images.map((image, index) => ({
             imageUrl: image.imageUrl,
@@ -81,7 +222,6 @@ export async function createProduct(input: CreateProductInput) {
           })),
         },
 
-        // Variants
         variants: {
           create: input.variants.map((variant) => ({
             name: variant.name,
@@ -91,21 +231,18 @@ export async function createProduct(input: CreateProductInput) {
           })),
         },
 
-        // Sizes
         sizes: {
           create: input.sizes.map((size) => ({
             size,
           })),
         },
 
-        // Colors
         colors: {
           create: input.colors.map((color) => ({
             color,
           })),
         },
 
-        // Tags
         tags: {
           create: input.tagIds.map((tagId) => ({
             tagId,
@@ -123,22 +260,24 @@ export async function createProduct(input: CreateProductInput) {
             tag: true,
           },
         },
+        category: true,
+        collection: true,
       },
     });
 
     return {
-      success: true,
+      success: true as const,
       product,
     };
   } catch (error) {
     console.error("Create product error:", error);
 
     return {
-      success: false,
+      success: false as const,
       error:
         error instanceof Error
           ? error.message
-          : "Failed to create product",
+          : "Failed to create product.",
     };
   }
 }

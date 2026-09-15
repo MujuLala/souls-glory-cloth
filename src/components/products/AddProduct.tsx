@@ -22,7 +22,11 @@ import {
 } from "lucide-react";
 
 import Breadcrumbs from "./Breadcrumbs";
-import { createProduct } from "@/actions/products";
+import {
+  createProduct,
+  getProductCategories,
+  getProductCollections,
+} from "@/actions/products";
 
 type Variant = {
   id: number;
@@ -35,6 +39,17 @@ type Variant = {
 type ProductImage = {
   url: string;
   name: string;
+};
+type CategoryOption = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
+type CollectionOption = {
+  id: number;
+  name: string;
+  slug: string;
 };
 
 const inputClass =
@@ -77,6 +92,9 @@ export default function AddProduct() {
   const [categoryId, setCategoryId] = useState("");
   const [collectionId, setCollectionId] = useState("");
   const [tagsInput, setTagsInput] = useState("");
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
+const [collections, setCollections] = useState<CollectionOption[]>([]);
+const [loadingOrganization, setLoadingOrganization] = useState(true);
 
   /* =========================================
      STATUS
@@ -1070,25 +1088,7 @@ export default function AddProduct() {
                       {/* Temporary IDs.
                           Replace with dynamic categories API
                           once Category management is connected. */}
-                      <option value="1">
-                        Suits
-                      </option>
-
-                      <option value="2">
-                        Kurtas
-                      </option>
-
-                      <option value="3">
-                        Dresses
-                      </option>
-
-                      <option value="4">
-                        Shirts
-                      </option>
-
-                      <option value="5">
-                        Kids
-                      </option>
+                      
                     </select>
                   </div>
 

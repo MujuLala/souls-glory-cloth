@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
 
-import AnnouncementBar from "@/components/layout/announcement-bar";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
-import AmbientBackground from "@/components/ui/ambient-background";
-import SiteChrome from "@/components/layout/site-chrome";
+import ThemeProvider, {
+  themeInitScript,
+} from "@/components/theme/theme-provider";
+import ToastProvider from "@/components/ui/toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,8 +15,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Soul's Glory Cloth",
-  description: "Custom clothing, made for you.",
+  title: {
+    default: "Soul's Glory Cloth — Bespoke Tailoring Platform",
+    template: "%s · Soul's Glory Cloth",
+  },
+  description:
+    "Bespoke tailoring, ready-to-wear commerce, measurements and point of sale — one platform for your whole atelier.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#050505" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f6f4" },
+  ],
 };
 
 export default function RootLayout({
@@ -26,19 +39,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
-        <AmbientBackground />
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Sets [data-theme] before first paint — no flash. */}
+        <script
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
+      </head>
 
-        <div className="relative z-10">
-          <SiteChrome
-            announcement={<AnnouncementBar />}
-            header={<Header />}
-            footer={<Footer />}
-          >
-            {children}
-          </SiteChrome>
-        </div>
+      <body className={`${inter.variable} antialiased`}>
+        <ThemeProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

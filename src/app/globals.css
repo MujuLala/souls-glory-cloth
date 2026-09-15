@@ -2,86 +2,225 @@
 
 /* =========================================================
    SOUL'S GLORY CLOTH — GLOBAL DESIGN SYSTEM
+   Single source of truth for both themes.
+   Every surface/border/text colour in the app must come
+   from one of these tokens — never a hard-coded hex.
+   ========================================================= */
+
+/* =========================================================
+   DARK THEME (default)
    ========================================================= */
 
 :root {
-  /* Background */
+  /* Page background */
   --bg: #050505;
   --bg-secondary: #0a0a0b;
+  --bg-tertiary: #0f0f11;
 
-  /* Surfaces */
+  /* Cards / panels */
+  --card: #0c0c0e;
+  --card-hover: #121214;
+  --card-elevated: #141417;
+
+  /* Translucent surfaces (glass) */
   --surface: rgba(255, 255, 255, 0.055);
   --surface-hover: rgba(255, 255, 255, 0.085);
+  --surface-strong: rgba(255, 255, 255, 0.12);
 
   /* Borders */
   --border: rgba(255, 255, 255, 0.11);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-subtle: rgba(255, 255, 255, 0.06);
 
   /* Text */
   --text: #f6f6f4;
   --text-secondary: #a0a0a4;
   --text-tertiary: #707075;
+  --text-disabled: #4a4a4f;
 
   /* Brand */
   --primary: #e51e32;
   --primary-hover: #ff3347;
+  --primary-active: #c2172a;
+  --primary-contrast: #ffffff;
 
-  /* Header */
+  /* Status */
+  --success: #2fbf71;
+  --warning: #e8a33d;
+  --danger: #f04d4d;
+  --info: #4d8df0;
+
+  /* Chrome */
   --header-bg: rgba(5, 5, 5, 0.78);
   --dropdown-bg: rgba(15, 15, 16, 0.94);
+  --sidebar-bg: #070708;
+  --topbar-bg: rgba(7, 7, 8, 0.88);
+  --overlay: rgba(0, 0, 0, 0.7);
 
   /* Announcement */
   --announcement-bg: #09090a;
   --announcement-border: rgba(255, 255, 255, 0.08);
   --announcement-text: #a7a7ac;
+
+  /* Inputs */
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --input-border: rgba(255, 255, 255, 0.12);
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+
+  /* Scrollbar */
+  --scrollbar-thumb: rgba(255, 255, 255, 0.18);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.28);
+
+  /* Layout */
+  --shell-width: 92vw;
+  --sidebar-width: 260px;
+  --topbar-height: 64px;
+
+  color-scheme: dark;
 }
 
 /* =========================================================
    LIGHT THEME
+   Warm off-white ground, true-white cards, soft shadows
+   instead of glow. Text contrast tuned for AA.
    ========================================================= */
 
 [data-theme="light"] {
-  /* Background */
-  --bg: #f5f5f3;
+  /* Page background */
+  --bg: #f6f6f4;
   --bg-secondary: #ffffff;
+  --bg-tertiary: #efefec;
 
-  /* Surfaces */
-  --surface: rgba(0, 0, 0, 0.035);
-  --surface-hover: rgba(0, 0, 0, 0.06);
+  /* Cards / panels */
+  --card: #ffffff;
+  --card-hover: #fafaf9;
+  --card-elevated: #ffffff;
+
+  /* Translucent surfaces */
+  --surface: rgba(17, 18, 20, 0.035);
+  --surface-hover: rgba(17, 18, 20, 0.06);
+  --surface-strong: rgba(17, 18, 20, 0.09);
 
   /* Borders */
-  --border: rgba(0, 0, 0, 0.1);
+  --border: rgba(17, 18, 20, 0.11);
+  --border-strong: rgba(17, 18, 20, 0.2);
+  --border-subtle: rgba(17, 18, 20, 0.07);
 
   /* Text */
   --text: #111214;
-  --text-secondary: #66686d;
-  --text-tertiary: #8a8a8f;
+  --text-secondary: #5c5f66;
+  --text-tertiary: #83868d;
+  --text-disabled: #aeb1b6;
 
   /* Brand */
-  --primary: #d9182d;
-  --primary-hover: #ed263b;
+  --primary: #d3132a;
+  --primary-hover: #ba1024;
+  --primary-active: #9e0c1e;
+  --primary-contrast: #ffffff;
 
-  /* Header */
-  --header-bg: rgba(255, 255, 255, 0.82);
-  --dropdown-bg: rgba(255, 255, 255, 0.96);
+  /* Status */
+  --success: #17864f;
+  --warning: #a86a12;
+  --danger: #c92a2a;
+  --info: #1f63c4;
+
+  /* Chrome */
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --dropdown-bg: rgba(255, 255, 255, 0.97);
+  --sidebar-bg: #ffffff;
+  --topbar-bg: rgba(255, 255, 255, 0.9);
+  --overlay: rgba(17, 18, 20, 0.45);
 
   /* Announcement */
-  --announcement-bg: #f0f0ee;
-  --announcement-border: rgba(0, 0, 0, 0.08);
-  --announcement-text: #66686d;
+  --announcement-bg: #111214;
+  --announcement-border: rgba(255, 255, 255, 0.1);
+  --announcement-text: #d6d6d8;
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: rgba(17, 18, 20, 0.14);
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(17, 18, 20, 0.06);
+  --shadow-md: 0 6px 20px rgba(17, 18, 20, 0.08);
+  --shadow-lg: 0 20px 48px rgba(17, 18, 20, 0.12);
+
+  /* Scrollbar */
+  --scrollbar-thumb: rgba(17, 18, 20, 0.2);
+  --scrollbar-thumb-hover: rgba(17, 18, 20, 0.32);
+
+  color-scheme: light;
 }
 
 /* =========================================================
-   HTML
+   TAILWIND THEME BRIDGE
+   `inline` keeps the utilities pointing at the live custom
+   property, so switching [data-theme] restyles instantly
+   without a rebuild.
+   ========================================================= */
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-card-elevated: var(--card-elevated);
+
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-strong: var(--surface-strong);
+
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-line-subtle: var(--border-subtle);
+
+  --color-ink: var(--text);
+  --color-muted: var(--text-secondary);
+  --color-faint: var(--text-tertiary);
+  --color-disabled: var(--text-disabled);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-contrast: var(--primary-contrast);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  --color-sidebar: var(--sidebar-bg);
+  --color-topbar: var(--topbar-bg);
+  --color-overlay: var(--overlay);
+
+  --color-input: var(--input-bg);
+  --color-input-line: var(--input-border);
+
+  --shadow-card: var(--shadow-sm);
+  --shadow-panel: var(--shadow-md);
+  --shadow-float: var(--shadow-lg);
+}
+
+/* Explicit dark-only escape hatch for the rare case a token
+   can't express the difference. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* =========================================================
+   BASE
    ========================================================= */
 
 html {
   scroll-behavior: smooth;
   background: var(--bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
-
-/* =========================================================
-   BODY
-   ========================================================= */
 
 body {
   margin: 0;
@@ -91,16 +230,16 @@ body {
   background: var(--bg);
   color: var(--text);
 
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  /* Never allow a stray wide child to scroll the whole page sideways. */
+  overflow-x: hidden;
 
   transition:
-    background-color 300ms ease,
-    color 300ms ease;
+    background-color 200ms ease,
+    color 200ms ease;
 }
-
-/* =========================================================
-   GLOBAL BOX SIZING
-   ========================================================= */
 
 *,
 *::before,
@@ -108,68 +247,51 @@ body {
   box-sizing: border-box;
 }
 
-/* =========================================================
-   LINKS
-   ========================================================= */
-
 a {
   color: inherit;
   text-decoration: none;
 }
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-
-
-/* =========================================================
-   IMAGES
-   ========================================================= */
 
 img {
   max-width: 100%;
   display: block;
 }
 
-/* =========================================================
-   SELECTION
-   ========================================================= */
-
 ::selection {
   background: var(--primary);
-  color: #ffffff;
+  color: var(--primary-contrast);
 }
 
 /* =========================================================
-   SCROLLBAR
+   SCROLLBARS
    ========================================================= */
 
-html {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
-}
-
-html::-webkit-scrollbar {
+html::-webkit-scrollbar,
+.scrollbar-thin::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
-html::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track,
+.scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
 }
 
-html::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+html::-webkit-scrollbar-thumb,
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
   border-radius: 999px;
 }
 
-html::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.28);
+html::-webkit-scrollbar-thumb:hover,
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
 
-/* =========================================================
-   HORIZONTAL CAROUSEL SCROLLBAR
-   ========================================================= */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
 
 .scrollbar-none {
   -ms-overflow-style: none;
@@ -181,7 +303,7 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 /* =========================================================
-   GLOBAL GLASS EFFECT
+   GLASS
    ========================================================= */
 
 .glass {
@@ -192,52 +314,99 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 /* =========================================================
-   GLOBAL FOCUS
-   ========================================================= */
-
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 3px;
-}
-/* =========================================================
-   GLOBAL FORM & BUTTON FOCUS RESET
+   FORM CONTROLS
+   Focus is a visible ring in both themes — the previous
+   global `outline: none !important` left keyboard users
+   with no focus indicator at all.
    ========================================================= */
 
 input,
 textarea,
 select,
 button {
-  outline: none;
+  font: inherit;
+  color: inherit;
 }
 
-input:focus,
-input:focus-visible,
-textarea:focus,
-textarea:focus-visible,
-select:focus,
-select:focus-visible,
-button:focus,
-button:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
 }
 
-/* Inputs */
-input:focus,
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 input:focus-visible,
-textarea:focus,
 textarea:focus-visible,
-select:focus,
 select:focus-visible {
-  border-color: var(--border) !important;
-  background: var(--surface) !important;
+  outline: none;
+  border-color: color-mix(in srgb, var(--primary) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent);
 }
 
-/* Buttons */
-button:focus,
-button:focus-visible {
-  border-color: transparent !important;
+/* Native pickers should follow the active theme. */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  color-scheme: inherit;
 }
+
+/* =========================================================
+   THEME TRANSITION
+   Applied briefly by the theme provider while switching so
+   the flip reads as a fade instead of a hard cut.
+   ========================================================= */
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    fill 200ms ease,
+    stroke 200ms ease !important;
+}
+
+/* =========================================================
+   ANIMATION HELPERS
+   ========================================================= */
+
+@keyframes sg-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: sg-fade-up 240ms ease both;
+}
+
+@keyframes sg-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 50%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.animate-pulse-ring {
+  animation: sg-pulse-ring 2s ease-out infinite;
+}
+
 /* =========================================================
    REDUCED MOTION
    ========================================================= */
@@ -254,5 +423,20 @@ button:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   PRINT (POS receipts)
+   ========================================================= */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
   }
 }

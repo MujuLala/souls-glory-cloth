@@ -15,7 +15,8 @@ model Category {
   image       String?
   status      String  @default("Active")
 
-  products Product[]
+  products  Product[]
+  questions ProductQuestion[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -115,6 +116,12 @@ model Product {
   reviews    ProductReview[]
   variants   ProductVariant[]
 
+  orderItems       OrderItem[]
+  posSaleItems     PosSaleItem[]
+  messages         Message[]
+  questions        ProductQuestion[]
+  stockAdjustments StockAdjustment[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -134,6 +141,8 @@ model ProductVariant {
   sku   String  @unique
   price Decimal @db.Decimal(12, 2)
   stock Int     @default(0)
+
+  orderItems OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -220,4 +229,629 @@ model ProductReview {
 
   @@index([productId])
   @@index([status])
+}
+
+/* =========================================================
+   PEOPLE
+   AppUser mirrors the Neon Auth identity so the rest of the
+   schema can hold real foreign keys and roles.
+========================================================= */
+
+model AppUser {
+  id String @id
+
+  email     String  @unique
+  name      String?
+  phone     String?
+  avatarUrl String?
+
+  // Admin | Manager | Tailor | Cashier | Customer
+  role     String  @default("Customer")
+  isActive Boolean @default(true)
+
+  lastSeenAt DateTime?
+
+  customer Customer?
+
+  assignedOrders Order[]        @relation("OrderTailor")
+  assignedChats  Conversation[] @relation("ConversationAgent")
+  posSessions    PosSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([role])
+}
+
+model CustomerGroup {
+  id Int @id @default(autoincrement())
+
+  name            String
+  slug            String   @unique
+  description     String?
+  discountPercent Decimal? @db.Decimal(5, 2)
+  color           String?
+
+  customers Customer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+
+  // Present once the customer has signed in to the storefront.
+  userId String?  @unique
+  user   AppUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  code     String  @unique
+  fullName String
+  email    String?
+  phone    String?
+  whatsapp String?
+  gender   String?
+
+  addressLine String?
+  city        String?
+  country     String? @default("Pakistan")
+  postalCode  String?
+
+  notes  String?
+  status String @default("Active")
+  source String @default("Storefront")
+
+  groupId Int?
+  group   CustomerGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+
+  totalOrders Int       @default(0)
+  totalSpent  Decimal   @default(0) @db.Decimal(12, 2)
+  lastOrderAt DateTime?
+
+  members       CustomerMember[]
+  measurements  Measurement[]
+  orders        Order[]
+  conversations Conversation[]
+  posSales      PosSale[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([phone])
+  @@index([groupId])
+}
+
+/* =========================================================
+   TAILORING — MEMBERS ("afraad") & MEASUREMENTS
+========================================================= */
+
+model CustomerMember {
+  id Int @id @default(autoincrement())
+
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  fullName String
+
+  // Self | Wife | Son | Daughter | Father | Mother | Brother | Sister | Other
+  relation String @default("Self")
+
+  gender      String?
+  dateOfBirth DateTime?
+  ageGroup    String?   @default("Adult")
+  phone       String?
+  notes       String?
+
+  // The account holder's own profile.
+  isPrimary Boolean @default(false)
+
+  measurements Measurement[]
+  orders       Order[]
+  orderItems   OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+}
+
+model MeasurementTemplate {
+  id Int @id @default(autoincrement())
+
+  name        String
+  slug        String  @unique
+  gender      String  @default("Unisex")
+  description String?
+  icon        String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  fields       MeasurementField[]
+  measurements Measurement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MeasurementField {
+  id Int @id @default(autoincrement())
+
+  templateId Int
+  template   MeasurementTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  // Machine key stored inside Measurement.values
+  key   String
+  label String
+
+  unit        String  @default("in")
+  helpText    String?
+  placeholder String?
+  required    Boolean @default(false)
+  sortOrder   Int     @default(0)
+
+  @@unique([templateId, key])
+}
+
+model Measurement {
+  id Int @id @default(autoincrement())
+
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  memberId Int?
+  member   CustomerMember? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  templateId Int
+  template   MeasurementTemplate @relation(fields: [templateId], references: [id], onDelete: Restrict)
+
+  title String
+  unit  String @default("in")
+
+  // { "chest": 40, "waist": 34 } keyed by MeasurementField.key
+  values Json
+
+  notes     String?
+  takenBy   String?
+  isDefault Boolean @default(false)
+  version   Int     @default(1)
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+  @@index([memberId])
+  @@index([templateId])
+}
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+model Order {
+  id Int @id @default(autoincrement())
+
+  orderNumber String @unique
+
+  customerId Int?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  memberId Int?
+  member   CustomerMember? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  // Ready Made | Custom | Mixed
+  type String @default("Ready Made")
+
+  // Online | POS | WhatsApp | Phone
+  channel String @default("Online")
+
+  // Pending | Confirmed | In Tailoring | Ready for Pickup | Shipped | Delivered | Completed | Cancelled
+  status String @default("Pending")
+
+  // Unpaid | Partial | Paid | Refunded
+  paymentStatus String  @default("Unpaid")
+  paymentMethod String?
+
+  subtotal      Decimal @default(0) @db.Decimal(12, 2)
+  discountTotal Decimal @default(0) @db.Decimal(12, 2)
+  taxTotal      Decimal @default(0) @db.Decimal(12, 2)
+  shippingTotal Decimal @default(0) @db.Decimal(12, 2)
+  total         Decimal @default(0) @db.Decimal(12, 2)
+  amountPaid    Decimal @default(0) @db.Decimal(12, 2)
+
+  currency   String  @default("PKR")
+  couponCode String?
+
+  notes         String?
+  internalNotes String?
+
+  shippingName    String?
+  shippingPhone   String?
+  shippingAddress String?
+  shippingCity    String?
+  shippingCountry String?
+
+  // Promised delivery date for tailoring work.
+  dueDate DateTime?
+
+  assignedTailorId String?
+  assignedTailor   AppUser? @relation("OrderTailor", fields: [assignedTailorId], references: [id], onDelete: SetNull)
+
+  items         OrderItem[]
+  events        OrderEvent[]
+  payments      Payment[]
+  conversations Conversation[]
+  posSale       PosSale?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([channel])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  variantId Int?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  // Who the garment is being made for.
+  memberId Int?
+  member   CustomerMember? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  measurementId Int?
+  measurement   Measurement? @relation(fields: [measurementId], references: [id], onDelete: SetNull)
+
+  // Snapshot of the product at the time of sale.
+  name  String
+  sku   String?
+  image String?
+
+  size   String?
+  color  String?
+  fabric String?
+
+  customNotes String?
+  isCustom    Boolean @default(false)
+
+  unitPrice    Decimal @db.Decimal(12, 2)
+  quantity     Int     @default(1)
+  tailoringFee Decimal @default(0) @db.Decimal(12, 2)
+  discount     Decimal @default(0) @db.Decimal(12, 2)
+  total        Decimal @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderEvent {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  status    String
+  note      String?
+  createdBy String?
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  amount    Decimal @db.Decimal(12, 2)
+  method    String
+  reference String?
+  status    String  @default("Completed")
+  note      String?
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+/* =========================================================
+   POINT OF SALE
+========================================================= */
+
+model PosSession {
+  id Int @id @default(autoincrement())
+
+  code String @unique
+
+  openedById String?
+  openedBy   AppUser? @relation(fields: [openedById], references: [id], onDelete: SetNull)
+
+  openingFloat  Decimal  @default(0) @db.Decimal(12, 2)
+  expectedTotal Decimal? @db.Decimal(12, 2)
+  countedTotal  Decimal? @db.Decimal(12, 2)
+
+  // Open | Closed
+  status String  @default("Open")
+  notes  String?
+
+  openedAt DateTime  @default(now())
+  closedAt DateTime?
+
+  sales PosSale[]
+
+  @@index([status])
+}
+
+model PosSale {
+  id Int @id @default(autoincrement())
+
+  saleNumber String @unique
+
+  sessionId Int?
+  session   PosSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  orderId Int?   @unique
+  order   Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  customerId Int?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  subtotal Decimal @default(0) @db.Decimal(12, 2)
+  discount Decimal @default(0) @db.Decimal(12, 2)
+  tax      Decimal @default(0) @db.Decimal(12, 2)
+  total    Decimal @default(0) @db.Decimal(12, 2)
+  paid     Decimal @default(0) @db.Decimal(12, 2)
+  change   Decimal @default(0) @db.Decimal(12, 2)
+
+  // Cash | Card | Easypaisa | JazzCash | Bank Transfer | Split
+  paymentMethod String @default("Cash")
+
+  // Completed | Held | Refunded
+  status String @default("Completed")
+
+  cashierId   String?
+  cashierName String?
+  note        String?
+
+  items PosSaleItem[]
+
+  createdAt DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PosSaleItem {
+  id Int @id @default(autoincrement())
+
+  saleId Int
+  sale   PosSale @relation(fields: [saleId], references: [id], onDelete: Cascade)
+
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  name String
+  sku  String?
+
+  unitPrice Decimal @db.Decimal(12, 2)
+  quantity  Int     @default(1)
+  discount  Decimal @default(0) @db.Decimal(12, 2)
+  total     Decimal @db.Decimal(12, 2)
+
+  @@index([saleId])
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+model Conversation {
+  id Int @id @default(autoincrement())
+
+  subject String?
+
+  customerId Int?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+
+  // Set for visitors who have not signed in yet.
+  guestKey   String? @unique
+  guestName  String?
+  guestEmail String?
+
+  // Open | Pending | Resolved | Closed
+  status   String @default("Open")
+  priority String @default("Normal")
+  channel  String @default("Web")
+
+  assignedToId String?
+  assignedTo   AppUser? @relation("ConversationAgent", fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  orderId Int?
+  order   Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  lastMessageAt     DateTime @default(now())
+  lastMessageText   String?
+  unreadForAdmin    Int      @default(0)
+  unreadForCustomer Int      @default(0)
+
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([lastMessageAt])
+  @@index([customerId])
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  // customer | admin | system
+  senderRole String
+  senderId   String?
+  senderName String
+
+  body String
+
+  // Product card attached to the message.
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  // Answers to product questions, quotes, and similar extras.
+  metadata Json?
+
+  attachmentUrl  String?
+  attachmentName String?
+
+  readAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId])
+  @@index([createdAt])
+}
+
+model Presence {
+  // AppUser id, or "guest:<key>" for anonymous visitors.
+  id String @id
+
+  role String  @default("Customer")
+  name String?
+
+  // online | away | offline
+  status String @default("online")
+
+  lastSeenAt DateTime @default(now())
+
+  @@index([lastSeenAt])
+}
+
+/* =========================================================
+   PRODUCT QUESTIONS
+   Drives the guided questions chat asks once a shopper
+   picks a product.
+========================================================= */
+
+model ProductQuestion {
+  id Int @id @default(autoincrement())
+
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  question String
+  helpText String?
+
+  // Text | Select | Number | Measurement | Date
+  type String @default("Text")
+
+  // ["Cotton", "Linen", "Wash & Wear"]
+  options Json?
+
+  required  Boolean @default(false)
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([categoryId])
+}
+
+/* =========================================================
+   MARKETING & INVENTORY
+========================================================= */
+
+model Coupon {
+  id Int @id @default(autoincrement())
+
+  code        String  @unique
+  description String?
+
+  // Percentage | Fixed | Free Shipping
+  type  String  @default("Percentage")
+  value Decimal @default(0) @db.Decimal(12, 2)
+
+  minOrderTotal Decimal? @db.Decimal(12, 2)
+  usageLimit    Int?
+  usedCount     Int      @default(0)
+
+  startsAt DateTime?
+  endsAt   DateTime?
+
+  status String @default("Active")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Campaign {
+  id Int @id @default(autoincrement())
+
+  name        String
+  slug        String  @unique
+  description String?
+
+  // Email | SMS | WhatsApp | Social
+  channel String @default("Email")
+  status  String @default("Draft")
+
+  audience String?
+  sent     Int     @default(0)
+  opened   Int     @default(0)
+  clicked  Int     @default(0)
+  revenue  Decimal @default(0) @db.Decimal(12, 2)
+
+  startsAt DateTime?
+  endsAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockAdjustment {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Add | Remove | Recount | Damaged | Returned
+  type     String
+  quantity Int
+
+  previousStock Int
+  newStock      Int
+
+  reason    String?
+  createdBy String?
+
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@index([createdAt])
 }

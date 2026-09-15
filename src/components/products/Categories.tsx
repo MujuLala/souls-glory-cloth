@@ -329,13 +329,15 @@ function StatCard({
 function StatusBadge({
   status,
 }: {
-  status: "Active" | "Draft";
+  status: string;
 }) {
+  const isActive = status === "Active";
+
   return (
     <span
       className={[
         "inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold",
-        status === "Active"
+        isActive
           ? "bg-emerald-500/10 text-emerald-400"
           : "bg-yellow-500/10 text-yellow-400",
       ].join(" ")}
