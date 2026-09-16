@@ -106,6 +106,30 @@ export function useChatThread({
     }
   }, [enabled, guestKey, guestName]);
 
+  /* Switching to a different explicit conversation (e.g. the
+     admin Inbox selecting another thread) must restart the
+     thread from scratch — otherwise `conversationRef` stays
+     pinned to whichever id was current on mount and every
+     later selection silently keeps polling the old one. */
+  useEffect(() => {
+    if (
+      initialConversationId === undefined ||
+      initialConversationId === conversationRef.current
+    ) {
+      return;
+    }
+
+    conversationRef.current = initialConversationId;
+    lastIdRef.current = 0;
+
+    setConversationId(initialConversationId);
+    setMessages([]);
+    setError(null);
+    setLoading(true);
+
+    void sync();
+  }, [initialConversationId, sync]);
+
   /* Initial load + polling. */
   useEffect(() => {
     if (!enabled) {

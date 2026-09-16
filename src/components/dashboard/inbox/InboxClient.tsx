@@ -131,7 +131,7 @@ export default function InboxClient() {
   };
 
   return (
-    <div className="grid h-[calc(100vh-140px)] min-h-[560px] gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
+    <div className="grid h-[min(75vh,760px)] min-h-[480px] gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
       {/* ===================================================
           CONVERSATION LIST
       =================================================== */}
