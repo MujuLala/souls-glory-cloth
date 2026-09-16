@@ -12,85 +12,61 @@ import {
 
 import Container from "@/components/ui/container";
 import Button from "@/components/ui/button";
+import { formatMoney } from "@/lib/format";
+import type { StorefrontProduct } from "@/types/catalog";
 
+/* =========================================================
+   FEATURED PRODUCT SHAPE
 
-const products = [
-  {
-    name: "Classic Ivory Shalwar Kameez",
-    category: "Men / Shalwar Kameez",
-    price: "$89",
-    oldPrice: "",
-    rating: "4.9",
-    reviews: "124",
-    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
-    href: "/product/classic-ivory-shalwar-kameez",
-    tag: "Best Seller",
-    sold: "124 sold",
-  },
-  {
-    name: "Midnight Formal Kurta",
-    category: "Men / Kurta",
-    price: "$79",
-    oldPrice: "$95",
-    rating: "4.8",
-    reviews: "86",
-    image: "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1200&q=85",
-    href: "/product/midnight-formal-kurta",
-    tag: "Popular",
-    sold: "86 sold",
-  },
-  {
-    name: "Pearl Wedding Ensemble",
-    category: "Women / Wedding Wear",
-    price: "$149",
-    oldPrice: "",
-    rating: "5.0",
-    reviews: "67",
-    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=85",
-    href: "/product/pearl-wedding-ensemble",
-    tag: "Premium",
-    sold: "67 sold",
-  },
-  {
-    name: "Premium Sand Waistcoat",
-    category: "Men / Waistcoat",
-    price: "$69",
-    oldPrice: "$82",
-    rating: "4.9",
-    reviews: "91",
-    image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=1200&q=85",
-    href: "/product/premium-sand-waistcoat",
-    tag: "New",
-    sold: "91 sold",
-  },
-  {
-    name: "Classic Black Kurta",
-    category: "Men / Kurta",
-    price: "$74",
-    oldPrice: "",
-    rating: "4.8",
-    reviews: "52",
-    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85",
-    href: "/product/classic-black-kurta",
-    tag: "Classic",
-    sold: "52 sold",
-  },
-  {
-    name: "Ivory Premium Suit",
-    category: "Men / Suit",
-    price: "$129",
-    oldPrice: "$149",
-    rating: "4.9",
-    reviews: "74",
-    image: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=85",
-    href: "/product/ivory-premium-suit",
-    tag: "Premium",
-    sold: "74 sold",
-  },
-];
+   Mapped from the real catalogue so this carousel always
+   shows what's actually for sale.
+========================================================= */
 
-export default function FeaturedProducts() {
+type FeaturedProduct = {
+  name: string;
+  category: string;
+  price: string;
+  oldPrice: string;
+  rating: string;
+  reviews: string;
+  image: string;
+  href: string;
+  tag: string;
+  sold: string;
+};
+
+function toFeatured(product: StorefrontProduct): FeaturedProduct {
+  return {
+    name: product.name,
+    category: product.category ?? "Atelier",
+    price: formatMoney(product.salePrice ?? product.price),
+    oldPrice:
+      product.salePrice || product.compareAtPrice
+        ? formatMoney(product.compareAtPrice ?? product.price)
+        : "",
+    rating: product.rating > 0 ? product.rating.toFixed(1) : "New",
+    reviews: String(product.reviewCount),
+    image: product.image ?? "",
+    href: `/product/${product.slug}`,
+    tag: product.badge ?? (product.inStock ? "In Stock" : "Made to Order"),
+    sold:
+      product.reviewCount > 0
+        ? `${product.reviewCount} review${product.reviewCount === 1 ? "" : "s"}`
+        : "Made to measure",
+  };
+}
+
+export default function FeaturedProducts({
+  products: sourceProducts,
+}: {
+  products: StorefrontProduct[];
+}) {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const products = sourceProducts.map(toFeatured);
+
+  if (products.length === 0) {
+    return null;
+  }
 
   const scrollCarousel = (direction: "prev" | "next") => {
     if (!carouselRef.current) return;
@@ -276,11 +252,7 @@ export default function FeaturedProducts() {
    PRODUCT CARD
 ========================================================= */
 
-function ProductCard({
-  product,
-}: {
-  product: (typeof products)[number];
-}) {
+function ProductCard({ product }: { product: FeaturedProduct }) {
   return (
     <article
       className="
@@ -379,7 +351,10 @@ function ProductCard({
           "
         >
           <img
-            src={product.image}
+            src={
+              product.image ||
+              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'/%3E"
+            }
             alt={product.name}
             loading="lazy"
             className="

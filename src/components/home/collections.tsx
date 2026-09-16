@@ -7,35 +7,30 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import Container from "@/components/ui/container";
 import Button from "@/components/ui/button";
 
+export type HomeCollectionItem = {
+  title: string;
+  description: string;
+  image: string;
+  href: string;
+  tag: string;
+};
 
-const collections = [
-  {
-    title: "New Arrivals",
-    description: "Fresh silhouettes and refined everyday pieces.",
-    image: "/images/collections/new-arrivals.jpg",
-    href: "/collections/new-arrivals",
-    tag: "New",
-    size: "large",
-  },
-  {
-    title: "Wedding Edit",
-    description: "Made for celebrations and unforgettable moments.",
-    image: "/images/collections/wedding.jpg",
-    href: "/collections/wedding",
-    tag: "Featured",
-    size: "small",
-  },
-  {
-    title: "Premium Essentials",
-    description: "Timeless pieces designed for everyday confidence.",
-    image: "/images/collections/premium.jpg",
-    href: "/collections/premium",
-    tag: "Premium",
-    size: "small",
-  },
+/* Local placeholder art used until a collection has its own
+   cover image uploaded in the CMS. */
+const fallbackImages = [
+  "/images/collections/new-arrivals.jpg",
+  "/images/collections/wedding.jpg",
+  "/images/collections/premium.jpg",
 ];
 
-export default function Collections() {
+export default function Collections({
+  collections,
+}: {
+  collections: HomeCollectionItem[];
+}) {
+  if (collections.length === 0) {
+    return null;
+  }
   return (
     <section className="relative overflow-hidden bg-transparent py-[6vw] max-lg:py-20 max-sm:py-14">
       {/* =====================================================
@@ -142,7 +137,7 @@ function CollectionCard({
   collection,
   className = "",
 }: {
-  collection: (typeof collections)[number];
+  collection: HomeCollectionItem;
   className?: string;
 }) {
   return (

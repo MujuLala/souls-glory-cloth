@@ -83,6 +83,15 @@
   color-scheme: dark;
 }
 
+/* Aliases some older marketing components were written
+   against. Kept as references to the real tokens above so
+   they never drift out of sync with the active theme. */
+:root {
+  --foreground: var(--text);
+  --muted-foreground: var(--text-secondary);
+  --background: var(--bg);
+}
+
 /* =========================================================
    LIGHT THEME
    Warm off-white ground, true-white cards, soft shadows

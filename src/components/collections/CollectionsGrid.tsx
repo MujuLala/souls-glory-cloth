@@ -1,63 +1,24 @@
 import Link from "next/link";
 import Container from "@/components/ui/container";
 
-const collections = [
-  {
-    title: "Men's Collection",
-    description: "Tailored essentials and timeless traditional wear.",
-    href: "/shop/men",
-    count: "MEN",
-  },
-  {
-    title: "Women's Collection",
-    description: "Elegant silhouettes designed around your style.",
-    href: "/shop/women",
-    count: "WOMEN",
-  },
-  {
-    title: "Kids Collection",
-    description: "Comfortable styles made for little moments.",
-    href: "/shop/kids",
-    count: "KIDS",
-  },
-  {
-    title: "Ready to Wear",
-    description: "Effortless pieces, ready when you are.",
-    href: "/shop/ready-to-wear",
-    count: "READY",
-  },
-  {
-    title: "Wedding Edit",
-    description: "Refined looks for your most memorable occasions.",
-    href: "/collections/wedding",
-    count: "01",
-  },
-  {
-    title: "Eid Edit",
-    description: "Celebrate in beautifully crafted festive styles.",
-    href: "/collections/eid",
-    count: "02",
-  },
-  {
-    title: "Formal Edit",
-    description: "Sharp, sophisticated pieces for every occasion.",
-    href: "/collections/formal",
-    count: "03",
-  },
-  {
-    title: "Casual Edit",
-    description: "Everyday comfort with a refined finish.",
-    href: "/collections/casual",
-    count: "04",
-  },
-];
+export type CollectionsGridItem = {
+  title: string;
+  description: string;
+  href: string;
+  count: string;
+};
 
-export default function CollectionsGrid() {
+export default function CollectionsGrid({
+  items,
+}: {
+  items: CollectionsGridItem[];
+}) {
+  if (items.length === 0) {
+    return null;
+  }
+
   return (
-    <section
-      id="collections"
-      className="relative py-16 sm:py-20 lg:py-24"
-    >
+    <section id="collections" className="relative py-16 sm:py-20 lg:py-24">
       <Container>
         <div className="mb-10">
           <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--primary)]">
@@ -70,9 +31,9 @@ export default function CollectionsGrid() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {collections.map((collection) => (
+          {items.map((collection) => (
             <Link
-              key={collection.title}
+              key={collection.href}
               href={collection.href}
               className="group relative min-h-[240px] overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)]/40"
             >

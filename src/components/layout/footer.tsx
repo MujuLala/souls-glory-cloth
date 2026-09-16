@@ -93,37 +93,37 @@ export default function Footer() {
             "
           >
             <Link
-              href="/about"
+              href="/shop"
               className="transition-colors hover:text-[var(--foreground)]"
             >
-              About
+              Shop
             </Link>
 
             <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
 
             <Link
-              href="/features"
+              href="/custom-studio"
               className="transition-colors hover:text-[var(--foreground)]"
             >
-              Features
+              Custom Studio
             </Link>
 
             <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
 
             <Link
-              href="/pricing"
+              href="/collections"
               className="transition-colors hover:text-[var(--foreground)]"
             >
-              Pricing
+              Collections
             </Link>
 
             <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
 
             <Link
-              href="/contact"
+              href="/support"
               className="transition-colors hover:text-[var(--foreground)]"
             >
-              Contact
+              Support
             </Link>
           </nav>
 
