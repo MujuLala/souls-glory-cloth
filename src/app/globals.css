@@ -222,169 +222,226 @@
 
 /* =========================================================
    BASE
+
+   Everything below is wrapped in `@layer base`. Tailwind puts
+   its own utilities in `@layer utilities`, and per the CSS
+   cascade-layers spec, ANY unlayered rule beats ANY layered
+   rule regardless of specificity — so a bare `a { color:
+   inherit }` here would silently win over every `text-*`
+   utility in the app, no matter how specific. Keeping our
+   resets inside `@layer base` lets Tailwind's utilities (and
+   any component using inline CSS-variable colors) override
+   them the way you'd expect.
    ========================================================= */
 
-html {
-  scroll-behavior: smooth;
-  background: var(--bg);
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
+    background: var(--bg);
+    color: var(--text);
+
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    /* Never allow a stray wide child to scroll the whole page sideways. */
+    overflow-x: hidden;
+
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-contrast);
+  }
+
+  /* =======================================================
+     SCROLLBARS
+     ======================================================= */
+
+  html::-webkit-scrollbar,
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  html::-webkit-scrollbar-track,
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  html::-webkit-scrollbar-thumb,
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 999px;
+  }
+
+  html::-webkit-scrollbar-thumb:hover,
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* =======================================================
+     GLASS
+     ======================================================= */
+
+  .glass {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* =======================================================
+     FORM CONTROLS
+     Focus is a visible ring in both themes — the previous
+     global `outline: none !important` left keyboard users
+     with no focus indicator at all.
+     ======================================================= */
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+    border-color: color-mix(in srgb, var(--primary) 60%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent);
+  }
+
+  /* Native pickers should follow the active theme. */
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"] {
+    color-scheme: inherit;
+  }
+
+  /* =======================================================
+     THEME TRANSITION
+     Applied briefly by the theme provider while switching so
+     the flip reads as a fade instead of a hard cut.
+     ======================================================= */
+
+  .theme-transition,
+  .theme-transition *,
+  .theme-transition *::before,
+  .theme-transition *::after {
+    transition:
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease,
+      fill 200ms ease,
+      stroke 200ms ease !important;
+  }
+
+  /* =======================================================
+     ANIMATION HELPERS
+     ======================================================= */
+
+  .animate-fade-up {
+    animation: sg-fade-up 240ms ease both;
+  }
+
+  .animate-pulse-ring {
+    animation: sg-pulse-ring 2s ease-out infinite;
+  }
+
+  /* =======================================================
+     REDUCED MOTION
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* =======================================================
+     PRINT (POS receipts)
+     ======================================================= */
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    body {
+      background: #ffffff;
+      color: #000000;
+    }
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-
-  background: var(--bg);
-  color: var(--text);
-
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-
-  /* Never allow a stray wide child to scroll the whole page sideways. */
-  overflow-x: hidden;
-
-  transition:
-    background-color 200ms ease,
-    color 200ms ease;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-::selection {
-  background: var(--primary);
-  color: var(--primary-contrast);
-}
-
-/* =========================================================
-   SCROLLBARS
-   ========================================================= */
-
-html::-webkit-scrollbar,
-.scrollbar-thin::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-html::-webkit-scrollbar-track,
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-html::-webkit-scrollbar-thumb,
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 999px;
-}
-
-html::-webkit-scrollbar-thumb:hover,
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
-
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
-}
-
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-
-/* =========================================================
-   GLASS
-   ========================================================= */
-
-.glass {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-/* =========================================================
-   FORM CONTROLS
-   Focus is a visible ring in both themes — the previous
-   global `outline: none !important` left keyboard users
-   with no focus indicator at all.
-   ========================================================= */
-
-input,
-textarea,
-select,
-button {
-  font: inherit;
-  color: inherit;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-tertiary);
-}
-
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: none;
-  border-color: color-mix(in srgb, var(--primary) 60%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent);
-}
-
-/* Native pickers should follow the active theme. */
-input[type="date"],
-input[type="time"],
-input[type="datetime-local"],
-input[type="month"] {
-  color-scheme: inherit;
-}
-
-/* =========================================================
-   THEME TRANSITION
-   Applied briefly by the theme provider while switching so
-   the flip reads as a fade instead of a hard cut.
-   ========================================================= */
-
-.theme-transition,
-.theme-transition *,
-.theme-transition *::before,
-.theme-transition *::after {
-  transition:
-    background-color 200ms ease,
-    border-color 200ms ease,
-    color 200ms ease,
-    fill 200ms ease,
-    stroke 200ms ease !important;
-}
-
-/* =========================================================
-   ANIMATION HELPERS
-   ========================================================= */
-
+/* Keyframes have no cascade/specificity of their own, so they
+   don't need to live inside a layer — kept at the top level
+   for clarity. */
 @keyframes sg-fade-up {
   from {
     opacity: 0;
@@ -396,10 +453,6 @@ input[type="month"] {
   }
 }
 
-.animate-fade-up {
-  animation: sg-fade-up 240ms ease both;
-}
-
 @keyframes sg-pulse-ring {
   0% {
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 50%, transparent);
@@ -409,43 +462,5 @@ input[type="month"] {
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
-  }
-}
-
-.animate-pulse-ring {
-  animation: sg-pulse-ring 2s ease-out infinite;
-}
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* =========================================================
-   PRINT (POS receipts)
-   ========================================================= */
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  body {
-    background: #ffffff;
-    color: #000000;
   }
 }

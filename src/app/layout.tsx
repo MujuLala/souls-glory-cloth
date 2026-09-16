@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 
 import "./globals.css";
 
@@ -41,8 +42,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Sets [data-theme] before first paint — no flash. */}
-        <script
+        {/* Sets [data-theme] before first paint — no flash.
+            `next/script` with beforeInteractive is the
+            supported way to inject a blocking inline script;
+            a raw <script> tag triggers a React dev warning
+            about scripts never executing on client renders. */}
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
         />
       </head>
