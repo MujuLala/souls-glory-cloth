@@ -145,19 +145,45 @@ export async function getCurrentUser(): Promise<AppUserWithCustomer | null> {
   const userCount = await prisma.appUser.count();
   const role = resolveBootstrapRole(session.email, userCount);
 
-  const created = await prisma.appUser.create({
-    data: {
-      id: session.id,
-      email: session.email,
-      name: session.name,
-      avatarUrl: session.image ?? null,
-      role,
-      lastSeenAt: new Date(),
-    },
-    select: { id: true, email: true, name: true, role: true, avatarUrl: true },
-  });
+  try {
+    const created = await prisma.appUser.create({
+      data: {
+        id: session.id,
+        email: session.email,
+        name: session.name,
+        avatarUrl: session.image ?? null,
+        role,
+        lastSeenAt: new Date(),
+      },
+      select: { id: true, email: true, name: true, role: true, avatarUrl: true },
+    });
 
-  return { ...created, customerId: null };
+    return { ...created, customerId: null };
+  } catch (error) {
+    /* Two requests can both find "no existing row" and race to
+       create one (e.g. a layout and a page fetching the
+       session in parallel). The loser hits this unique
+       constraint — just read back what the winner created. */
+    if ((error as { code?: string }).code === "P2002") {
+      const winner = await prisma.appUser.findUnique({
+        where: { id: session.id },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          avatarUrl: true,
+          customer: { select: { id: true } },
+        },
+      });
+
+      if (winner) {
+        return { ...winner, customerId: winner.customer?.id ?? null };
+      }
+    }
+
+    throw error;
+  }
 }
 
 /* =========================================================
@@ -177,30 +203,47 @@ export async function getOrCreateCustomer(user: AppUserWithCustomer) {
     return existing.id;
   }
 
-  const customer = await prisma.customer.create({
-    data: {
-      userId: user.id,
-      code: "TEMP",
-      fullName: user.name ?? user.email.split("@")[0],
-      email: user.email,
-      source: "Storefront",
-      members: {
-        create: {
-          fullName: user.name ?? user.email.split("@")[0],
-          relation: "Self",
-          isPrimary: true,
+  try {
+    const customer = await prisma.customer.create({
+      data: {
+        userId: user.id,
+        code: "TEMP",
+        fullName: user.name ?? user.email.split("@")[0],
+        email: user.email,
+        source: "Storefront",
+        members: {
+          create: {
+            fullName: user.name ?? user.email.split("@")[0],
+            relation: "Self",
+            isPrimary: true,
+          },
         },
       },
-    },
-    select: { id: true },
-  });
+      select: { id: true },
+    });
 
-  await prisma.customer.update({
-    where: { id: customer.id },
-    data: { code: padCode("SGC", customer.id, 4) },
-  });
+    await prisma.customer.update({
+      where: { id: customer.id },
+      data: { code: padCode("SGC", customer.id, 4) },
+    });
 
-  return customer.id;
+    return customer.id;
+  } catch (error) {
+    /* Same race as the AppUser create above — another request
+       may have created the customer row first. */
+    if ((error as { code?: string }).code === "P2002") {
+      const winner = await prisma.customer.findUnique({
+        where: { userId: user.id },
+        select: { id: true },
+      });
+
+      if (winner) {
+        return winner.id;
+      }
+    }
+
+    throw error;
+  }
 }
 
 /* =========================================================
