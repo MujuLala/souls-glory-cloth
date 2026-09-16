@@ -1,310 +1,287 @@
 "use client";
 
-import Link from "next/link";
+import { useMemo, useState } from "react";
 import {
   ArrowRight,
   BookOpen,
-  CheckCircle2,
   ChevronRight,
   CircleHelp,
-  FileText,
   LifeBuoy,
   Mail,
   MessageCircle,
+  Package,
   Search,
   Settings,
   ShieldCheck,
-  ShoppingBag,
   UserRound,
 } from "lucide-react";
+
+import Button from "@/components/ui/button";
+import { Card, CardHeader } from "@/components/ui/card";
+import { Breadcrumbs, PageHeader, PageShell } from "@/components/ui/page";
 
 const supportOptions = [
   {
     icon: MessageCircle,
-    title: "Chat with Support",
-    description:
-      "Get help from our support team with your account or store.",
-    action: "Start Chat",
+    title: "Chat with a customer",
+    description: "Jump into the storefront inbox and reply to shoppers.",
+    href: "/inbox",
+    action: "Open inbox",
   },
   {
     icon: Mail,
-    title: "Email Support",
-    description:
-      "Send us your question and our team will get back to you.",
-    action: "Send Email",
+    title: "Email the team",
+    description: "Send us a question about running your store.",
+    href: "mailto:support@soulsglorycloth.com",
+    action: "Send email",
   },
   {
     icon: BookOpen,
-    title: "Help Center",
-    description:
-      "Browse guides and tutorials to learn how everything works.",
-    action: "Browse Guides",
+    title: "Customer support page",
+    description: "See what shoppers see when they need help.",
+    href: "/support",
+    action: "View page",
   },
 ];
 
 const popularTopics = [
   {
-    icon: ShoppingBag,
-    title: "Products & Catalog",
-    description:
-      "Manage products, categories, collections and inventory.",
+    icon: Package,
+    title: "Products & catalogue",
+    description: "Manage products, categories, collections and inventory.",
+    href: "/products",
   },
   {
     icon: UserRound,
-    title: "Customers",
-    description:
-      "Learn how to manage customers and their information.",
+    title: "Customers & measurements",
+    description: "Manage customer profiles, family members and fits.",
+    href: "/customers",
   },
   {
     icon: Settings,
-    title: "Account & Settings",
-    description:
-      "Manage your store settings, account and preferences.",
+    title: "Store settings",
+    description: "Team, pricing defaults and storefront preferences.",
+    href: "/settings",
   },
   {
     icon: ShieldCheck,
-    title: "Security & Privacy",
-    description:
-      "Learn about account security and protecting your store.",
+    title: "Security",
+    description: "Sessions, admin access and account protection.",
+    href: "/settings",
   },
 ];
 
 const faqs = [
-  "How do I add a new product?",
-  "How can I update my store settings?",
-  "How do I manage customer orders?",
-  "How can I reset my account password?",
-  "How do I contact support?",
+  {
+    q: "How do I add a new product?",
+    a: "Go to Products → Add product. Fill in pricing and images, then publish.",
+  },
+  {
+    q: "How do I take an order over the phone?",
+    a: "Use the POS from the top bar — search the product, add the customer by phone, and complete the sale.",
+  },
+  {
+    q: "Where do customer measurements live?",
+    a: "Open a customer's profile → Measurements tab, or Tailoring → Measurements for everyone.",
+  },
+  {
+    q: "How do I change my password?",
+    a: "Password resets go through the sign-in screen's \"Forgot password\" link.",
+  },
+  {
+    q: "How do shoppers reach us?",
+    a: "Through the chat widget on the storefront — replies land in your Inbox here in the CMS.",
+  },
 ];
 
 export default function HelpSupportPage() {
+  const [search, setSearch] = useState("");
+
+  const filteredFaqs = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return faqs;
+    return faqs.filter((faq) => faq.q.toLowerCase().includes(term));
+  }, [search]);
+
   return (
-    <main className="min-h-screen w-full bg-[#050505] text-white">
-      <div className="w-full px-5 py-6 sm:px-6 md:px-8 lg:px-10">
-        {/* Page Header */}
-        <div className="mb-8">
-          <div className="mb-3 flex items-center gap-2 text-sm text-zinc-500">
-            <LifeBuoy size={16} />
-            <span>Support</span>
-            <ChevronRight size={14} />
-            <span className="text-zinc-400">Help & Support</span>
-          </div>
+    <PageShell>
+      <Breadcrumbs
+        items={[{ label: "Dashboard", href: "/dashboard" }, { label: "Help & Support" }]}
+      />
 
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Help & Support
-          </h1>
+      <PageHeader
+        title="Help & Support"
+        description="Find answers, jump to the right section of the CMS, or reach our team directly."
+      />
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
-            Find answers, browse helpful guides, or contact our support
-            team if you need assistance with your store.
+      {/* SEARCH */}
+      <Card className="mb-4 p-5 sm:p-6">
+        <div className="mx-auto max-w-[640px] text-center">
+          <span className="mx-auto mb-3 grid size-12 place-items-center rounded-xl bg-primary/10 text-primary">
+            <CircleHelp size={22} />
+          </span>
+
+          <h2 className="text-lg font-semibold text-ink">How can we help?</h2>
+          <p className="mt-1 text-[13px] text-faint">
+            Search frequently asked questions below.
           </p>
+
+          <div className="relative mt-4">
+            <Search
+              size={17}
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-faint"
+            />
+
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search for help…"
+              className="h-12 w-full rounded-xl border border-line bg-input pl-11 pr-4 text-sm text-ink outline-none placeholder:text-faint focus-visible:border-primary/50"
+            />
+          </div>
         </div>
+      </Card>
 
-        {/* Search */}
-        <section className="mb-6 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 sm:p-6">
-          <div className="mx-auto max-w-3xl">
-            <div className="mb-5 text-center">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#e51e32]/10 text-[#e51e32]">
-                <CircleHelp size={23} />
-              </div>
+      {/* SUPPORT OPTIONS */}
+      <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {supportOptions.map((option) => {
+          const Icon = option.icon;
 
-              <h2 className="text-lg font-semibold">
-                How can we help?
-              </h2>
+          return (
+            <Card
+              key={option.title}
+              className="group p-5 transition-colors hover:border-primary/30"
+            >
+              <span className="mb-5 grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
+                <Icon size={20} />
+              </span>
 
-              <p className="mt-1 text-sm text-zinc-500">
-                Search our help center for answers and guides.
+              <h2 className="text-[15px] font-semibold text-ink">{option.title}</h2>
+
+              <p className="mt-2 min-h-[48px] text-[13px] leading-6 text-faint">
+                {option.description}
               </p>
-            </div>
 
-            <div className="relative">
-              <Search
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600"
-              />
+              <Button href={option.href} variant="ghost" size="sm" className="mt-3 px-0">
+                {option.action}
+                <ArrowRight size={15} />
+              </Button>
+            </Card>
+          );
+        })}
+      </div>
 
-              <input
-                type="search"
-                placeholder="Search for help..."
-                className="h-12 w-full rounded-xl border border-white/10 bg-[#080808] pl-11 pr-4 text-sm text-white outline-none placeholder:text-zinc-700 transition focus:border-[#e51e32]/50"
-              />
-            </div>
-          </div>
-        </section>
+      {/* MAIN CONTENT */}
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.4fr_1fr]">
+        {/* TOPICS */}
+        <Card className="overflow-hidden">
+          <CardHeader
+            title="Popular topics"
+            description="Quickly jump to the right part of the CMS."
+          />
 
-        {/* Support Options */}
-        <section className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {supportOptions.map((option) => {
-            const Icon = option.icon;
+          <div className="divide-y divide-line-subtle">
+            {popularTopics.map((topic) => {
+              const Icon = topic.icon;
 
-            return (
-              <div
-                key={option.title}
-                className="group rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5 transition hover:border-[#e51e32]/30 hover:bg-white/[0.04]"
-              >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#e51e32]/10 text-[#e51e32]">
-                  <Icon size={20} />
-                </div>
-
-                <h2 className="text-base font-semibold">
-                  {option.title}
-                </h2>
-
-                <p className="mt-2 min-h-[48px] text-sm leading-6 text-zinc-500">
-                  {option.description}
-                </p>
-
-                <button
-                  type="button"
-                  className="mt-5 flex items-center gap-2 text-sm font-medium text-[#e51e32] transition group-hover:gap-3"
+              return (
+                <a
+                  key={topic.title}
+                  href={topic.href}
+                  className="group flex w-full items-center gap-4 p-5 text-left transition-colors hover:bg-surface"
                 >
-                  {option.action}
-                  <ArrowRight size={15} />
-                </button>
-              </div>
-            );
-          })}
-        </section>
-
-        {/* Main Content */}
-        <section className="grid grid-cols-1 gap-5 xl:grid-cols-[1.4fr_1fr]">
-          {/* Popular Topics */}
-          <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025]">
-            <div className="border-b border-white/[0.07] p-5 sm:p-6">
-              <p className="text-xs font-medium uppercase tracking-wider text-zinc-600">
-                Knowledge Base
-              </p>
-
-              <h2 className="mt-1 text-xl font-semibold">
-                Popular Topics
-              </h2>
-
-              <p className="mt-2 text-sm text-zinc-500">
-                Quickly find information about your store.
-              </p>
-            </div>
-
-            <div className="divide-y divide-white/[0.05]">
-              {popularTopics.map((topic) => {
-                const Icon = topic.icon;
-
-                return (
-                  <button
-                    key={topic.title}
-                    type="button"
-                    className="group flex w-full items-center gap-4 p-5 text-left transition hover:bg-white/[0.025]"
-                  >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.04] text-zinc-400 transition group-hover:bg-[#e51e32]/10 group-hover:text-[#e51e32]">
-                      <Icon size={19} />
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-sm font-medium">
-                        {topic.title}
-                      </h3>
-
-                      <p className="mt-1 text-xs leading-5 text-zinc-600">
-                        {topic.description}
-                      </p>
-                    </div>
-
-                    <ArrowRight
-                      size={16}
-                      className="shrink-0 text-zinc-700 transition group-hover:translate-x-1 group-hover:text-[#e51e32]"
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* FAQ */}
-          <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025]">
-            <div className="border-b border-white/[0.07] p-5 sm:p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e51e32]/10 text-[#e51e32]">
-                  <FileText size={19} />
-                </div>
-
-                <div>
-                  <p className="text-xs text-zinc-600">
-                    Frequently Asked
-                  </p>
-
-                  <h2 className="text-xl font-semibold">
-                    Questions
-                  </h2>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-3">
-              {faqs.map((faq) => (
-                <button
-                  key={faq}
-                  type="button"
-                  className="group flex w-full items-center justify-between gap-4 rounded-xl p-4 text-left transition hover:bg-white/[0.04]"
-                >
-                  <span className="text-sm text-zinc-400 transition group-hover:text-white">
-                    {faq}
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-surface text-faint transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                    <Icon size={19} />
                   </span>
 
-                  <ChevronRight
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[13px] font-medium text-ink">
+                      {topic.title}
+                    </span>
+
+                    <span className="mt-1 block text-[11.5px] leading-5 text-faint">
+                      {topic.description}
+                    </span>
+                  </span>
+
+                  <ArrowRight
                     size={16}
-                    className="shrink-0 text-zinc-700 transition group-hover:translate-x-1 group-hover:text-[#e51e32]"
+                    className="shrink-0 text-faint transition-transform group-hover:translate-x-1 group-hover:text-primary"
                   />
-                </button>
-              ))}
-            </div>
-
-            <div className="border-t border-white/[0.07] p-5">
-              <button
-                type="button"
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-medium text-zinc-300 transition hover:bg-white/[0.04] hover:text-white"
-              >
-                View All Articles
-                <ArrowRight size={15} />
-              </button>
-            </div>
+                </a>
+              );
+            })}
           </div>
-        </section>
+        </Card>
 
-        {/* Contact Support */}
-        <section className="mt-5 rounded-2xl border border-[#e51e32]/20 bg-[#e51e32]/[0.04] p-6">
-          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e51e32]/10 text-[#e51e32]">
-                <LifeBuoy size={21} />
-              </div>
+        {/* FAQ */}
+        <Card className="overflow-hidden">
+          <CardHeader title="Frequently asked" icon={<LifeBuoy size={16} />} />
 
-              <div>
-                <h2 className="text-base font-semibold">
-                  Still need help?
-                </h2>
-
-                <p className="mt-1 text-sm text-zinc-500">
-                  Our support team is here to help you with any
-                  questions.
-                </p>
-              </div>
-            </div>
-
-            <Link
-              href="/support"
-              className="flex h-10 w-fit items-center gap-2 rounded-xl bg-[#e51e32] px-5 text-sm font-medium text-white transition hover:bg-[#c9182b]"
-            >
-              Contact Support
-              <ArrowRight size={15} />
-            </Link>
+          <div className="p-2">
+            {filteredFaqs.length === 0 ? (
+              <p className="p-4 text-center text-[12px] text-faint">
+                No matching questions.
+              </p>
+            ) : (
+              filteredFaqs.map((faq) => <FaqRow key={faq.q} {...faq} />)
+            )}
           </div>
-        </section>
-
-        {/* Status */}
-        <div className="flex items-center justify-center gap-2 py-8 text-xs text-zinc-700">
-          <CheckCircle2 size={14} />
-          <span>Support Center</span>
-        </div>
+        </Card>
       </div>
-    </main>
+
+      {/* CONTACT */}
+      <Card className="mt-5 border-primary/20 bg-primary/5 p-6">
+        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+          <div className="flex items-start gap-4">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+              <LifeBuoy size={21} />
+            </span>
+
+            <div>
+              <h2 className="text-[15px] font-semibold text-ink">Still need help?</h2>
+              <p className="mt-1 text-[13px] text-faint">
+                Reach the team directly and we&apos;ll get back to you.
+              </p>
+            </div>
+          </div>
+
+          <Button href="mailto:support@soulsglorycloth.com">
+            Contact support
+            <ArrowRight size={15} />
+          </Button>
+        </div>
+      </Card>
+    </PageShell>
+  );
+}
+
+/* =========================================================
+   FAQ ROW
+========================================================= */
+
+function FaqRow({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        className="group flex w-full items-center justify-between gap-4 rounded-xl p-4 text-left transition-colors hover:bg-surface"
+      >
+        <span className="text-[13px] text-muted group-hover:text-ink">{q}</span>
+
+        <ChevronRight
+          size={16}
+          className={`shrink-0 text-faint transition-transform group-hover:text-primary ${open ? "rotate-90" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <p className="px-4 pb-4 text-[12px] leading-5 text-faint">{a}</p>
+      )}
+    </div>
   );
 }

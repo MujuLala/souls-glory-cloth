@@ -125,9 +125,18 @@ export default function SupportChatWidget() {
         .catch(() => undefined);
     };
 
-    window.addEventListener("sg:chat-product", handleAsk);
+    const handleOpen = () => {
+      togglePanel(true);
+      setView("chat");
+    };
 
-    return () => window.removeEventListener("sg:chat-product", handleAsk);
+    window.addEventListener("sg:chat-product", handleAsk);
+    window.addEventListener("sg:chat-open", handleOpen);
+
+    return () => {
+      window.removeEventListener("sg:chat-product", handleAsk);
+      window.removeEventListener("sg:chat-open", handleOpen);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

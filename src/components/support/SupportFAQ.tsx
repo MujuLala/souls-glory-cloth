@@ -16,28 +16,28 @@ export default function SupportFAQ() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="support-faq" className="border-y border-white/[0.07] bg-[#080808]">
+    <section id="support-faq" className="border-y border-line-subtle bg-bg-secondary">
       <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-8 lg:px-10 lg:py-24">
         <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
           <div>
-            <p className="text-[9px] font-semibold uppercase tracking-[.2em] text-[#ed1b2f]">
+            <p className="text-[9px] font-semibold uppercase tracking-[.2em] text-primary">
               Frequently asked
             </p>
-            <h2 className="mt-3 text-4xl font-semibold leading-none tracking-[-.05em] sm:text-5xl">
+            <h2 className="mt-3 text-4xl font-semibold leading-none tracking-[-.05em] text-ink sm:text-5xl">
               Quick answers.
               <br />
-              <span className="text-white/25">No guesswork.</span>
+              <span className="text-faint">No guesswork.</span>
             </h2>
-            <p className="mt-5 max-w-sm text-xs leading-5 text-white/30">
+            <p className="mt-5 max-w-sm text-xs leading-5 text-faint">
               The questions our customers ask most. If yours is not here, our
               support team is one message away.
             </p>
-            <div className="mt-7 inline-flex rounded-full border border-[#ed1b2f]/20 bg-[#ed1b2f]/5 px-3 py-1.5 text-[9px] text-white/40">
+            <div className="mt-7 inline-flex rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-[9px] text-muted">
               Updated for your shopping experience
             </div>
           </div>
 
-          <div className="divide-y divide-white/[0.08]">
+          <div className="divide-y divide-line-subtle">
             {faqs.map(([question, answer], index) => {
               const isOpen = open === index;
               return (
@@ -48,19 +48,25 @@ export default function SupportFAQ() {
                     className="flex w-full items-center justify-between gap-5 py-5 text-left"
                     aria-expanded={isOpen}
                   >
-                    <span className="flex items-center gap-4 text-sm font-medium">
-                      <span className="text-[9px] text-[#ed1b2f]">
+                    <span className="flex items-center gap-4 text-sm font-medium text-ink">
+                      <span className="text-[9px] text-primary">
                         0{index + 1}
                       </span>
                       {question}
                     </span>
-                    <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white/10 transition ${isOpen ? "rotate-45 border-[#ed1b2f]/40 text-[#ed1b2f]" : "text-white/30"}`}>
+                    <span
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md border transition ${
+                        isOpen
+                          ? "rotate-45 border-primary/40 text-primary"
+                          : "border-line text-faint"
+                      }`}
+                    >
                       <Plus className="h-3.5 w-3.5" />
                     </span>
                   </button>
                   <div className={`grid transition-all duration-300 ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
                     <div className="overflow-hidden">
-                      <p className="max-w-2xl pb-5 pl-8 text-xs leading-6 text-white/30">
+                      <p className="max-w-2xl pb-5 pl-8 text-xs leading-6 text-faint">
                         {answer}
                       </p>
                     </div>

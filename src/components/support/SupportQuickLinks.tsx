@@ -27,14 +27,14 @@ export default function SupportQuickLinks() {
     >
       <div className="mb-9 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="text-[9px] font-semibold uppercase tracking-[.2em] text-[#ed1b2f]">
+          <p className="text-[9px] font-semibold uppercase tracking-[.2em] text-primary">
             Support topics
           </p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-[-.04em] sm:text-4xl">
-            What do you need <span className="text-[#ed1b2f]">help with?</span>
+          <h2 className="mt-2 text-3xl font-semibold tracking-[-.04em] text-ink sm:text-4xl">
+            What do you need <span className="text-primary">help with?</span>
           </h2>
         </div>
-        <p className="max-w-sm text-xs leading-5 text-white/30">
+        <p className="max-w-sm text-xs leading-5 text-faint">
           Start with one of the most common support topics. Everything is kept
           simple and focused.
         </p>
@@ -45,17 +45,17 @@ export default function SupportQuickLinks() {
           <a
             href="#support-faq"
             key={title}
-            className="group rounded-xl border border-white/[0.08] bg-[#090909] p-5 transition duration-300 hover:-translate-y-0.5 hover:border-[#ed1b2f]/30 hover:bg-[#0d0d0d]"
+            className="group rounded-xl border border-line-subtle bg-card p-5 transition duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-card-hover"
           >
             <div className="flex items-start justify-between">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md border border-white/10 text-[8px] text-white/25">
+              <span className="flex h-7 w-7 items-center justify-center rounded-md border border-line text-[8px] text-faint">
                 {n}
               </span>
-              <Icon className="h-4 w-4 text-white/20 transition group-hover:text-[#ed1b2f]" />
+              <Icon className="h-4 w-4 text-faint transition group-hover:text-primary" />
             </div>
-            <h3 className="mt-7 text-sm font-semibold">{title}</h3>
-            <p className="mt-1 max-w-xs text-[10px] leading-4 text-white/30">{copy}</p>
-            <div className="mt-5 flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wider text-white/25 transition group-hover:text-[#ed1b2f]">
+            <h3 className="mt-7 text-sm font-semibold text-ink">{title}</h3>
+            <p className="mt-1 max-w-xs text-[10px] leading-4 text-faint">{copy}</p>
+            <div className="mt-5 flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wider text-faint transition group-hover:text-primary">
               Explore
               <ChevronRight className="h-3 w-3" />
             </div>
