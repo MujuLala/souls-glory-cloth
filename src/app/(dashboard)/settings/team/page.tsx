@@ -1,8 +1,9 @@
-import { Users } from "lucide-react";
+import { UserPlus, Users } from "lucide-react";
 
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Breadcrumbs, PageHeader, PageShell } from "@/components/ui/page";
 import TeamClient from "@/components/dashboard/settings/TeamClient";
+import PromoteUser from "@/components/dashboard/settings/PromoteUser";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/session";
 
@@ -36,8 +37,20 @@ export default async function TeamPage() {
 
       <PageHeader
         title="Team"
-        description="Everyone with access to this workspace, and what they can do. New staff get an account automatically the first time they sign in — set their role here."
+        description="Everyone with access to this workspace, and what they can do."
       />
+
+      <Card className="mb-4">
+        <CardHeader
+          title="Give someone staff access"
+          description="Every account starts as a regular customer, even yours before you signed up. Find their account here and assign a role."
+          icon={<UserPlus size={16} />}
+        />
+
+        <CardBody>
+          <PromoteUser />
+        </CardBody>
+      </Card>
 
       <Card className="overflow-hidden">
         <CardHeader title="Staff accounts" icon={<Users size={16} />} />
