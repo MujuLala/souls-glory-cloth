@@ -15,25 +15,29 @@ import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct } from "@/types/catalog";
 
 /**
- * Compatibility type for ProductGrid and other components
- * that import Product from this file.
+ * Compatibility type used by ProductGrid and other components.
  */
 export type Product = StorefrontProduct;
 
-export default function ProductCard({
-  product,
-}: {
+interface ProductCardProps {
   product: StorefrontProduct;
-}) {
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
   const [liked, setLiked] = useState(false);
 
   const activePrice = product.salePrice ?? product.price;
+
   const wasPrice = product.salePrice
     ? product.price
     : product.compareAtPrice;
 
+  const hasDiscount =
+    wasPrice != null && wasPrice > activePrice;
+
   return (
     <article className="group relative min-w-0">
+      {/* PRODUCT IMAGE */}
       <Link
         href={`/product/${product.slug}`}
         className="block"
@@ -56,19 +60,24 @@ export default function ProductCard({
               />
 
               {product.hoverImage && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={product.hoverImage}
-                  alt=""
-                  loading="lazy"
-                  aria-hidden
-                  className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                />
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={product.hoverImage}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  />
+                </>
               )}
             </>
           ) : (
             <div className="flex size-full flex-col items-center justify-center gap-2 text-faint">
-              <ImageIcon size={22} strokeWidth={1.4} />
+              <ImageIcon
+                size={22}
+                strokeWidth={1.4}
+              />
 
               <span className="text-[9px] font-semibold uppercase tracking-[0.18em]">
                 No image yet
@@ -77,22 +86,23 @@ export default function ProductCard({
           )}
 
           {/* BADGES */}
-          <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+          <div className="absolute left-3 top-3 z-[1] flex flex-col gap-1.5">
             {product.badge && (
               <span className="rounded-full bg-primary px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--primary-contrast)]">
                 {product.badge}
               </span>
             )}
 
-            {product.salePrice && (
+            {product.salePrice != null && (
               <span className="rounded-full border border-line bg-bg-secondary/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-ink backdrop-blur">
                 Sale
               </span>
             )}
           </div>
 
+          {/* SOLD OUT */}
           {!product.inStock && (
-            <span className="absolute bottom-3 left-3 rounded-full border border-line bg-bg-secondary/90 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-muted backdrop-blur">
+            <span className="absolute bottom-3 left-3 z-[1] rounded-full border border-line bg-bg-secondary/90 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-muted backdrop-blur">
               Sold out
             </span>
           )}
@@ -107,20 +117,25 @@ export default function ProductCard({
             ? `Remove ${product.name} from wishlist`
             : `Save ${product.name}`
         }
+        aria-pressed={liked}
         onClick={() => setLiked((value) => !value)}
         className={cn(
-          "absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full border backdrop-blur transition-colors",
+          "absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full border backdrop-blur transition-all duration-200",
           liked
             ? "border-primary bg-primary text-[var(--primary-contrast)]"
-            : "border-line bg-bg-secondary/85 text-muted hover:text-primary",
+            : "border-line bg-bg-secondary/85 text-muted hover:border-primary/40 hover:text-primary",
         )}
       >
-        <Heart size={14} fill={liked ? "currentColor" : "none"} />
+        <Heart
+          size={14}
+          fill={liked ? "currentColor" : "none"}
+        />
       </button>
 
-      {/* DETAILS */}
+      {/* PRODUCT DETAILS */}
       <div className="pt-3.5">
         <div className="flex items-start justify-between gap-3">
+          {/* NAME / CATEGORY */}
           <div className="min-w-0">
             <p className="text-[9px] font-medium uppercase tracking-[0.16em] text-faint">
               {product.category ?? "Atelier"}
@@ -133,12 +148,13 @@ export default function ProductCard({
             </h3>
           </div>
 
+          {/* PRICE */}
           <div className="shrink-0 text-right">
             <p className="text-sm font-bold text-ink">
               {formatMoney(activePrice)}
             </p>
 
-            {wasPrice && wasPrice > activePrice && (
+            {hasDiscount && wasPrice != null && (
               <s className="text-[11px] text-faint">
                 {formatMoney(wasPrice)}
               </s>
@@ -146,7 +162,9 @@ export default function ProductCard({
           </div>
         </div>
 
+        {/* META */}
         <div className="mt-3 flex items-center justify-between border-t border-line-subtle pt-2.5">
+          {/* RATING */}
           {product.reviewCount > 0 ? (
             <span className="flex items-center gap-1 text-[10px] text-muted">
               <Star
@@ -169,9 +187,10 @@ export default function ProductCard({
             </span>
           )}
 
+          {/* VIEW */}
           <Link
             href={`/product/${product.slug}`}
-            className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-primary"
+            className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-primary transition-opacity hover:opacity-75"
           >
             {product.inStock ? (
               <>
