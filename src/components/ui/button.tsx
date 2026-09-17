@@ -33,7 +33,7 @@ const variants: Record<ButtonVariant, string> = {
     "bg-primary text-[var(--primary-contrast)] hover:bg-primary-hover active:bg-primary-active shadow-[0_8px_24px_color-mix(in_srgb,var(--primary)_22%,transparent)]",
 
   secondary:
-    "border border-line bg-surface text-ink hover:border-primary/50 hover:bg-surface-hover",
+    " bg-[var(--header-bg)] text-ink hover:border-primary/50 hover:bg-surface-hover",
 
   subtle: "bg-surface text-muted hover:bg-surface-hover hover:text-ink",
 

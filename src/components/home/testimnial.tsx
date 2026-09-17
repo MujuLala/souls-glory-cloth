@@ -6,7 +6,6 @@ import {
   Quote,
   Star,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 
 import Container from "@/components/ui/container";
@@ -108,16 +107,14 @@ function TestimonialCard({
         w-[285px]
         shrink-0
         overflow-hidden
-        rounded-[16px]
-        border
-        border-[var(--border)]
-        bg-[var(--dropdown-bg)]
+        rounded-[18px]
+        bg-[var(--surface)]
         p-4
-        shadow-[0_18px_50px_rgba(0,0,0,0.04)]
+        shadow-[0_12px_35px_rgba(0,0,0,0.045)]
         transition-all
         duration-500
-        hover:border-[var(--primary)]
-        hover:shadow-[0_20px_55px_rgba(0,0,0,0.08)]
+        hover:bg-[var(--surface-hover)]
+        hover:shadow-[0_18px_45px_rgba(0,0,0,0.07)]
 
         sm:w-[320px]
         sm:rounded-[18px]
@@ -165,9 +162,7 @@ function TestimonialCard({
               items-center
               justify-center
               rounded-full
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
+              bg-[var(--bg-secondary)]
               text-[12px]
               font-semibold
               text-[var(--foreground)]
@@ -233,9 +228,7 @@ function TestimonialCard({
             items-center
             gap-0.5
             rounded-full
-            border
-            border-[var(--border)]
-            bg-[var(--surface)]
+            bg-[var(--bg-secondary)]
             px-1.5
             py-1
 
@@ -266,7 +259,10 @@ function TestimonialCard({
           DIVIDER
       ================================================== */}
 
-      <div className="my-4 h-px bg-[var(--border)] sm:my-5" />
+      <div className="my-4 flex items-center gap-2 sm:my-5">
+        <span className="h-px w-8 bg-[var(--primary)]/50" />
+        <span className="h-px flex-1 bg-[var(--border)]/50" />
+      </div>
 
       {/* =================================================
           REVIEW
@@ -346,12 +342,9 @@ function TestimonialCard({
             items-center
             justify-center
             rounded-full
-            border
-            border-[var(--border)]
-            bg-[var(--surface)]
+            bg-[var(--bg-secondary)]
             transition-all
             duration-300
-            group-hover:border-[var(--primary)]
             group-hover:bg-[var(--primary)]
             group-hover:text-white
           "
@@ -429,7 +422,7 @@ export default function Testimonials() {
       className="
         relative
         overflow-hidden
-        bg-[var(--background)]
+        bg-transparent
         py-16
 
         sm:py-20
@@ -446,89 +439,99 @@ export default function Testimonials() {
       <Container>
         <div
           className="
-            mx-auto
             mb-10
-            max-w-[800px]
-            text-center
+            grid
+            gap-8
 
             sm:mb-12
 
             lg:mb-[4vw]
+            lg:grid-cols-[0.7fr_1.3fr]
+            lg:items-end
+            lg:gap-[5vw]
           "
         >
-          {/* Eyebrow */}
+          {/* =================================================
+              LEFT — EYEBROW + DESCRIPTION
+          ================================================== */}
 
-          <div
-            className="
-              mb-5
-              inline-flex
-              items-center
-              gap-2
-              rounded-full
-              border
-              border-[var(--border)]
-              bg-[var(--surface)]
-              px-3.5
-              py-2
-              text-[10px]
-              font-medium
-              uppercase
-              tracking-[0.18em]
-              text-[var(--muted-foreground)]
-            "
-          >
-            <Sparkles
-              className="h-3.5 w-3.5 text-[var(--primary)]"
-              strokeWidth={1.8}
-            />
+          <div className="max-w-[460px]">
+            {/* Shared eyebrow style */}
 
-            Loved by our customers
+            <div className="mb-3 flex items-center gap-2">
+              <span
+                className="
+                  h-[5px]
+                  w-[5px]
+                  shrink-0
+                  rounded-full
+                  bg-[var(--primary)]
+                "
+              />
+
+              <span
+                className="
+                  text-[10px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.18em]
+                  text-[var(--primary)]
+                "
+              >
+                Loved by our customers
+              </span>
+            </div>
+
+            {/* Description */}
+
+            <p
+              className="
+                max-w-[440px]
+                text-left
+                text-[13px]
+                leading-[1.7]
+                text-[var(--muted-foreground)]
+
+                sm:text-[14px]
+
+                md:text-[15px]
+              "
+            >
+              Every piece is made around the person wearing it.
+              Here is what our customers have to say about their
+              Soul&apos;s Glory Cloth experience.
+            </p>
           </div>
 
-          {/* MAIN HEADING */}
+          {/* =================================================
+              RIGHT — HEADING
+          ================================================== */}
 
-          <h2
-            className="
-              text-[3vw]
-              font-bold
-              leading-[0.96]
-              tracking-[-0.06em]
-              text-[var(--text)]
+          <div className="lg:flex lg:justify-end">
+            <h2
+              className="
+                max-w-[850px]
+                text-left
+                text-[3.2vw]
+                font-[100]
+                uppercase
+                leading-[0.92]
+                tracking-[-0.055em]
+                text-[var(--text)]
 
-              max-lg:text-[40px]
-              max-md:text-[35px]
-              max-sm:text-[31px]
-            "
-          >
-            Made with care.
-            <br />
+                max-[1100px]:text-[42px]
+                max-lg:text-[38px]
+                max-md:text-[36px]
+                max-sm:text-[30px]
 
-            <span className="text-[var(--primary)]">
+                lg:text-right
+              "
+            >
+              Made with care.
+              <br />
               Worn with confidence.
-            </span>
-          </h2>
-
-          {/* DESCRIPTION */}
-
-          <p
-            className="
-              mx-auto
-              mt-5
-              max-w-[600px]
-              text-[13px]
-              leading-[1.7]
-              text-[var(--muted-foreground)]
-
-              sm:mt-6
-              sm:text-[14px]
-
-              md:text-[15px]
-            "
-          >
-            Every piece is made around the person wearing it.
-            Here is what our customers have to say about their
-            Soul&apos;s Glory Cloth experience.
-          </p>
+            </h2>
+          </div>
         </div>
       </Container>
 
@@ -558,8 +561,6 @@ export default function Testimonials() {
             items-center
             justify-center
             gap-6
-            border-t
-            border-[var(--border)]
             pt-7
 
             sm:mt-12

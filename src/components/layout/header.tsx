@@ -98,7 +98,7 @@ export default function Header({
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-[100] w-full border-b border-line bg-[var(--header-bg)] backdrop-blur-2xl"
+      className="sticky top-0 z-[100] w-full bg-[var(--header-bg)]  backdrop-blur-2xl"
     >
       <Shell className="flex h-16 items-center justify-between gap-4 lg:h-[72px]">
         {/* =============================================
@@ -106,14 +106,24 @@ export default function Header({
         ============================================= */}
 
         <Link
-          href="/"
-          aria-label="Soul's Glory Cloth home"
-          className="shrink-0 text-[18px] font-bold leading-[0.86] tracking-[-0.065em] text-ink lg:text-[20px]"
-        >
-          Soul&apos;s
-          <br />
-          <span className="text-primary">Glory</span>
-        </Link>
+  href="/"
+  aria-label="Soul's Glory Cloth home"
+  className="shrink-0"
+>
+  {/* Light mode */}
+  <img
+    src="/images/souls-glory-logo-black.svg"
+    alt="Soul's Glory Cloth"
+    className="block h-auto w-[170px] dark:hidden lg:w-[190px]"
+  />
+
+  {/* Dark mode */}
+  <img
+    src="/images/souls-glory-logo-white.svg"
+    alt="Soul's Glory Cloth"
+    className="hidden h-auto w-[170px] dark:block lg:w-[190px]"
+  />
+</Link>
 
         {/* =============================================
             DESKTOP NAV
@@ -259,48 +269,95 @@ function Dropdown({
   items: NavLink[];
   withDescriptions?: boolean;
 }) {
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleEnter = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+    }
+
+    if (!open) {
+      onToggle();
+    }
+  };
+
+  const handleLeave = () => {
+    closeTimer.current = setTimeout(() => {
+      if (open) {
+        onToggle();
+      }
+    }, 120);
+  };
+
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
       <button
         type="button"
         aria-expanded={open}
         aria-haspopup="menu"
         onClick={onToggle}
-        className="flex items-center gap-1.5 text-[13px] font-medium leading-none tracking-[-0.015em] text-muted transition-colors hover:text-primary xl:text-[14px]"
+        className="flex items-center gap-1.5 text-[13px] font-medium leading-none tracking-[-0.015em] text-muted transition-colors duration-200 hover:text-primary xl:text-[14px]"
       >
         {label}
 
         <ChevronDown
           size={14}
-          className={cn("transition-transform duration-200", open && "rotate-180")}
+          className={cn(
+            "transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            open && "rotate-180",
+          )}
         />
       </button>
 
-      {open && (
-        <div
-          role="menu"
-          className="absolute left-1/2 top-[calc(100%+22px)] z-[110] w-[260px] -translate-x-1/2 rounded-xl border border-line bg-[var(--dropdown-bg)] p-2 shadow-float backdrop-blur-2xl"
-        >
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              role="menuitem"
-              className="group block rounded-lg px-3 py-2.5 transition-colors hover:bg-surface-hover"
-            >
-              <span className="block text-[13.5px] font-medium leading-none text-ink transition-colors group-hover:text-primary">
-                {item.label}
-              </span>
+      {/* Hover bridge */}
+      <div
+        className={cn(
+          "absolute left-1/2 top-full h-[22px] w-[280px] -translate-x-1/2",
+          open ? "block" : "hidden",
+        )}
+      />
 
-              {withDescriptions && item.description && (
-                <span className="mt-1.5 block text-[11.5px] leading-4 text-faint">
-                  {item.description}
-                </span>
-              )}
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* Dropdown */}
+      <div
+        role="menu"
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+        className={cn(
+          "absolute left-1/2 top-[calc(100%+30px)] z-[110] w-[260px] -translate-x-1/2",
+          "rounded-xl  bg-[var(--dropdown-bg)] p-2",
+          "shadow-float backdrop-blur-2xl",
+          "origin-top",
+          "transition-[opacity,transform,visibility]",
+          "duration-300",
+          "ease-[cubic-bezier(0.22,1,0.36,1)]",
+          open
+            ? "visible translate-y-0 scale-100 opacity-100"
+            : "invisible -translate-y-1 scale-[0.98] opacity-0",
+        )}
+      >
+        {items.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            role="menuitem"
+            className="group block rounded-lg px-3 py-2.5 transition-colors duration-200 hover:bg-surface-hover"
+          >
+            <span className="block text-[13.5px] font-medium leading-none text-ink transition-colors duration-200 group-hover:text-primary">
+              {item.label}
+            </span>
+
+            {withDescriptions && item.description && (
+              <span className="mt-1.5 block text-[11.5px] leading-4 text-faint">
+                {item.description}
+              </span>
+            )}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

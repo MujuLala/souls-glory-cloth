@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
-
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 import ThemeProvider, {
@@ -55,7 +55,8 @@ export default function RootLayout({
       </head>
 
       <body className={`${inter.variable} antialiased`}>
-        <ThemeProvider>
+        <SmoothScroll />
+         <ThemeProvider>
           <ToastProvider>{children}</ToastProvider>
         </ThemeProvider>
       </body>

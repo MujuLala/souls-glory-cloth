@@ -115,7 +115,7 @@ const fadeUp = {
 
 export default function DashboardPreview() {
   return (
-    <section className="relative overflow-hidden py-16 sm:py-20 md:py-24 lg:py-[6vw]">
+    <section className="relative overflow-hidden bg-transparent py-14 sm:py-18 md:py-20 lg:py-[4.5vw]">
       <Container>
         {/* ================================================================
             SECTION INTRO
@@ -180,24 +180,23 @@ export default function DashboardPreview() {
 
             <h2
               className="
-                max-w-[850px]
-                text-[3vw]
-                font-bold
-                leading-[0.96]
-                tracking-[-0.06em]
+                max-w-[1000px]
+                whitespace-nowrap
+                text-[3.2vw]
+                font-[100]
+                uppercase
+                leading-[0.92]
+                tracking-[-0.055em]
                 text-[var(--text)]
 
-                max-lg:text-[40px]
-                max-md:text-[35px]
-                max-sm:text-[31px]
+                max-[1100px]:text-[42px]
+                max-lg:text-[38px]
+                max-md:whitespace-normal
+                max-md:text-[36px]
+                max-sm:text-[30px]
               "
             >
-              Your entire experience.
-              <br />
-
-              <span className="text-[var(--primary)]">
-                One simple dashboard.
-              </span>
+              Your entire experience.  <br /> One simple dashboard.
             </h2>
           </div>
 
@@ -247,31 +246,9 @@ export default function DashboardPreview() {
           }}
           className="
             relative
-            mx-auto
-            max-w-[1120px]
+            w-full
           "
         >
-          {/* ==============================================================
-              SOFT BACKGROUND GLOW
-          ============================================================== */}
-
-          <div
-            className="
-              pointer-events-none
-              absolute
-              left-1/2
-              top-1/2
-              h-[55%]
-              w-[65%]
-              -translate-x-1/2
-              -translate-y-1/2
-              rounded-full
-              bg-[var(--primary)]
-              opacity-[0.035]
-              blur-[100px]
-            "
-          />
-
           {/* ==============================================================
               DASHBOARD FRAME
           ============================================================== */}
@@ -280,11 +257,10 @@ export default function DashboardPreview() {
             className="
               relative
               overflow-hidden
+              w-full
               rounded-[18px]
-              border
-              border-[var(--border)]
               bg-[var(--surface)]
-              shadow-[0_25px_75px_rgba(0,0,0,0.14)]
+              shadow-[0_24px_70px_rgba(0,0,0,0.10)]
 
               sm:rounded-[20px]
 
@@ -300,8 +276,6 @@ export default function DashboardPreview() {
                 flex
                 items-center
                 justify-between
-                border-b
-                border-[var(--border)]
                 px-3.5
                 py-3
 
@@ -382,8 +356,6 @@ export default function DashboardPreview() {
                   className="
                     hidden
                     rounded-full
-                    border
-                    border-[var(--border)]
                     bg-[var(--dropdown-bg)]
                     px-3
                     py-1.5
@@ -406,8 +378,6 @@ export default function DashboardPreview() {
                     items-center
                     justify-center
                     rounded-full
-                    border
-                    border-[var(--border)]
                     bg-[var(--dropdown-bg)]
                   "
                 >
@@ -499,13 +469,11 @@ export default function DashboardPreview() {
                           flex-col
                           justify-between
                           rounded-[12px]
-                          border
-                          border-[var(--border)]
                           bg-[var(--dropdown-bg)]
                           p-3
                           transition-all
                           duration-300
-                          hover:border-[var(--primary)]/30
+                          hover:bg-[var(--surface-hover)]
 
                           sm:min-h-[125px]
                           sm:rounded-[14px]
@@ -591,8 +559,6 @@ export default function DashboardPreview() {
                     min-h-[245px]
                     flex-col
                     rounded-[12px]
-                    border
-                    border-[var(--border)]
                     bg-[var(--dropdown-bg)]
                     p-3
 
@@ -687,12 +653,11 @@ export default function DashboardPreview() {
                           items-center
                           gap-2.5
                           rounded-[10px]
-                          border
-                          border-[var(--border)]
+                          bg-[var(--surface)]
                           p-2
                           transition-all
                           duration-300
-                          hover:border-[var(--primary)]/30
+                          hover:bg-[var(--surface-hover)]
                           hover:bg-[var(--surface)]
 
                           sm:gap-3
@@ -837,8 +802,6 @@ export default function DashboardPreview() {
                     justify-between
                     gap-3
                     rounded-[12px]
-                    border
-                    border-[var(--border)]
                     bg-[var(--dropdown-bg)]
                     p-3
 
@@ -918,8 +881,7 @@ export default function DashboardPreview() {
                       items-center
                       gap-1.5
                       rounded-full
-                      border
-                      border-[var(--border)]
+                      bg-[var(--surface)]
                       px-2
                       py-1
                       text-[7px]
@@ -967,8 +929,6 @@ export default function DashboardPreview() {
                     flex-col
                     justify-between
                     rounded-[12px]
-                    border
-                    border-[var(--border)]
                     bg-[var(--dropdown-bg)]
                     p-3.5
 
@@ -1095,8 +1055,6 @@ export default function DashboardPreview() {
                     min-h-[245px]
                     flex-col
                     rounded-[12px]
-                    border
-                    border-[var(--border)]
                     bg-[var(--dropdown-bg)]
                     p-3
 
@@ -1160,14 +1118,13 @@ export default function DashboardPreview() {
                             items-center
                             justify-between
                             rounded-[9px]
-                            border
-                            border-[var(--border)]
+                            bg-[var(--surface)]
                             px-2.5
                             py-2.5
                             text-left
                             transition-all
                             duration-300
-                            hover:border-[var(--primary)]/30
+                            hover:bg-[var(--surface-hover)]
                             hover:bg-[var(--surface)]
                           "
                         >
@@ -1253,8 +1210,6 @@ export default function DashboardPreview() {
                     min-h-[92px]
                     overflow-hidden
                     rounded-[12px]
-                    border
-                    border-[var(--primary)]/25
                     bg-[var(--primary)]
                     p-3.5
                     text-white
@@ -1449,13 +1404,10 @@ export default function DashboardPreview() {
               items-center
               gap-2
               rounded-full
-              border
-              border-[var(--border)]
               bg-[var(--dropdown-bg)]
               px-3
               py-2
-              shadow-[0_15px_45px_rgba(0,0,0,0.15)]
-              backdrop-blur-xl
+              shadow-[0_15px_45px_rgba(0,0,0,0.10)]
 
               lg:flex
 

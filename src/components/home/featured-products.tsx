@@ -80,7 +80,7 @@ export default function FeaturedProducts({
   };
 
   return (
-    <section className="relative overflow-hidden bg-transparent py-[6vw] max-lg:py-20 max-sm:py-14">
+    <section className="relative overflow-hidden bg-transparent py-[4.5vw] max-lg:py-16 max-sm:py-12">
       {/* =====================================================
           GLOBAL BACKGROUND
       ====================================================== */}
@@ -112,22 +112,23 @@ export default function FeaturedProducts({
 
             <h2
               className="
-                text-[3vw]
-                font-bold
-                leading-[0.96]
-                tracking-[-0.06em]
+                whitespace-nowrap
+                text-[3.2vw]
+                font-[100]
+                uppercase
+                leading-[0.92]
+                tracking-[-0.055em]
                 text-[var(--text)]
 
-                max-lg:text-[40px]
-                max-md:text-[35px]
-                max-sm:text-[31px]
+                max-[1100px]:text-[42px]
+                max-lg:text-[38px]
+                max-md:whitespace-normal
+                max-md:text-[36px]
+                max-sm:text-[30px]
               "
             >
               Signature pieces
-              <br />
-              <span className="text-[var(--primary)]">
-                made around you.
-              </span>
+               made around you.
             </h2>
 
             <p className="mt-4 max-w-[520px] text-[13px] leading-[1.6] text-[var(--text-secondary)]">
@@ -234,15 +235,7 @@ export default function FeaturedProducts({
             CAROUSEL PROGRESS
         ====================================================== */}
 
-        <div className="mt-[1.8vw] flex items-center gap-4 max-lg:mt-6">
-          <div className="h-px flex-1 bg-[var(--border)]" />
-
-          <span className="text-[9px] font-medium uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
-            Scroll to explore
-          </span>
-
-          <div className="h-px w-[8vw] bg-[var(--border)] max-sm:w-[15vw]" />
-        </div>
+        
       </Container>
     </section>
   );
@@ -263,14 +256,10 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         snap-start
         overflow-hidden
         rounded-[1.1vw]
-        border
-        border-[var(--border)]
         bg-[var(--surface)]
-        backdrop-blur-2xl
         transition-all
         duration-500
 
-        hover:border-[var(--primary)]/30
         hover:bg-[var(--surface-hover)]
 
         max-lg:w-[calc(50%-0.375rem)]
@@ -372,17 +361,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
 
           {/* Image overlay */}
 
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              bg-gradient-to-t
-              from-black/45
-              via-transparent
-              to-black/10
-            "
-          />
+
 
           {/* =================================================
               TAG
@@ -393,9 +372,7 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
               className="
                 inline-flex
                 rounded-full
-                border
-                border-white/15
-                bg-black/30
+                bg-black/35
                 px-2.5
                 py-1.5
                 text-[8px]
@@ -498,8 +475,6 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
         className="
           relative
           z-10
-          border-t
-          border-[var(--border)]
           px-4
           pb-4
           pt-3
@@ -581,8 +556,6 @@ function ProductCard({ product }: { product: FeaturedProduct }) {
               items-center
               gap-1.5
               rounded-full
-              border
-              border-[var(--border)]
               bg-[var(--bg-secondary)]
               px-2
               py-1

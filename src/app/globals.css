@@ -10,7 +10,9 @@
 /* =========================================================
    DARK THEME (default)
    ========================================================= */
-
+html {
+  scroll-behavior: auto;
+}
 :root {
   /* Page background */
   --bg: #050505;
@@ -39,10 +41,10 @@
   --text-disabled: #4a4a4f;
 
   /* Brand */
-  --primary: #e51e32;
-  --primary-hover: #ff3347;
-  --primary-active: #c2172a;
-  --primary-contrast: #ffffff;
+  --primary: #FF553E;
+  --primary-hover: #ee4e39;
+  --primary-active: #ee4e39;
+  --primary-contrast: #171717;
 
   /* Status */
   --success: #2fbf71;
@@ -51,8 +53,8 @@
   --info: #4d8df0;
 
   /* Chrome */
-  --header-bg: rgba(5, 5, 5, 0.78);
-  --dropdown-bg: rgba(15, 15, 16, 0.94);
+  --header-bg: #171717;
+  --dropdown-bg: rgb(15, 15, 16);
   --sidebar-bg: #070708;
   --topbar-bg: rgba(7, 7, 8, 0.88);
   --overlay: rgba(0, 0, 0, 0.7);
@@ -462,5 +464,53 @@
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
+  }
+}
+@keyframes stitchReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  5% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  85% {
+    clip-path: inset(0 0% 0 0);
+  }
+
+  92% {
+    clip-path: inset(0 0% 0 0);
+  }
+
+  100% {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes scissorsFollow {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+
+  5% {
+    left: 0%;
+    opacity: 1;
+  }
+
+  85% {
+    left: 100%;
+    opacity: 1;
+  }
+
+  92% {
+    left: 100%;
+    opacity: 0;
+  }
+
+  100% {
+    left: 0%;
+    opacity: 0;
   }
 }

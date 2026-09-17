@@ -2,9 +2,8 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[var(--border)] bg-[var(--background)]">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-10">
-
+    <footer className="bg-transparent">
+      <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10">
         {/* Main Footer */}
         <div
           className="
@@ -21,6 +20,7 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
+              aria-label="Soul's Glory Cloth home"
               className="
                 group
                 flex
@@ -29,9 +29,7 @@ export default function Footer() {
                 items-center
                 justify-center
                 rounded-xl
-                border
-                border-[var(--border)]
-                bg-[var(--surface)]
+                bg-transparent
                 text-[11px]
                 font-bold
                 tracking-[-0.04em]
@@ -39,7 +37,6 @@ export default function Footer() {
                 transition-all
                 duration-300
                 hover:-rotate-3
-                hover:border-[var(--foreground)]
               "
             >
               <span className="relative">
@@ -99,7 +96,7 @@ export default function Footer() {
               Shop
             </Link>
 
-            <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
+            <span className="h-1 w-1 rounded-full bg-[var(--border)]/50" />
 
             <Link
               href="/custom-studio"
@@ -108,7 +105,7 @@ export default function Footer() {
               Custom Studio
             </Link>
 
-            <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
+            <span className="h-1 w-1 rounded-full bg-[var(--border)]/50" />
 
             <Link
               href="/collections"
@@ -117,7 +114,7 @@ export default function Footer() {
               Collections
             </Link>
 
-            <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
+            <span className="h-1 w-1 rounded-full bg-[var(--border)]/50" />
 
             <Link
               href="/support"
@@ -127,9 +124,8 @@ export default function Footer() {
             </Link>
           </nav>
 
-          {/* Social / CTA */}
-          <div className="flex items-center gap-2">
-
+          {/* Social */}
+          <div className="flex items-center gap-1">
             <Link
               href="#"
               aria-label="Instagram"
@@ -140,16 +136,14 @@ export default function Footer() {
                 items-center
                 justify-center
                 rounded-full
-                border
-                border-[var(--border)]
-                bg-[var(--surface)]
+                bg-transparent
                 text-[9px]
                 font-semibold
                 text-[var(--muted-foreground)]
                 transition-all
                 duration-300
                 hover:-translate-y-0.5
-                hover:border-[var(--foreground)]
+                hover:bg-[var(--surface)]
                 hover:text-[var(--foreground)]
               "
             >
@@ -166,16 +160,14 @@ export default function Footer() {
                 items-center
                 justify-center
                 rounded-full
-                border
-                border-[var(--border)]
-                bg-[var(--surface)]
+                bg-transparent
                 text-[11px]
                 font-bold
                 text-[var(--muted-foreground)]
                 transition-all
                 duration-300
                 hover:-translate-y-0.5
-                hover:border-[var(--foreground)]
+                hover:bg-[var(--surface)]
                 hover:text-[var(--foreground)]
               "
             >
@@ -192,34 +184,28 @@ export default function Footer() {
                 items-center
                 justify-center
                 rounded-full
-                border
-                border-[var(--border)]
-                bg-[var(--surface)]
+                bg-transparent
                 text-[9px]
                 font-bold
                 text-[var(--muted-foreground)]
                 transition-all
                 duration-300
                 hover:-translate-y-0.5
-                hover:border-[var(--foreground)]
+                hover:bg-[var(--surface)]
                 hover:text-[var(--foreground)]
               "
             >
               in
             </Link>
-
           </div>
         </div>
 
-        {/* Bottom Line */}
+        {/* Bottom */}
         <div
           className="
             flex
             flex-col
             gap-3
-            border-t
-            border-dashed
-            border-[var(--border)]
             py-4
             text-[9px]
             uppercase
@@ -230,9 +216,7 @@ export default function Footer() {
             sm:justify-between
           "
         >
-          <p>
-            © {new Date().getFullYear()} Soul&apos;s Glory Cloth
-          </p>
+          <p>© {new Date().getFullYear()} Soul&apos;s Glory Cloth</p>
 
           <div className="flex items-center gap-4">
             <Link
@@ -254,7 +238,6 @@ export default function Footer() {
             <span>Made with precision</span>
           </div>
         </div>
-
       </div>
     </footer>
   );
