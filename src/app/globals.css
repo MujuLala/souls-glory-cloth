@@ -41,9 +41,9 @@ html {
   --text-disabled: #4a4a4f;
 
   /* Brand */
-  --primary: #FF553E;
-  --primary-hover: #ee4e39;
-  --primary-active: #ee4e39;
+  --primary: #f7e57b;
+  --primary-hover: #f7e57b;
+  --primary-active: #f7e57b;
   --primary-contrast: #171717;
 
   /* Status */
@@ -512,5 +512,49 @@ html {
   100% {
     left: 0%;
     opacity: 0;
+  }
+}
+.hover-animate-stitching {
+  position: relative;
+  isolation: isolate;
+}
+
+.hover-animate-stitching::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px dashed #f7e57b;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+
+  transition: opacity 0.25s ease;
+}
+
+.hover-animate-stitching:hover::before {
+  opacity: 1;
+  animation: stitch-border 1.2s linear infinite;
+}
+
+@keyframes stitch-border {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  25% {
+    clip-path: inset(0 0 75% 0);
+  }
+
+  50% {
+    clip-path: inset(0 0 0 75%);
+  }
+
+  75% {
+    clip-path: inset(75% 0 0 0);
+  }
+
+  100% {
+    clip-path: inset(0 100% 0 0);
   }
 }

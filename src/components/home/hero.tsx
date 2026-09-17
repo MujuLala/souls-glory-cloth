@@ -77,7 +77,7 @@ export default function Hero() {
                   justify-center
                   rounded-full
                   bg-[var(--primary)]
-                  text-white
+                  text-[var(--primary-contrast)]
                 "
               >
                 <Sparkles size={10} />
@@ -103,7 +103,7 @@ export default function Hero() {
                 HEADING
             ============================================= */}
 
-            <div className="relative">
+            <div className="relative mb-4">
               <h1
                 className="
                   relative
@@ -122,6 +122,8 @@ export default function Hero() {
                   max-[900px]:text-[50px]
                   max-[700px]:text-[38px]
                   max-[480px]:text-[30px]
+                  
+                  
                 "
               >
                 Clothing made around you.
@@ -139,7 +141,7 @@ export default function Hero() {
                     w-[96%]
                     -translate-x-1/2
                     overflow-visible
-
+stroke-[var(--primary-contrast)]
                     max-[700px]:-bottom-6
                     max-[700px]:h-6
                   "
@@ -337,7 +339,7 @@ export default function Hero() {
                   w-full
                   px-6
                   text-[14px]
-
+                  hover-animate-stitching
                   sm:w-auto
                   sm:text-[15px]
                 "
