@@ -2,11 +2,23 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowUpRight, Heart, ImageIcon, ShoppingBag, Star } from "lucide-react";
+import {
+  ArrowUpRight,
+  Heart,
+  ImageIcon,
+  ShoppingBag,
+  Star,
+} from "lucide-react";
 
 import { cn } from "@/components/ui/cn";
 import { formatMoney } from "@/lib/format";
 import type { StorefrontProduct } from "@/types/catalog";
+
+/**
+ * Compatibility type for ProductGrid and other components
+ * that import Product from this file.
+ */
+export type Product = StorefrontProduct;
 
 export default function ProductCard({
   product,
@@ -16,7 +28,9 @@ export default function ProductCard({
   const [liked, setLiked] = useState(false);
 
   const activePrice = product.salePrice ?? product.price;
-  const wasPrice = product.salePrice ? product.price : product.compareAtPrice;
+  const wasPrice = product.salePrice
+    ? product.price
+    : product.compareAtPrice;
 
   return (
     <article className="group relative min-w-0">
@@ -89,7 +103,9 @@ export default function ProductCard({
       <button
         type="button"
         aria-label={
-          liked ? `Remove ${product.name} from wishlist` : `Save ${product.name}`
+          liked
+            ? `Remove ${product.name} from wishlist`
+            : `Save ${product.name}`
         }
         onClick={() => setLiked((value) => !value)}
         className={cn(
@@ -111,7 +127,9 @@ export default function ProductCard({
             </p>
 
             <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold leading-5 text-ink transition-colors group-hover:text-primary">
-              <Link href={`/product/${product.slug}`}>{product.name}</Link>
+              <Link href={`/product/${product.slug}`}>
+                {product.name}
+              </Link>
             </h3>
           </div>
 
@@ -121,7 +139,9 @@ export default function ProductCard({
             </p>
 
             {wasPrice && wasPrice > activePrice && (
-              <s className="text-[11px] text-faint">{formatMoney(wasPrice)}</s>
+              <s className="text-[11px] text-faint">
+                {formatMoney(wasPrice)}
+              </s>
             )}
           </div>
         </div>
@@ -129,13 +149,23 @@ export default function ProductCard({
         <div className="mt-3 flex items-center justify-between border-t border-line-subtle pt-2.5">
           {product.reviewCount > 0 ? (
             <span className="flex items-center gap-1 text-[10px] text-muted">
-              <Star size={11} className="text-warning" fill="currentColor" />
+              <Star
+                size={11}
+                className="text-warning"
+                fill="currentColor"
+              />
+
               {product.rating.toFixed(1)}
-              <span className="text-faint">({product.reviewCount})</span>
+
+              <span className="text-faint">
+                ({product.reviewCount})
+              </span>
             </span>
           ) : (
             <span className="text-[10px] text-faint">
-              {product.inStock ? "Made to order" : "Currently unavailable"}
+              {product.inStock
+                ? "Made to order"
+                : "Currently unavailable"}
             </span>
           )}
 
