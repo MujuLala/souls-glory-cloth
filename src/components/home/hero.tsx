@@ -515,6 +515,7 @@ function PlatformBenefit({
     <div className="group relative h-full">
       <div
         className="
+          hover-animate-stitching
           relative
           flex
           h-full
@@ -524,12 +525,11 @@ function PlatformBenefit({
           justify-between
           overflow-hidden
           rounded-[16px]
-          border
-          border-[var(--border)]
+          
           bg-[var(--dropdown-bg)]
           p-4
 
-          transition-[background-color,border-color,box-shadow]
+          transition-[background-color,box-shadow]
           duration-500
           ease-out
 
@@ -539,13 +539,9 @@ function PlatformBenefit({
           sm:p-5
         "
       >
-        {/* =============================================
-            TOP ROW
-        ============================================= */}
-
+        {/* TOP ROW */}
         <div className="relative flex items-center justify-between">
           {/* ICON */}
-
           <div
             className="
               relative
@@ -572,7 +568,6 @@ function PlatformBenefit({
           </div>
 
           {/* NUMBER */}
-
           <span
             className="
               text-[9px]
@@ -590,10 +585,7 @@ function PlatformBenefit({
           </span>
         </div>
 
-        {/* =============================================
-            CONTENT
-        ============================================= */}
-
+        {/* CONTENT */}
         <div className="relative mt-5">
           <div className="flex items-center gap-3">
             <p
@@ -610,8 +602,7 @@ function PlatformBenefit({
               {title}
             </p>
 
-            {/* SMALL ARROW */}
-
+            {/* ARROW */}
             <span
               className="
                 flex
@@ -653,39 +644,6 @@ function PlatformBenefit({
           >
             {description}
           </p>
-        </div>
-
-        {/* =============================================
-            SUBTLE PROGRESS LINE
-        ============================================= */}
-
-        <div
-          className="
-            pointer-events-none
-            absolute
-            bottom-0
-            left-5
-            right-5
-            h-px
-            overflow-hidden
-            bg-[var(--border)]
-          "
-        >
-          <span
-            className="
-              absolute
-              inset-y-0
-              left-0
-              w-0
-              bg-[var(--primary)]
-
-              transition-all
-              duration-700
-              ease-out
-
-              group-hover:w-full
-            "
-          />
         </div>
       </div>
     </div>

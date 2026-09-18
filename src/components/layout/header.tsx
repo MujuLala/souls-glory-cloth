@@ -334,6 +334,7 @@ function Dropdown({
           "transition-[opacity,transform,visibility]",
           "duration-300",
           "ease-[cubic-bezier(0.22,1,0.36,1)]",
+          
           open
             ? "visible translate-y-0 scale-100 opacity-100"
             : "invisible -translate-y-1 scale-[0.98] opacity-0",
@@ -344,9 +345,9 @@ function Dropdown({
             key={item.href}
             href={item.href}
             role="menuitem"
-            className="group block rounded-lg px-3 py-2.5 transition-colors duration-200 hover:bg-surface-hover"
+            className="group block mb-1 rounded-lg px-3 py-2.5 transition-colors duration-200 bg-surface-hover hover:bg-primary-hover "
           >
-            <span className="block text-[13.5px] font-medium leading-none text-ink transition-colors duration-200 group-hover:text-primary">
+            <span className="block text-[13.5px] font-medium leading-none text-ink transition-colors duration-200 text-primary group-hover:text-[var(--primary-contrast)]">
               {item.label}
             </span>
 

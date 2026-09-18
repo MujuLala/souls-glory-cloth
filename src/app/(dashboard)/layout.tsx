@@ -42,9 +42,9 @@ export default async function DashboardLayout({
             inboxCount={inboxCount}
           />
 
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pl-8 pr-8">{children}</main>
 
-          <footer className="mx-auto flex w-full max-w-[92vw] flex-col gap-1 border-t border-line-subtle py-4 text-[10px] text-faint sm:flex-row sm:items-center sm:justify-between">
+          <footer className="pl-8 pr-8 mx-auto flex w-full max-w-[92vw] flex-col gap-1 border-t border-line-subtle py-4 text-[10px] text-faint sm:flex-row sm:items-center sm:justify-between">
             <span>
               © {new Date().getFullYear()} Soul&apos;s Glory Cloth — all
               rights reserved.
