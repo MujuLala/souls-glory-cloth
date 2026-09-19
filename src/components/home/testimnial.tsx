@@ -2,13 +2,18 @@
 
 import { motion } from "framer-motion";
 import {
+  ArrowUpRight,
   BadgeCheck,
   Quote,
+  Sparkles,
   Star,
-  ArrowUpRight,
 } from "lucide-react";
 
 import Container from "@/components/ui/container";
+
+/* -------------------------------------------------------------------------- */
+/* TYPES                                                                      */
+/* -------------------------------------------------------------------------- */
 
 type Testimonial = {
   name: string;
@@ -18,6 +23,10 @@ type Testimonial = {
   product: string;
   rating: number;
 };
+
+/* -------------------------------------------------------------------------- */
+/* DATA                                                                       */
+/* -------------------------------------------------------------------------- */
 
 const testimonials: Testimonial[] = [
   {
@@ -80,14 +89,15 @@ const testimonials: Testimonial[] = [
     name: "Fahad Mir",
     role: "Verified Customer",
     initials: "FM",
-    text: "Excellent quality, clean stitching and great communication throughout the process. Highly recommended.",
+    text: "Excellent quality, clean stitching and great communication throughout the process.",
     product: "Custom Men's Wear",
     rating: 5,
   },
 ];
 
-const firstRow = testimonials.slice(0, 4);
-const secondRow = testimonials.slice(4);
+/* -------------------------------------------------------------------------- */
+/* TESTIMONIAL CARD                                                           */
+/* -------------------------------------------------------------------------- */
 
 function TestimonialCard({
   testimonial,
@@ -96,96 +106,107 @@ function TestimonialCard({
 }) {
   return (
     <motion.article
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -4 }}
       transition={{
-        duration: 0.35,
+        duration: 0.3,
         ease: [0.22, 1, 0.36, 1],
       }}
       className="
+        hover-animate-stitching
         group
         relative
-        w-[285px]
+        flex
+        w-[24vw]
+        min-w-[300px]
+        max-w-[380px]
         shrink-0
+        flex-col
         overflow-hidden
-        rounded-[18px]
-        bg-[var(--surface)]
-        p-4
-        shadow-[0_12px_35px_rgba(0,0,0,0.045)]
-        transition-all
-        duration-500
-        hover:bg-[var(--surface-hover)]
-        hover:shadow-[0_18px_45px_rgba(0,0,0,0.07)]
+        rounded-[1vw]
+        bg-surface
+        p-[1.2vw]
 
-        sm:w-[320px]
-        sm:rounded-[18px]
-        sm:p-5
+        transition-colors
+        duration-300
 
-        lg:w-[340px]
-        lg:rounded-[20px]
-        lg:p-5
+        hover:bg-surface-hover
+
+        max-xl:w-[28vw]
+        max-lg:w-[38vw]
+        max-lg:min-w-[290px]
+        max-lg:rounded-[14px]
+        max-lg:p-4
+
+        max-md:w-[72vw]
+
+        max-sm:w-[84vw]
+        max-sm:min-w-[270px]
       "
     >
-      {/* Decorative quote */}
+      {/* ================================================================
+          TOP
+      ================================================================= */}
 
       <div
         className="
-          pointer-events-none
-          absolute
-          right-4
-          top-3
-          opacity-[0.035]
-          transition-opacity
-          duration-500
-          group-hover:opacity-[0.08]
+          relative
+          z-10
+          flex
+          items-center
+          justify-between
+          gap-[1vw]
         "
       >
-        <Quote
-          className="h-14 w-14 sm:h-16 sm:w-16"
-          strokeWidth={1}
-        />
-      </div>
+        {/* Customer */}
 
-      {/* =================================================
-          TOP
-      ================================================== */}
+        <div
+          className="
+            flex
+            min-w-0
+            items-center
+            gap-[0.65vw]
 
-      <div className="relative z-10 flex items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+            max-lg:gap-2.5
+          "
+        >
           {/* Avatar */}
 
           <div
             className="
               flex
-              h-10
-              w-10
+              h-[2.65vw]
+              w-[2.65vw]
+              min-h-[40px]
+              min-w-[40px]
               shrink-0
               items-center
               justify-center
               rounded-full
               bg-[var(--bg-secondary)]
-              text-[12px]
+              text-[0.62vw]
               font-semibold
-              text-[var(--foreground)]
+              tracking-[-0.02em]
+              text-[var(--text)]
 
-              sm:h-11
-              sm:w-11
-              sm:text-sm
+              max-lg:h-10
+              max-lg:w-10
+              max-lg:text-[11px]
             "
           >
             {testimonial.initials}
           </div>
 
           <div className="min-w-0">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-[0.25vw]">
               <h3
                 className="
                   truncate
-                  text-[13px]
+                  text-[0.68vw]
                   font-semibold
-                  tracking-[-0.01em]
-                  text-[var(--foreground)]
+                  tracking-[-0.02em]
+                  text-[var(--text)]
 
-                  sm:text-sm
+                  max-lg:text-[12px]
                 "
               >
                 {testimonial.name}
@@ -193,25 +214,26 @@ function TestimonialCard({
 
               <BadgeCheck
                 className="
-                  h-3.5
-                  w-3.5
+                  h-[0.7vw]
+                  w-[0.7vw]
                   shrink-0
-                  text-[var(--primary)]
+                  text-primary
 
-                  sm:h-4
-                  sm:w-4
+                  max-lg:h-3.5
+                  max-lg:w-3.5
                 "
-                strokeWidth={2.2}
+                strokeWidth={2}
               />
             </div>
 
             <p
               className="
-                mt-0.5
-                text-[10px]
-                text-[var(--muted-foreground)]
+                mt-[0.15vw]
+                text-[0.42vw]
+                text-[var(--text-secondary)]
 
-                sm:text-[11px]
+                max-lg:mt-0.5
+                max-lg:text-[8px]
               "
             >
               {testimonial.role}
@@ -226,13 +248,15 @@ function TestimonialCard({
             flex
             shrink-0
             items-center
-            gap-0.5
+            gap-[0.18vw]
             rounded-full
             bg-[var(--bg-secondary)]
-            px-1.5
-            py-1
+            px-[0.5vw]
+            py-[0.3vw]
 
-            sm:px-2
+            max-lg:gap-0.5
+            max-lg:px-2
+            max-lg:py-1
           "
         >
           {Array.from({
@@ -241,78 +265,115 @@ function TestimonialCard({
             <Star
               key={index}
               className="
-                h-2.5
-                w-2.5
+                h-[0.48vw]
+                w-[0.48vw]
                 fill-current
-                text-[var(--primary)]
+                text-primary
 
-                sm:h-3
-                sm:w-3
+                max-lg:h-2.5
+                max-lg:w-2.5
               "
-              strokeWidth={1.5}
+              strokeWidth={1.4}
             />
           ))}
         </div>
       </div>
 
-      {/* =================================================
-          DIVIDER
-      ================================================== */}
-
-      <div className="my-4 flex items-center gap-2 sm:my-5">
-        <span className="h-px w-8 bg-[var(--primary)]/50" />
-        <span className="h-px flex-1 bg-[var(--border)]/50" />
-      </div>
-
-      {/* =================================================
+      {/* ================================================================
           REVIEW
-      ================================================== */}
+      ================================================================= */}
 
-      <div className="relative z-10 min-h-[128px] sm:min-h-[118px]">
-        <Quote
+      <div
+        className="
+          relative
+          z-10
+          mt-[1.25vw]
+          min-h-[8.8vw]
+          flex-1
+
+          max-lg:mt-4
+          max-lg:min-h-[120px]
+        "
+      >
+        {/* Quote */}
+
+        <div
           className="
-            mb-2.5
-            h-4
-            w-4
-            text-[var(--primary)]
+            mb-[0.7vw]
+            flex
+            h-[1.65vw]
+            w-[1.65vw]
+            min-h-[24px]
+            min-w-[24px]
+            items-center
+            justify-center
+            rounded-full
+            bg-primary
+            text-[var(--primary-contrast)]
 
-            sm:mb-3
-            sm:h-5
-            sm:w-5
+            max-lg:mb-2.5
+            max-lg:h-6
+            max-lg:w-6
           "
-          strokeWidth={1.8}
-        />
+        >
+          <Quote
+            className="
+              h-[0.68vw]
+              w-[0.68vw]
+
+              max-lg:h-3
+              max-lg:w-3
+            "
+            strokeWidth={1.8}
+          />
+        </div>
 
         <p
           className="
-            text-[13px]
+            max-w-[21vw]
+            text-[0.7vw]
             leading-[1.65]
-            tracking-[-0.01em]
-            text-[var(--foreground)]/80
+            tracking-[-0.008em]
+            text-[var(--text-secondary)]
 
-            sm:text-[14px]
-            lg:text-[15px]
+            max-xl:max-w-[24vw]
+            max-lg:max-w-[330px]
+            max-lg:text-[13px]
+
+            max-sm:text-[12px]
           "
         >
           “{testimonial.text}”
         </p>
       </div>
 
-      {/* =================================================
+      {/* ================================================================
           PRODUCT
-      ================================================== */}
+      ================================================================= */}
 
-      <div className="mt-4 flex items-center justify-between gap-3 sm:mt-5">
+      <div
+        className="
+          relative
+          z-10
+          mt-[1vw]
+          flex
+          items-end
+          justify-between
+          gap-[1vw]
+
+          max-lg:mt-4
+        "
+      >
         <div className="min-w-0">
           <p
             className="
-              text-[8px]
-              font-medium
+              text-[0.4vw]
+              font-semibold
               uppercase
-              tracking-[0.16em]
-              text-[var(--muted-foreground)]
+              tracking-[0.15em]
+              text-[var(--text-secondary)]
 
-              sm:text-[9px]
+              max-lg:text-[7px]
             "
           >
             Ordered
@@ -320,13 +381,14 @@ function TestimonialCard({
 
           <p
             className="
-              mt-1
+              mt-[0.25vw]
               truncate
-              text-[10px]
-              font-medium
-              text-[var(--foreground)]
+              text-[0.54vw]
+              font-semibold
+              text-[var(--text)]
 
-              sm:text-[11px]
+              max-lg:mt-1
+              max-lg:text-[10px]
             "
           >
             {testimonial.product}
@@ -336,38 +398,82 @@ function TestimonialCard({
         <div
           className="
             flex
-            h-8
-            w-8
+            h-[2vw]
+            w-[2vw]
+            min-h-[31px]
+            min-w-[31px]
             shrink-0
             items-center
             justify-center
             rounded-full
             bg-[var(--bg-secondary)]
-            transition-all
+            text-[var(--text-secondary)]
+            transition-colors
             duration-300
-            group-hover:bg-[var(--primary)]
-            group-hover:text-white
+
+            group-hover:bg-primary
+            group-hover:text-[var(--primary-contrast)]
+
+            max-lg:h-8
+            max-lg:w-8
           "
         >
-          <ArrowUpRight className="h-3.5 w-3.5" />
+          <ArrowUpRight
+            className="
+              h-[0.7vw]
+              w-[0.7vw]
+
+              max-lg:h-3.5
+              max-lg:w-3.5
+            "
+            strokeWidth={1.8}
+          />
         </div>
       </div>
+
+      {/* Decorative quote */}
+
+      <Quote
+        className="
+          pointer-events-none
+          absolute
+          right-[1vw]
+          top-[0.8vw]
+          h-[4vw]
+          w-[4vw]
+          text-primary
+          opacity-[0.035]
+          transition-opacity
+          duration-300
+
+          group-hover:opacity-[0.07]
+
+          max-lg:right-3
+          max-lg:top-3
+          max-lg:h-14
+          max-lg:w-14
+        "
+        strokeWidth={1}
+      />
     </motion.article>
   );
 }
 
-function MarqueeRow({
-  items,
-  reverse = false,
-}: {
-  items: Testimonial[];
-  reverse?: boolean;
-}) {
+/* -------------------------------------------------------------------------- */
+/* MARQUEE                                                                    */
+/* -------------------------------------------------------------------------- */
+
+function TestimonialsMarquee() {
   /*
-   * Three copies create enough content for
-   * a smooth infinite marquee.
+   * Duplicate the complete set so the row can
+   * continuously loop without an empty gap.
    */
-  const duplicated = [...items, ...items, ...items];
+
+  const duplicated = [
+    ...testimonials,
+    ...testimonials,
+    ...testimonials,
+  ];
 
   return (
     <div
@@ -375,32 +481,58 @@ function MarqueeRow({
         relative
         w-full
         overflow-hidden
-        py-2
+        py-[0.5vw]
 
-        sm:py-3
+        max-lg:py-1.5
       "
-      style={{
-        maskImage:
-          "linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to right, transparent 0%, black 7%, black 93%, transparent 100%)",
-      }}
     >
+      {/* Left fade */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          left-0
+          top-0
+          z-20
+          w-[7vw]
+          bg-gradient-to-r
+          from-[var(--background)]
+          to-transparent
+        "
+      />
+
+      {/* Right fade */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-0
+          right-0
+          top-0
+          z-20
+          w-[7vw]
+          bg-gradient-to-l
+          from-[var(--background)]
+          to-transparent
+        "
+      />
+
       <motion.div
         className="
           flex
           w-max
-          gap-3
+          gap-[0.9vw]
 
-          sm:gap-4
+          max-lg:gap-3
         "
         animate={{
-          x: reverse
-            ? ["-33.333%", "0%"]
-            : ["0%", "-33.333%"],
+          x: ["0%", "-33.333%"],
         }}
         transition={{
-          duration: reverse ? 42 : 38,
+          duration: 48,
           repeat: Infinity,
           ease: "linear",
         }}
@@ -416,6 +548,10 @@ function MarqueeRow({
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/* MAIN                                                                       */
+/* -------------------------------------------------------------------------- */
+
 export default function Testimonials() {
   return (
     <section
@@ -423,108 +559,77 @@ export default function Testimonials() {
         relative
         overflow-hidden
         bg-transparent
-        py-16
+        py-[6vw]
 
-        sm:py-20
-
-        md:py-24
-
-        lg:py-[6vw]
+        max-xl:py-[7vw]
+        max-lg:py-16
+        max-md:py-14
+        max-sm:py-12
       "
     >
-      {/* =================================================
-          HEADING
-      ================================================== */}
+      {/* ================================================================
+          HEADER
+      ================================================================= */}
 
       <Container>
-        <div
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 18,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.65,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           className="
-            mb-10
+            mb-[3.5vw]
             grid
-            gap-8
+            grid-cols-[1.2fr_0.8fr]
+            items-end
+            gap-[5vw]
 
-            sm:mb-12
+            max-xl:gap-[4vw]
 
-            lg:mb-[4vw]
-            lg:grid-cols-[0.7fr_1.3fr]
-            lg:items-end
-            lg:gap-[5vw]
+            max-lg:mb-10
+            max-lg:grid-cols-[1fr_1fr]
+            max-lg:gap-8
+
+            max-md:grid-cols-1
+            max-md:gap-6
           "
         >
-          {/* =================================================
-              LEFT — EYEBROW + DESCRIPTION
-          ================================================== */}
+          {/* ==============================================================
+              LEFT — HEADING
+          ============================================================== */}
 
-          <div className="max-w-[460px]">
-            {/* Shared eyebrow style */}
-
-            <div className="mb-3 flex items-center gap-2">
-              <span
-                className="
-                  h-[5px]
-                  w-[5px]
-                  shrink-0
-                  rounded-full
-                  bg-[var(--primary)]
-                "
-              />
-
-              <span
-                className="
-                  text-[10px]
-                  font-semibold
-                  uppercase
-                  tracking-[0.18em]
-                  text-[var(--primary)]
-                "
-              >
-                Loved by our customers
-              </span>
-            </div>
-
-            {/* Description */}
-
-            <p
-              className="
-                max-w-[440px]
-                text-left
-                text-[13px]
-                leading-[1.7]
-                text-[var(--muted-foreground)]
-
-                sm:text-[14px]
-
-                md:text-[15px]
-              "
-            >
-              Every piece is made around the person wearing it.
-              Here is what our customers have to say about their
-              Soul&apos;s Glory Cloth experience.
-            </p>
-          </div>
-
-          {/* =================================================
-              RIGHT — HEADING
-          ================================================== */}
-
-          <div className="lg:flex lg:justify-end">
+          <div className="min-w-0">
             <h2
               className="
-                max-w-[850px]
-                text-left
+                max-w-[52vw]
+
                 text-[3.2vw]
-                font-[100]
-                uppercase
-                leading-[0.92]
-                tracking-[-0.055em]
-                text-[var(--text)]
+                font-semibold
+                capitalize
+                leading-[0.96]
+                tracking-[-0.045em]
+                text-hero-heading
 
-                max-[1100px]:text-[42px]
+                max-[1200px]:text-[40px]
+
+                max-lg:max-w-[650px]
                 max-lg:text-[38px]
-                max-md:text-[36px]
-                max-sm:text-[30px]
 
-                lg:text-right
+                max-md:text-[35px]
+
+                max-sm:text-[29px]
               "
             >
               Made with care.
@@ -532,92 +637,229 @@ export default function Testimonials() {
               Worn with confidence.
             </h2>
           </div>
-        </div>
+
+          {/* ==============================================================
+              RIGHT — EYEBROW + PARAGRAPH
+          ============================================================== */}
+
+          <div
+            className="
+              max-w-[30vw]
+              justify-self-end
+
+              max-xl:max-w-[380px]
+
+              max-lg:max-w-[420px]
+
+              max-md:max-w-[600px]
+              max-md:justify-self-start
+            "
+          >
+            {/* Eyebrow */}
+
+            <div
+              className="
+                mb-[0.8vw]
+                flex
+                items-center
+                gap-[0.55vw]
+
+                max-lg:mb-3
+                max-lg:gap-2
+              "
+            >
+              <span
+                className="
+                  flex
+                  h-[1.45vw]
+                  w-[1.45vw]
+                  min-h-[20px]
+                  min-w-[20px]
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-primary
+                  text-[var(--primary-contrast)]
+
+                  max-lg:h-5
+                  max-lg:w-5
+                "
+              >
+                <Sparkles
+                  size={10}
+                  strokeWidth={2}
+                />
+              </span>
+
+              <span
+                className="
+                  whitespace-nowrap
+                  text-[0.58vw]
+                  font-semibold
+                  uppercase
+                  tracking-[0.14em]
+                  text-[var(--text-secondary)]
+
+                  max-lg:text-[10px]
+                "
+              >
+                Loved by our customers
+              </span>
+            </div>
+
+            {/* Paragraph */}
+
+            <p
+              className="
+                max-w-[28vw]
+                text-[0.72vw]
+                leading-[1.7]
+                text-[var(--text-secondary)]
+
+                max-xl:max-w-[380px]
+                max-xl:text-[12px]
+
+                max-lg:max-w-[420px]
+                max-lg:text-[13px]
+
+                max-md:max-w-[600px]
+              "
+            >
+              Every piece is made around the person wearing it.
+              Here is what our customers have to say about their
+              Soul&apos;s Glory Cloth experience.
+            </p>
+          </div>
+        </motion.div>
       </Container>
 
-      {/* =================================================
-          MARQUEE ROWS
-          Transparent left + right masks
-      ================================================== */}
+      {/* ================================================================
+          ONE ROW OF REVIEW CARDS
+      ================================================================= */}
 
-      <div className="space-y-1 sm:space-y-2">
-        <MarqueeRow items={firstRow} />
+      <TestimonialsMarquee />
 
-        
-      </div>
-
-      {/* =================================================
-          TRUST STATS
-      ================================================== */}
+      {/* ================================================================
+          TRUST METRICS
+      ================================================================= */}
 
       <Container>
-        <div
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.3,
+          }}
+          transition={{
+            duration: 0.6,
+            delay: 0.1,
+          }}
           className="
             mx-auto
-            mt-10
+            mt-[3.5vw]
             flex
-            max-w-[850px]
-            flex-col
+            max-w-[58vw]
             items-center
             justify-center
-            gap-6
-            pt-7
+            gap-[3.5vw]
 
-            sm:mt-12
-            sm:flex-row
-            sm:gap-10
-            sm:pt-8
+            max-lg:mt-10
+            max-lg:max-w-[700px]
+            max-lg:gap-10
 
-            lg:mt-[4vw]
+            max-md:flex-wrap
+            max-md:gap-7
+
+            max-sm:gap-5
           "
         >
           {/* Rating */}
 
-          <div className="text-center">
-            <p
+          <div className="min-w-[90px] text-center">
+            <div
               className="
-                text-xl
-                font-semibold
-                tracking-[-0.03em]
-                text-[var(--foreground)]
+                flex
+                items-center
+                justify-center
+                gap-[0.35vw]
+
+                max-lg:gap-1
               "
             >
-              4.9/5
-            </p>
+              <Star
+                className="
+                  h-[0.85vw]
+                  w-[0.85vw]
+                  fill-current
+                  text-primary
+
+                  max-lg:h-3.5
+                  max-lg:w-3.5
+                "
+              />
+
+              <p
+                className="
+                  text-[1.15vw]
+                  font-semibold
+                  tracking-[-0.04em]
+                  text-[var(--text)]
+
+                  max-lg:text-[18px]
+                "
+              >
+                4.9/5
+              </p>
+            </div>
 
             <p
               className="
-                mt-1
-                text-[9px]
+                mt-[0.35vw]
+                text-[0.42vw]
+                font-medium
                 uppercase
                 tracking-[0.14em]
-                text-[var(--muted-foreground)]
+                text-[var(--text-secondary)]
+
+                max-lg:mt-1
+                max-lg:text-[8px]
               "
             >
               Average Rating
             </p>
           </div>
 
+          {/* Divider */}
+
           <div
             className="
-              hidden
-              h-8
+              h-[2vw]
               w-px
               bg-[var(--border)]
 
-              sm:block
+              max-lg:h-8
             "
           />
 
           {/* Customers */}
 
-          <div className="text-center">
+          <div className="min-w-[90px] text-center">
             <p
               className="
-                text-xl
+                text-[1.15vw]
                 font-semibold
-                tracking-[-0.03em]
-                text-[var(--foreground)]
+                tracking-[-0.04em]
+                text-[var(--text)]
+
+                max-lg:text-[18px]
               "
             >
               1,200+
@@ -625,55 +867,88 @@ export default function Testimonials() {
 
             <p
               className="
-                mt-1
-                text-[9px]
+                mt-[0.35vw]
+                text-[0.42vw]
+                font-medium
                 uppercase
                 tracking-[0.14em]
-                text-[var(--muted-foreground)]
+                text-[var(--text-secondary)]
+
+                max-lg:mt-1
+                max-lg:text-[8px]
               "
             >
               Happy Customers
             </p>
           </div>
 
+          {/* Divider */}
+
           <div
             className="
-              hidden
-              h-8
+              h-[2vw]
               w-px
               bg-[var(--border)]
 
-              sm:block
+              max-lg:h-8
             "
           />
 
           {/* Handcrafted */}
 
-          <div className="text-center">
-            <p
+          <div className="min-w-[90px] text-center">
+            <div
               className="
-                text-xl
-                font-semibold
-                tracking-[-0.03em]
-                text-[var(--foreground)]
+                flex
+                items-center
+                justify-center
+                gap-[0.35vw]
+
+                max-lg:gap-1
               "
             >
-              100%
-            </p>
+              <span
+                className="
+                  h-[0.42vw]
+                  w-[0.42vw]
+                  min-h-[6px]
+                  min-w-[6px]
+                  rounded-full
+                  bg-primary
+                "
+              />
+
+              <p
+                className="
+                  text-[1.15vw]
+                  font-semibold
+                  tracking-[-0.04em]
+                  text-[var(--text)]
+
+                  max-lg:text-[18px]
+                "
+              >
+                100%
+              </p>
+            </div>
 
             <p
               className="
-                mt-1
-                text-[9px]
+                mt-[0.35vw]
+                text-[0.42vw]
+                font-medium
                 uppercase
                 tracking-[0.14em]
-                text-[var(--muted-foreground)]
+                text-[var(--text-secondary)]
+
+                max-lg:mt-1
+                max-lg:text-[8px]
               "
             >
               Handcrafted
             </p>
           </div>
-        </div>
+        </motion.div>
       </Container>
     </section>
   );

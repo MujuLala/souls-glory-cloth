@@ -7,102 +7,175 @@
    from one of these tokens — never a hard-coded hex.
    ========================================================= */
 
+
 /* =========================================================
    DARK THEME (default)
    ========================================================= */
+
 html {
   scroll-behavior: auto;
 }
+
 :root {
-  /* Page background */
+  /* =======================================================
+     PAGE BACKGROUND
+     ======================================================= */
+
   --bg: #050505;
   --bg-secondary: #0a0a0b;
   --bg-tertiary: #0f0f11;
 
-  /* Cards / panels */
+:root {
+  /* ...existing tokens... */
+
+  --stitching-border: #f7e57b;
+}
+  /* =======================================================
+     CARDS / PANELS
+     ======================================================= */
+
   --card: #0c0c0e;
   --card-hover: #121214;
   --card-elevated: #141417;
 
-  /* Translucent surfaces (glass) */
+
+  /* =======================================================
+     TRANSLUCENT SURFACES
+     ======================================================= */
+
   --surface: rgba(255, 255, 255, 0.055);
   --surface-hover: rgba(255, 255, 255, 0.085);
   --surface-strong: rgba(255, 255, 255, 0.12);
 
-  /* Borders */
+
+  /* =======================================================
+     BORDERS
+     ======================================================= */
+
   --border: rgba(255, 255, 255, 0.11);
   --border-strong: rgba(255, 255, 255, 0.2);
   --border-subtle: rgba(255, 255, 255, 0.06);
 
-  /* Text */
+
+  /* =======================================================
+     TEXT
+     ======================================================= */
+
   --text: #f6f6f4;
   --text-secondary: #a0a0a4;
   --text-tertiary: #707075;
   --text-disabled: #4a4a4f;
 
-  /* Brand */
+
+  /* =======================================================
+     BRAND
+     ======================================================= */
+
   --primary: #f7e57b;
   --primary-hover: #f7e57b;
   --primary-active: #f7e57b;
   --primary-contrast: #171717;
 
-  /* Status */
+
+  /* =======================================================
+     HOMEPAGE / HERO
+     Dedicated heading/accent token.
+     
+     Dark:
+     H1 / hero accent = luxury gold
+     ======================================================= */
+
+  --hero-heading: #f7e57b;
+
+
+  /* =======================================================
+     STATUS
+     ======================================================= */
+
   --success: #2fbf71;
   --warning: #e8a33d;
   --danger: #f04d4d;
   --info: #4d8df0;
 
-  /* Chrome */
+
+  /* =======================================================
+     CHROME
+     ======================================================= */
+
   --header-bg: #171717;
   --dropdown-bg: rgb(15, 15, 16);
   --sidebar-bg: #070708;
   --topbar-bg: rgba(7, 7, 8, 0.88);
   --overlay: rgba(0, 0, 0, 0.7);
 
-  /* Announcement */
+
+  /* =======================================================
+     ANNOUNCEMENT
+     ======================================================= */
+
   --announcement-bg: #09090a;
   --announcement-border: rgba(255, 255, 255, 0.08);
   --announcement-text: #a7a7ac;
 
-  /* Inputs */
+
+  /* =======================================================
+     INPUTS
+     ======================================================= */
+
   --input-bg: rgba(255, 255, 255, 0.04);
   --input-border: rgba(255, 255, 255, 0.12);
 
-  /* Elevation */
+
+  /* =======================================================
+     ELEVATION
+     ======================================================= */
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
 
-  /* Scrollbar */
+
+  /* =======================================================
+     SCROLLBAR
+     ======================================================= */
+
   --scrollbar-thumb: rgba(255, 255, 255, 0.18);
   --scrollbar-thumb-hover: rgba(255, 255, 255, 0.28);
 
-  /* Layout */
+
+  /* =======================================================
+     LAYOUT
+     ======================================================= */
+
   --shell-width: 92vw;
   --sidebar-width: 260px;
   --topbar-height: 64px;
 
+
   color-scheme: dark;
 }
 
-/* Aliases some older marketing components were written
-   against. Kept as references to the real tokens above so
-   they never drift out of sync with the active theme. */
+
+/* =========================================================
+   GLOBAL ALIASES
+   Older components can continue using these.
+   ========================================================= */
+
 :root {
   --foreground: var(--text);
   --muted-foreground: var(--text-secondary);
   --background: var(--bg);
 }
 
+
 /* =========================================================
    LIGHT THEME
-   Warm off-white ground, true-white cards, soft shadows
-   instead of glow. Text contrast tuned for AA.
+   Warm off-white ground, true-white cards, soft shadows.
    ========================================================= */
 
 [data-theme="light"] {
   /* Page background */
-  --bg: #f6f6f4;
+  --bg: #ffffe8;
   --bg-secondary: #ffffff;
   --bg-tertiary: #efefec;
 
@@ -110,6 +183,9 @@ html {
   --card: #ffffff;
   --card-hover: #fafaf9;
   --card-elevated: #ffffff;
+ /* ...existing tokens... */
+
+  --stitching-border: #f7e57b;
 
   /* Translucent surfaces */
   --surface: rgba(17, 18, 20, 0.035);
@@ -127,11 +203,18 @@ html {
   --text-tertiary: #83868d;
   --text-disabled: #aeb1b6;
 
-  /* Brand */
-  --primary: #d3132a;
-  --primary-hover: #ba1024;
-  --primary-active: #9e0c1e;
-  --primary-contrast: #ffffff;
+  /* =====================================================
+     BRAND
+     Same luxury yellow system as DARK mode
+     ===================================================== */
+  --primary: #f7e57b;
+  --primary-hover: #f7e57b;
+  --primary-active: #f7e57b;
+  --primary-contrast: #171717;
+
+  /* Hero heading */
+    --hero-heading: #111214;
+
 
   /* Status */
   --success: #17864f;
@@ -140,7 +223,7 @@ html {
   --info: #1f63c4;
 
   /* Chrome */
-  --header-bg: rgba(255, 255, 255, 0.85);
+  --header-bg: #f7e57b;
   --dropdown-bg: rgba(255, 255, 255, 0.97);
   --sidebar-bg: #ffffff;
   --topbar-bg: rgba(255, 255, 255, 0.9);
@@ -167,17 +250,16 @@ html {
   color-scheme: light;
 }
 
+
 /* =========================================================
    TAILWIND THEME BRIDGE
-   `inline` keeps the utilities pointing at the live custom
-   property, so switching [data-theme] restyles instantly
-   without a rebuild.
    ========================================================= */
 
 @theme inline {
   --color-bg: var(--bg);
   --color-bg-secondary: var(--bg-secondary);
   --color-bg-tertiary: var(--bg-tertiary);
+  --color-stitching-border: var(--stitching-border);
 
   --color-card: var(--card);
   --color-card-hover: var(--card-hover);
@@ -201,6 +283,9 @@ html {
   --color-primary-active: var(--primary-active);
   --color-primary-contrast: var(--primary-contrast);
 
+  /* Homepage / Hero */
+  --color-hero-heading: var(--hero-heading);
+
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
@@ -218,30 +303,27 @@ html {
   --shadow-float: var(--shadow-lg);
 }
 
-/* Explicit dark-only escape hatch for the rare case a token
-   can't express the difference. */
+
+/* =========================================================
+   DARK VARIANT
+   ========================================================= */
+
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 
 /* =========================================================
    BASE
-
-   Everything below is wrapped in `@layer base`. Tailwind puts
-   its own utilities in `@layer utilities`, and per the CSS
-   cascade-layers spec, ANY unlayered rule beats ANY layered
-   rule regardless of specificity — so a bare `a { color:
-   inherit }` here would silently win over every `text-*`
-   utility in the app, no matter how specific. Keeping our
-   resets inside `@layer base` lets Tailwind's utilities (and
-   any component using inline CSS-variable colors) override
-   them the way you'd expect.
    ========================================================= */
 
 @layer base {
   html {
     scroll-behavior: smooth;
     background: var(--bg);
+
     scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+    scrollbar-color:
+      var(--scrollbar-thumb)
+      transparent;
   }
 
   body {
@@ -252,10 +334,14 @@ html {
     background: var(--bg);
     color: var(--text);
 
-    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-family:
+      var(--font-inter),
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+
     -webkit-font-smoothing: antialiased;
 
-    /* Never allow a stray wide child to scroll the whole page sideways. */
     overflow-x: hidden;
 
     transition:
@@ -263,26 +349,47 @@ html {
       color 200ms ease;
   }
 
+
+  /* =======================================================
+     UNIVERSAL BOX SIZING
+     ======================================================= */
+
   *,
   *::before,
   *::after {
     box-sizing: border-box;
   }
 
+
+  /* =======================================================
+     LINKS
+     ======================================================= */
+
   a {
     color: inherit;
     text-decoration: none;
   }
+
+
+  /* =======================================================
+     IMAGES
+     ======================================================= */
 
   img {
     max-width: 100%;
     display: block;
   }
 
+
+  /* =======================================================
+     TEXT SELECTION
+     ======================================================= */
+
   ::selection {
     background: var(--primary);
     color: var(--primary-contrast);
   }
+
 
   /* =======================================================
      SCROLLBARS
@@ -312,7 +419,9 @@ html {
 
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+    scrollbar-color:
+      var(--scrollbar-thumb)
+      transparent;
   }
 
   .scrollbar-none {
@@ -324,6 +433,7 @@ html {
     display: none;
   }
 
+
   /* =======================================================
      GLASS
      ======================================================= */
@@ -331,15 +441,14 @@ html {
   .glass {
     background: var(--surface);
     border: 1px solid var(--border);
+
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
 
+
   /* =======================================================
      FORM CONTROLS
-     Focus is a visible ring in both themes — the previous
-     global `outline: none !important` left keyboard users
-     with no focus indicator at all.
      ======================================================= */
 
   input,
@@ -364,11 +473,28 @@ html {
   textarea:focus-visible,
   select:focus-visible {
     outline: none;
-    border-color: color-mix(in srgb, var(--primary) 60%, transparent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent);
+
+    border-color:
+      color-mix(
+        in srgb,
+        var(--primary) 60%,
+        transparent
+      );
+
+    box-shadow:
+      0 0 0 3px
+      color-mix(
+        in srgb,
+        var(--primary) 14%,
+        transparent
+      );
   }
 
-  /* Native pickers should follow the active theme. */
+
+  /* =======================================================
+     NATIVE DATE / TIME PICKERS
+     ======================================================= */
+
   input[type="date"],
   input[type="time"],
   input[type="datetime-local"],
@@ -376,10 +502,9 @@ html {
     color-scheme: inherit;
   }
 
+
   /* =======================================================
      THEME TRANSITION
-     Applied briefly by the theme provider while switching so
-     the flip reads as a fade instead of a hard cut.
      ======================================================= */
 
   .theme-transition,
@@ -394,17 +519,27 @@ html {
       stroke 200ms ease !important;
   }
 
+
   /* =======================================================
      ANIMATION HELPERS
      ======================================================= */
 
   .animate-fade-up {
-    animation: sg-fade-up 240ms ease both;
+    animation:
+      sg-fade-up
+      240ms
+      ease
+      both;
   }
 
   .animate-pulse-ring {
-    animation: sg-pulse-ring 2s ease-out infinite;
+    animation:
+      sg-pulse-ring
+      2s
+      ease-out
+      infinite;
   }
+
 
   /* =======================================================
      REDUCED MOTION
@@ -425,8 +560,9 @@ html {
     }
   }
 
+
   /* =======================================================
-     PRINT (POS receipts)
+     PRINT
      ======================================================= */
 
   @media print {
@@ -441,31 +577,53 @@ html {
   }
 }
 
-/* Keyframes have no cascade/specificity of their own, so they
-   don't need to live inside a layer — kept at the top level
-   for clarity. */
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
 @keyframes sg-fade-up {
   from {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+
 @keyframes sg-pulse-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 50%, transparent);
+    box-shadow:
+      0 0 0 0
+      color-mix(
+        in srgb,
+        var(--success) 50%,
+        transparent
+      );
   }
+
   70% {
-    box-shadow: 0 0 0 6px transparent;
+    box-shadow:
+      0 0 0 6px
+      transparent;
   }
+
   100% {
-    box-shadow: 0 0 0 0 transparent;
+    box-shadow:
+      0 0 0 0
+      transparent;
   }
 }
+
+
+/* =========================================================
+   STITCH REVEAL
+   ========================================================= */
+
 @keyframes stitchReveal {
   0% {
     clip-path: inset(0 100% 0 0);
@@ -487,6 +645,7 @@ html {
     clip-path: inset(0 100% 0 0);
   }
 }
+
 
 @keyframes scissorsFollow {
   0% {
@@ -514,28 +673,59 @@ html {
     opacity: 0;
   }
 }
+
+
+/* =========================================================
+   HOVER STITCHING BORDER
+   Uses active theme hero heading color.
+   ========================================================= */
+
 .hover-animate-stitching {
   position: relative;
   isolation: isolate;
 }
 
+
 .hover-animate-stitching::before {
   content: "";
+
   position: absolute;
+
   inset: 2px;
-  border: 1px dashed #f7e57b;
+
+  border:
+    1px dashed
+     var(--stitching-border);
+
   border-radius: inherit;
+
   pointer-events: none;
-  opacity: 0;
+
+  opacity: 1;
+
   z-index: -1;
 
-  transition: opacity 0.25s ease;
+  transition:
+    opacity
+    0.25s
+    ease;
 }
+
 
 .hover-animate-stitching:hover::before {
   opacity: 1;
-  animation: stitch-border 1.2s linear infinite;
+
+  animation:
+    stitch-border
+    1.2s
+    linear
+    infinite;
 }
+
+
+/* =========================================================
+   STITCH BORDER ANIMATION
+   ========================================================= */
 
 @keyframes stitch-border {
   0% {
@@ -557,4 +747,19 @@ html {
   100% {
     clip-path: inset(0 100% 0 0);
   }
+}
+/* =========================================================
+   HIDE NATIVE SCROLLBAR
+   ========================================================= */
+
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }

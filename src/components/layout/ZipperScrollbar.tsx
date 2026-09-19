@@ -4,21 +4,25 @@ import { useEffect } from "react";
 
 export default function ZipperScrollbar() {
   useEffect(() => {
-    if (
-      document.getElementById(
-        "souls-glory-zipper"
-      )
-    ) {
-      return;
+    const ID = "souls-glory-zipper";
+    const HEADER_HEIGHT = 68;
+
+    // Prevent duplicate instances
+    const existing =
+      document.getElementById(ID);
+
+    if (existing) {
+      existing.remove();
     }
 
-    const HEADER_HEIGHT = 68;
+    // =====================================================
+    // TRACK
+    // =====================================================
 
     const track =
       document.createElement("div");
 
-    track.id =
-      "souls-glory-zipper";
+    track.id = ID;
 
     Object.assign(track.style, {
       position: "fixed",
@@ -33,7 +37,7 @@ export default function ZipperScrollbar() {
     });
 
     // =====================================================
-    // ZIPPER TEETH
+    // TEETH
     // =====================================================
 
     const teeth =
@@ -48,25 +52,32 @@ export default function ZipperScrollbar() {
     const createTeeth = () => {
       teeth.innerHTML = "";
 
-      const height =
+      const availableHeight =
         window.innerHeight -
         HEADER_HEIGHT;
 
       const count =
-        Math.ceil(height / 9);
+        Math.ceil(
+          availableHeight / 9
+        );
 
-      for (let i = 0; i < count; i++) {
+      for (
+        let i = 0;
+        i < count;
+        i++
+      ) {
         const tooth =
           document.createElement("div");
 
         Object.assign(tooth.style, {
           position: "absolute",
+          top: `${i * 9}px`,
           left: "0",
           right: "0",
-          top: `${i * 9}px`,
           height: "9px",
         });
 
+        // LEFT ZIPPER TOOTH
         const left =
           document.createElement("span");
 
@@ -76,13 +87,15 @@ export default function ZipperScrollbar() {
           top: "50%",
           width: "5px",
           height: "1px",
-          background: "var(--primary)",
-          opacity: "0.72",
+          backgroundColor:
+            "var(--primary)",
+          opacity: "0.7",
           borderRadius: "999px",
           transform:
             "translateY(-50%) rotate(-38deg)",
         });
 
+        // RIGHT ZIPPER TOOTH
         const right =
           document.createElement("span");
 
@@ -92,8 +105,9 @@ export default function ZipperScrollbar() {
           top: "50%",
           width: "5px",
           height: "1px",
-          background: "var(--primary)",
-          opacity: "0.72",
+          backgroundColor:
+            "var(--primary)",
+          opacity: "0.7",
           borderRadius: "999px",
           transform:
             "translateY(-50%) rotate(38deg)",
@@ -132,7 +146,7 @@ export default function ZipperScrollbar() {
       alignItems: "center",
       justifyContent: "center",
       cursor: "grab",
-      zIndex: "20",
+      zIndex: "50",
       touchAction: "none",
     });
 
@@ -150,7 +164,7 @@ export default function ZipperScrollbar() {
       border:
         "1px solid var(--primary)",
       borderRadius: "3px",
-      background:
+      backgroundColor:
         "var(--background)",
       display: "flex",
       alignItems: "center",
@@ -158,6 +172,7 @@ export default function ZipperScrollbar() {
       boxSizing: "border-box",
     });
 
+    // Center hole
     const hole =
       document.createElement("span");
 
@@ -165,7 +180,7 @@ export default function ZipperScrollbar() {
       width: "3px",
       height: "9px",
       borderRadius: "999px",
-      background:
+      backgroundColor:
         "var(--primary)",
     });
 
@@ -180,36 +195,47 @@ export default function ZipperScrollbar() {
     // UPDATE POSITION
     // =====================================================
 
-    const update = () => {
+    const updatePosition = () => {
       const maxScroll =
-        document.documentElement.scrollHeight -
+        document.documentElement
+          .scrollHeight -
         window.innerHeight;
 
       const progress =
         maxScroll > 0
-          ? window.scrollY / maxScroll
+          ? window.scrollY /
+            maxScroll
           : 0;
 
       pull.style.top =
         `${Math.max(
           0,
-          Math.min(1, progress)
+          Math.min(
+            1,
+            progress
+          )
         ) * 100}%`;
     };
 
-    update();
+    updatePosition();
+
+    // =====================================================
+    // SCROLL
+    // =====================================================
 
     window.addEventListener(
       "scroll",
-      update,
-      { passive: true }
+      updatePosition,
+      {
+        passive: true,
+      }
     );
 
     // =====================================================
     // CLICK
     // =====================================================
 
-    const handleClick = (
+    const handleTrackClick = (
       event: MouseEvent
     ) => {
       const target =
@@ -226,8 +252,12 @@ export default function ZipperScrollbar() {
       const rect =
         track.getBoundingClientRect();
 
-      const ratio =
-        (event.clientY - rect.top) /
+      const clickPosition =
+        event.clientY -
+        rect.top;
+
+      const progress =
+        clickPosition /
         rect.height;
 
       const maxScroll =
@@ -239,7 +269,10 @@ export default function ZipperScrollbar() {
         top:
           Math.max(
             0,
-            Math.min(1, ratio)
+            Math.min(
+              1,
+              progress
+            )
           ) * maxScroll,
         behavior: "smooth",
       });
@@ -247,7 +280,7 @@ export default function ZipperScrollbar() {
 
     track.addEventListener(
       "click",
-      handleClick
+      handleTrackClick
     );
 
     // =====================================================
@@ -256,7 +289,7 @@ export default function ZipperScrollbar() {
 
     let dragging = false;
 
-    const pointerDown = (
+    const handlePointerDown = (
       event: PointerEvent
     ) => {
       dragging = true;
@@ -264,15 +297,17 @@ export default function ZipperScrollbar() {
       pull.style.cursor =
         "grabbing";
 
-      pull.setPointerCapture?.(
-        event.pointerId
-      );
-
       event.preventDefault();
       event.stopPropagation();
+
+      try {
+        pull.setPointerCapture(
+          event.pointerId
+        );
+      } catch {}
     };
 
-    const pointerMove = (
+    const handlePointerMove = (
       event: PointerEvent
     ) => {
       if (!dragging) return;
@@ -280,8 +315,12 @@ export default function ZipperScrollbar() {
       const rect =
         track.getBoundingClientRect();
 
-      const ratio =
-        (event.clientY - rect.top) /
+      const position =
+        event.clientY -
+        rect.top;
+
+      const progress =
+        position /
         rect.height;
 
       const maxScroll =
@@ -293,51 +332,55 @@ export default function ZipperScrollbar() {
         top:
           Math.max(
             0,
-            Math.min(1, ratio)
+            Math.min(
+              1,
+              progress
+            )
           ) * maxScroll,
         behavior: "auto",
       });
     };
 
-    const pointerUp = () => {
+    const handlePointerUp = () => {
       dragging = false;
-      pull.style.cursor = "grab";
+      pull.style.cursor =
+        "grab";
     };
 
     pull.addEventListener(
       "pointerdown",
-      pointerDown
+      handlePointerDown
     );
 
     pull.addEventListener(
       "pointermove",
-      pointerMove
+      handlePointerMove
     );
 
     pull.addEventListener(
       "pointerup",
-      pointerUp
+      handlePointerUp
     );
 
     pull.addEventListener(
       "pointercancel",
-      pointerUp
+      handlePointerUp
     );
 
     // =====================================================
     // RESIZE
     // =====================================================
 
-    const resize = () => {
+    const handleResize = () => {
       createTeeth();
-      update();
+      updatePosition();
     };
 
     createTeeth();
 
     window.addEventListener(
       "resize",
-      resize
+      handleResize
     );
 
     // =====================================================
@@ -347,42 +390,44 @@ export default function ZipperScrollbar() {
     return () => {
       window.removeEventListener(
         "scroll",
-        update
+        updatePosition
       );
 
       window.removeEventListener(
         "resize",
-        resize
+        handleResize
       );
 
       track.removeEventListener(
         "click",
-        handleClick
+        handleTrackClick
       );
 
       pull.removeEventListener(
         "pointerdown",
-        pointerDown
+        handlePointerDown
       );
 
       pull.removeEventListener(
         "pointermove",
-        pointerMove
+        handlePointerMove
       );
 
       pull.removeEventListener(
         "pointerup",
-        pointerUp
+        handlePointerUp
       );
 
       pull.removeEventListener(
         "pointercancel",
-        pointerUp
+        handlePointerUp
       );
 
       track.remove();
     };
   }, []);
 
+  // React renders NOTHING.
+  // This prevents hydration mismatch.
   return null;
 }

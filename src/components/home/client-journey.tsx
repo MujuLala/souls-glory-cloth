@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Sparkles } from "lucide-react";
 
 import Container from "@/components/ui/container";
 import Button from "@/components/ui/button";
@@ -49,55 +49,155 @@ export default function ClientJourney() {
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
 
   return (
-    <section className="relative pb-16 sm:pb-20 lg:pb-24">
+    <section
+      className="
+        relative
+        bg-transparent
+        py-[6vw]
+
+        max-xl:py-[7vw]
+        max-lg:py-20
+        max-md:py-16
+        max-sm:py-14
+      "
+    >
       <Container>
         {/* =====================================================
             HEADER
         ====================================================== */}
 
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-[760px]">
-            <p
+        <div
+          className="
+            flex
+            items-end
+            justify-between
+            gap-[4vw]
+
+            max-lg:gap-8
+
+            max-md:flex-col
+            max-md:items-start
+            max-md:gap-6
+          "
+        >
+          {/* ===================================================
+              HEADER CONTENT
+          =================================================== */}
+
+          <div
+            className="
+              min-w-0
+              max-w-[58vw]
+
+              max-lg:max-w-[700px]
+              max-md:max-w-full
+            "
+          >
+            {/* =================================================
+                EYEBROW
+            ================================================== */}
+
+            <div
               className="
-                mb-3
-                text-[10px]
-                font-semibold
-                uppercase
-                tracking-[0.18em]
-                text-[var(--primary)]
+                mb-[0.8vw]
+                flex
+                items-center
+                gap-[0.55vw]
+
+                max-lg:mb-3
+                max-lg:gap-2
               "
             >
-              Your Client Journey
-            </p>
+              <span
+                className="
+                  flex
+                  h-[1.45vw]
+                  w-[1.45vw]
+                  min-h-[20px]
+                  min-w-[20px]
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-primary
+                  text-[var(--primary-contrast)]
+
+                  max-lg:h-5
+                  max-lg:w-5
+                "
+              >
+                <Sparkles
+                  size={10}
+                  strokeWidth={2}
+                />
+              </span>
+
+              <span
+                className="
+                  whitespace-nowrap
+                  text-[0.58vw]
+                  font-semibold
+                  uppercase
+                  tracking-[0.14em]
+                  text-[var(--text-secondary)]
+
+                  max-lg:text-[10px]
+                "
+              >
+                Your Client Journey
+              </span>
+            </div>
+
+            {/* =================================================
+                HEADING
+            ================================================== */}
 
             <h2
               className="
-                whitespace-nowrap
+                max-w-[55vw]
+
                 text-[3.2vw]
-                font-[100]
-                uppercase
-                leading-[0.92]
-                tracking-[-0.055em]
-                text-[var(--text)]
+                font-semibold
+                capitalize
+                leading-[1]
+                tracking-[-0.045em]
+                text-hero-heading
 
                 max-[1100px]:text-[42px]
+
+                max-lg:max-w-[700px]
                 max-lg:text-[38px]
-                max-md:whitespace-normal
+
+                max-md:max-w-full
                 max-md:text-[36px]
+
                 max-sm:text-[30px]
               "
             >
-              From sign up to your door.
+              From Sign Up To Your Door.
             </h2>
           </div>
 
+          {/* ===================================================
+              DESCRIPTION
+          =================================================== */}
+
           <p
             className="
-              max-w-[440px]
-              text-[13px]
+              max-w-[30vw]
+
+              text-[0.82vw]
               leading-[1.7]
               text-[var(--text-secondary)]
-              md:text-right
+
+              max-xl:max-w-[400px]
+              max-xl:text-[12px]
+
+              max-lg:max-w-[440px]
+              max-lg:text-[13px]
+
+              max-md:max-w-[650px]
+              max-md:text-[13px]
             "
           >
             Everything happens inside your account. Save your preferences,
@@ -111,39 +211,56 @@ export default function ClientJourney() {
         ====================================================== */}
 
         <div
-          className="mt-12 sm:mt-14 lg:mt-16"
+          className="
+            mt-[3.8vw]
+
+            max-xl:mt-12
+            max-lg:mt-10
+            max-md:mt-8
+          "
           onMouseLeave={() => setHoveredStep(null)}
         >
-          {/* -------------------------------------------------
-              DESKTOP STITCH PATH
-          -------------------------------------------------- */}
+          {/* =================================================
+              DESKTOP
+          ================================================== */}
 
           <div className="hidden xl:block">
-            <div className="relative grid grid-cols-6">
-              {/* Base path */}
+            <div className="relative grid grid-cols-6 gap-[0.7vw]">
+              {/* =================================================
+                  BASE PATH
+              ================================================== */}
 
               <div
                 className="
                   pointer-events-none
                   absolute
+
                   left-[8.333%]
                   right-[8.333%]
-                  top-[27px]
+                  top-[1.8vw]
+
                   h-px
+
                   bg-[var(--border)]
                 "
               />
 
-              {/* Active path */}
+              {/* =================================================
+                  ACTIVE PATH
+              ================================================== */}
 
               <div
                 className="
                   pointer-events-none
                   absolute
+
                   left-[8.333%]
-                  top-[27px]
+                  top-[1.8vw]
+
                   h-px
-                  bg-[var(--primary)]
+
+                  bg-primary
+
                   transition-all
                   duration-500
                   ease-out
@@ -165,22 +282,35 @@ export default function ClientJourney() {
                 return (
                   <div
                     key={step.number}
-                    className="relative px-2"
+                    className="
+                      relative
+                      px-[0.35vw]
+                    "
                     onMouseEnter={() => setHoveredStep(index)}
                   >
-                    {/* Number */}
+                    {/* =================================================
+                        NUMBER
+                    ================================================== */}
 
                     <div className="relative z-10 flex justify-center">
                       <div
                         className={`
                           flex
-                          size-[54px]
+                          h-[3.4vw]
+                          w-[3.4vw]
+
+                          min-h-[48px]
+                          min-w-[48px]
+
                           items-center
                           justify-center
+
                           rounded-full
                           bg-[var(--bg)]
-                          transition-all
+
+                          transition-transform
                           duration-300
+
                           ${
                             selected
                               ? "scale-110"
@@ -191,24 +321,44 @@ export default function ClientJourney() {
                         <div
                           className={`
                             flex
-                            size-[42px]
+                            h-[2.65vw]
+                            w-[2.65vw]
+
+                            min-h-[38px]
+                            min-w-[38px]
+
                             items-center
                             justify-center
+
                             rounded-full
-                            text-[11px]
+
+                            text-[0.68vw]
                             font-semibold
                             tracking-[0.08em]
+
                             transition-all
                             duration-300
+
+                            max-[1280px]:text-[10px]
+
                             ${
                               active
-                                ? "bg-[var(--primary)] text-white"
+                                ? "bg-primary text-[var(--primary-contrast)]"
                                 : "bg-[var(--surface)] text-[var(--text-secondary)]"
                             }
                           `}
                         >
                           {active ? (
-                            <Check size={15} strokeWidth={2.2} />
+                            <Check
+                              className="
+                                h-[0.85vw]
+                                w-[0.85vw]
+
+                                max-[1280px]:h-3.5
+                                max-[1280px]:w-3.5
+                              "
+                              strokeWidth={2.2}
+                            />
                           ) : (
                             step.number
                           )}
@@ -216,19 +366,32 @@ export default function ClientJourney() {
                       </div>
                     </div>
 
-                    {/* Card */}
+                    {/* =================================================
+                        CARD
+                    ================================================== */}
 
                     <div
                       className={`
-                        mt-7
+                        mt-[1.45vw]
+
                         flex
-                        min-h-[215px]
+                        min-h-[15vw]
                         flex-col
-                        rounded-[18px]
+
+                        rounded-[1vw]
+
                         bg-[var(--surface)]
-                        p-5
-                        transition-all
+
+                        p-[1.25vw]
+
+                        hover-animate-stitching
+
+                        transition-colors
                         duration-300
+
+                        max-[1280px]:rounded-[16px]
+                        max-[1280px]:p-5
+
                         ${
                           selected
                             ? "bg-[var(--surface-hover)]"
@@ -236,14 +399,24 @@ export default function ClientJourney() {
                         }
                       `}
                     >
-                      <div className="flex items-start justify-between gap-3">
+                      {/* TOP */}
+
+                      <div
+                        className="
+                          flex
+                          items-start
+                          justify-between
+                          gap-[1vw]
+                        "
+                      >
                         <span
                           className={`
-                            text-[10px]
+                            text-[0.62vw]
                             font-semibold
                             tracking-[0.16em]
-                            transition-colors
-                            duration-300
+
+                            max-[1280px]:text-[10px]
+
                             ${
                               selected
                                 ? "text-[var(--primary)]"
@@ -255,10 +428,16 @@ export default function ClientJourney() {
                         </span>
 
                         <ArrowRight
-                          size={14}
                           className={`
+                            h-[0.85vw]
+                            w-[0.85vw]
+
                             transition-all
                             duration-300
+
+                            max-[1280px]:h-3.5
+                            max-[1280px]:w-3.5
+
                             ${
                               selected
                                 ? "translate-x-0 text-[var(--primary)] opacity-100"
@@ -268,15 +447,22 @@ export default function ClientJourney() {
                         />
                       </div>
 
+                      {/* CONTENT */}
+
                       <div className="mt-auto">
                         <h3
                           className="
-                            max-w-[170px]
-                            text-[17px]
-                            font-medium
+                            max-w-[12vw]
+
+                            text-[1.05vw]
+                            font-semibold
                             leading-[1.1]
                             tracking-[-0.035em]
+
                             text-[var(--text)]
+
+                            max-[1280px]:max-w-[170px]
+                            max-[1280px]:text-[17px]
                           "
                         >
                           {step.title}
@@ -284,34 +470,20 @@ export default function ClientJourney() {
 
                         <p
                           className="
-                            mt-3
-                            text-[12px]
+                            mt-[0.75vw]
+
+                            text-[0.68vw]
                             leading-[1.65]
+
                             text-[var(--text-secondary)]
+
+                            max-[1280px]:mt-3
+                            max-[1280px]:text-[12px]
                           "
                         >
                           {step.description}
                         </p>
                       </div>
-
-                      {/* Bottom active indicator */}
-
-                      <div
-                        className={`
-                          mt-5
-                          h-[2px]
-                          origin-left
-                          rounded-full
-                          bg-[var(--primary)]
-                          transition-transform
-                          duration-500
-                          ${
-                            selected
-                              ? "scale-x-100"
-                              : "scale-x-0"
-                          }
-                        `}
-                      />
                     </div>
                   </div>
                 );
@@ -325,17 +497,23 @@ export default function ClientJourney() {
 
           <div className="xl:hidden">
             <div className="relative">
-              {/* Vertical path */}
+              {/* VERTICAL PATH */}
 
               <div
                 className="
                   absolute
-                  bottom-[48px]
-                  left-[27px]
-                  top-[27px]
+
+                  bottom-[3vw]
+                  left-[1.7vw]
+                  top-[1.7vw]
+
                   w-px
+
                   bg-[var(--border)]
-                  sm:left-[31px]
+
+                  max-lg:bottom-[48px]
+                  max-lg:left-[27px]
+                  max-lg:top-[27px]
                 "
               />
 
@@ -351,54 +529,98 @@ export default function ClientJourney() {
                     className="
                       group
                       relative
+
                       flex
-                      gap-5
-                      pb-5
+                      gap-[1.4vw]
+                      pb-[1.4vw]
+
                       last:pb-0
 
-                      sm:gap-6
+                      max-lg:gap-5
+                      max-lg:pb-5
+
+                      max-sm:gap-4
                     "
                     onMouseEnter={() => setHoveredStep(index)}
                   >
-                    {/* Node */}
+                    {/* =================================================
+                        NODE
+                    ================================================== */}
 
                     <div className="relative z-10 shrink-0">
                       <div
-                        className={`
+                        className="
                           flex
-                          size-[54px]
+
+                          h-[3.4vw]
+                          w-[3.4vw]
+
+                          min-h-[48px]
+                          min-w-[48px]
+
                           items-center
                           justify-center
+
                           rounded-full
                           bg-[var(--bg)]
-                          sm:size-[62px]
-                        `}
+
+                          max-lg:h-[54px]
+                          max-lg:w-[54px]
+
+                          max-sm:h-[48px]
+                          max-sm:w-[48px]
+                        "
                       >
                         <div
                           className={`
                             flex
-                            size-[42px]
+
+                            h-[2.65vw]
+                            w-[2.65vw]
+
+                            min-h-[38px]
+                            min-w-[38px]
+
                             items-center
                             justify-center
+
                             rounded-full
-                            text-[10px]
+
+                            text-[0.65vw]
                             font-semibold
                             tracking-[0.08em]
+
                             transition-all
                             duration-300
 
-                            sm:size-[48px]
-                            sm:text-[11px]
+                            max-lg:h-[42px]
+                            max-lg:w-[42px]
+                            max-lg:text-[10px]
+
+                            max-sm:h-[36px]
+                            max-sm:w-[36px]
+                            max-sm:text-[9px]
 
                             ${
                               active
-                                ? "bg-[var(--primary)] text-white"
+                                ? "bg-primary text-[var(--primary-contrast)]"
                                 : "bg-[var(--surface)] text-[var(--text-secondary)]"
                             }
                           `}
                         >
                           {active ? (
-                            <Check size={15} />
+                            <Check
+                              className="
+                                h-[0.85vw]
+                                w-[0.85vw]
+
+                                max-lg:h-3.5
+                                max-lg:w-3.5
+
+                                max-sm:h-3
+                                max-sm:w-3
+                              "
+                            />
                           ) : (
                             step.number
                           )}
@@ -406,20 +628,33 @@ export default function ClientJourney() {
                       </div>
                     </div>
 
-                    {/* Card */}
+                    {/* =================================================
+                        MOBILE CARD
+                    ================================================== */}
 
                     <div
                       className={`
-                        min-h-[160px]
+                        min-h-[11vw]
+
                         flex-1
-                        rounded-[16px]
+
+                        rounded-[1vw]
+
                         bg-[var(--surface)]
-                        p-5
+
+                        p-[1.4vw]
+
+                        hover-animate-stitching
+
                         transition-colors
                         duration-300
 
-                        sm:min-h-[175px]
-                        sm:p-6
+                        max-lg:min-h-[160px]
+                        max-lg:rounded-[16px]
+                        max-lg:p-5
+
+                        max-sm:min-h-[150px]
+                        max-sm:p-4
 
                         ${
                           selected
@@ -428,12 +663,24 @@ export default function ClientJourney() {
                         }
                       `}
                     >
-                      <div className="flex items-start justify-between gap-4">
+                      {/* TOP */}
+
+                      <div
+                        className="
+                          flex
+                          items-start
+                          justify-between
+                          gap-4
+                        "
+                      >
                         <span
                           className={`
-                            text-[10px]
+                            text-[0.62vw]
                             font-semibold
                             tracking-[0.16em]
+
+                            max-lg:text-[10px]
+
                             ${
                               selected
                                 ? "text-[var(--primary)]"
@@ -445,10 +692,16 @@ export default function ClientJourney() {
                         </span>
 
                         <ArrowRight
-                          size={15}
                           className={`
+                            h-[0.85vw]
+                            w-[0.85vw]
+
                             transition-all
                             duration-300
+
+                            max-lg:h-3.5
+                            max-lg:w-3.5
+
                             ${
                               selected
                                 ? "translate-x-0 text-[var(--primary)] opacity-100"
@@ -458,49 +711,50 @@ export default function ClientJourney() {
                         />
                       </div>
 
+                      {/* TITLE */}
+
                       <h3
                         className="
-                          mt-7
-                          text-[18px]
-                          font-medium
+                          mt-[1.5vw]
+
+                          text-[1.15vw]
+                          font-semibold
                           leading-[1.05]
                           tracking-[-0.035em]
+
                           text-[var(--text)]
 
-                          sm:text-[20px]
+                          max-lg:mt-7
+                          max-lg:text-[18px]
+
+                          max-sm:mt-5
+                          max-sm:text-[17px]
                         "
                       >
                         {step.title}
                       </h3>
 
+                      {/* DESCRIPTION */}
+
                       <p
                         className="
-                          mt-3
+                          mt-[0.7vw]
+
                           max-w-[520px]
-                          text-[12px]
+
+                          text-[0.7vw]
                           leading-[1.65]
+
                           text-[var(--text-secondary)]
+
+                          max-lg:mt-3
+                          max-lg:text-[12px]
+
+                          max-sm:text-[11px]
                         "
                       >
                         {step.description}
                       </p>
-
-                      <div
-                        className={`
-                          mt-5
-                          h-[2px]
-                          origin-left
-                          rounded-full
-                          bg-[var(--primary)]
-                          transition-transform
-                          duration-500
-                          ${
-                            selected
-                              ? "scale-x-100"
-                              : "scale-x-0"
-                          }
-                        `}
-                      />
                     </div>
                   </div>
                 );
@@ -510,28 +764,39 @@ export default function ClientJourney() {
         </div>
 
         {/* =====================================================
-            CTA
+            BOTTOM CTA
         ====================================================== */}
 
         <div
           className="
-            mt-10
-            flex
-            flex-col
-            gap-5
+            mt-[3vw]
 
-            sm:mt-12
-            sm:flex-row
-            sm:items-center
-            sm:justify-between
+            flex
+            items-center
+            justify-between
+            gap-[2vw]
+
+            max-xl:mt-10
+            max-lg:mt-10
+
+            max-md:flex-col
+            max-md:items-start
+            max-md:gap-5
           "
         >
           <p
             className="
-              max-w-[500px]
-              text-[12px]
+              max-w-[34vw]
+
+              text-[0.72vw]
               leading-[1.6]
+
               text-[var(--text-secondary)]
+
+              max-xl:max-w-[500px]
+              max-xl:text-[12px]
+
+              max-lg:text-[13px]
             "
           >
             One account. One place. A simpler way to manage every
@@ -540,17 +805,43 @@ export default function ClientJourney() {
 
           <Button
             href="/sign-up"
-            variant="secondary"
-            className="group h-11 w-fit px-5 text-[13px]"
+            variant="primary"
+            size="md"
+            className="
+              hover-animate-stitching
+              group
+              whitespace-nowrap
+              !shadow-none
+
+              px-[1.35vw]
+              text-[0.72vw]
+
+              max-xl:px-5
+              max-xl:text-[10px]
+
+              max-lg:px-5
+              max-lg:text-[11px]
+
+              max-sm:px-4
+              max-sm:text-[10px]
+            "
           >
-            Start Your Journey
+            <span className="whitespace-nowrap">
+              Start Your Journey
+            </span>
 
             <ArrowRight
-              size={14}
               className="
+                h-[0.85vw]
+                w-[0.85vw]
+
                 transition-transform
                 duration-300
-                group-hover:translate-x-1
+
+                group-hover:translate-x-[0.2vw]
+
+                max-lg:h-3.5
+                max-lg:w-3.5
               "
             />
           </Button>

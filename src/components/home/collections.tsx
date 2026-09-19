@@ -33,11 +33,19 @@ export default function Collections({
   }
 
   return (
-    <section className="relative overflow-hidden bg-transparent py-[6vw] max-lg:py-20 max-sm:py-14">
-      {/* =====================================================
-          CONTENT
-      ====================================================== */}
+    <section
+      className="
+        relative
+        overflow-hidden
+        bg-transparent
+        py-[6vw]
 
+        max-xl:py-[7vw]
+        max-lg:py-20
+        max-md:py-16
+        max-sm:py-14
+      "
+    >
       <Container className="relative z-10">
         {/* =====================================================
             SECTION HEADER
@@ -49,9 +57,12 @@ export default function Collections({
             flex
             items-end
             justify-between
-            gap-8
+            gap-[3vw]
+
+            max-xl:mb-[3.5vw]
 
             max-lg:mb-8
+            max-lg:gap-8
 
             max-md:flex-col
             max-md:items-start
@@ -65,69 +76,113 @@ export default function Collections({
           <div className="min-w-0">
             {/* EYEBROW */}
 
-            <div className="mb-4 flex items-center gap-2.5">
+            <div
+              className="
+                mb-[1vw]
+                flex
+                items-center
+                gap-[0.65vw]
+
+                max-lg:mb-3
+                max-lg:gap-2.5
+              "
+            >
               <span
                 className="
                   flex
-                  h-5
-                  w-5
+                  h-[1.35vw]
+                  w-[1.35vw]
+                  min-h-5
+                  min-w-5
                   items-center
                   justify-center
                   rounded-full
-                  bg-[var(--primary)]
-                  text-white
+                  bg-primary
+                  text-[var(--primary-contrast)]
+
+                  max-lg:h-5
+                  max-lg:w-5
                 "
               >
-                <Sparkles size={10} />
+                <Sparkles
+                  className="
+                    h-[0.65vw]
+                    w-[0.65vw]
+
+                    max-lg:h-2.5
+                    max-lg:w-2.5
+                  "
+                />
               </span>
 
               <span
                 className="
-                  text-[10px]
+                  text-[0.62vw]
                   font-semibold
                   uppercase
                   tracking-[0.14em]
                   text-[var(--text-secondary)]
+
+                  max-xl:text-[9px]
+                  max-lg:text-[10px]
                 "
               >
                 Explore our world
               </span>
             </div>
 
-            {/* HEADING */}
+            {/* =================================================
+                HEADING
+            ================================================== */}
 
             <h2
               className="
-                whitespace-nowrap
+                max-w-[58vw]
+
                 text-[3.2vw]
-                font-[100]
-                uppercase
-                leading-[0.95]
-                tracking-[-0.055em]
-                text-[var(--text)]
+                font-semibold
+                capitalize
+                leading-[1]
+                tracking-[-0.045em]
+
+                text-hero-heading
 
                 max-[1100px]:text-[42px]
+
+                max-lg:max-w-[700px]
                 max-lg:text-[38px]
-                max-md:whitespace-normal
+
+                max-md:max-w-full
                 max-md:text-[36px]
+
                 max-sm:text-[30px]
               "
             >
-              Collections made for every moment.
+              Collections Made For Every Moment.
             </h2>
 
-            {/* DESCRIPTION */}
+            {/* =================================================
+                DESCRIPTION
+            ================================================== */}
 
             <p
               className="
-                mt-4
-                max-w-[650px]
-                text-[13px]
+                mt-[1.1vw]
+                max-w-[42vw]
+
+                text-[0.9vw]
                 leading-[1.7]
+
                 text-[var(--text-secondary)]
 
-                sm:text-[14px]
-                lg:text-[15px]
+                max-xl:max-w-[560px]
+                max-xl:text-[13px]
+
+                max-lg:mt-4
+                max-lg:max-w-[650px]
+                max-lg:text-[14px]
+
+                max-sm:text-[13px]
               "
             >
               Discover curated collections designed around modern style,
@@ -136,48 +191,70 @@ export default function Collections({
           </div>
 
           {/* =================================================
-              VIEW ALL BUTTON
+              VIEW ALL COLLECTIONS
           ================================================== */}
 
-          <Button
-            href="/collections"
-            variant="secondary"
-            className="
-              group
-              h-11
-              shrink-0
-              rounded-full
-              border-[var(--border)]
-              px-5
-              text-[11px]
-              font-medium
-              transition-all
-              duration-300
-
-              hover:border-[var(--text-secondary)]
-              hover:bg-[var(--surface-hover)]
-
-              max-md:self-start
-            "
-          >
-            View All Collections
-
-            <ArrowRight
-              size={13}
+          <div className="shrink-0 max-md:self-start">
+            <Button
+              href="/collections"
+              variant="primary"
+              size="md"
               className="
-                transition-transform
-                duration-300
-                group-hover:translate-x-1
+                group
+                rounded-full
+
+                px-[1.35vw]
+
+                text-[0.72vw]
+
+                hover-animate-stitching
+
+                max-xl:px-5
+                max-xl:text-[10px]
+
+                max-lg:px-5
+                max-lg:text-[11px]
+
+                max-sm:px-4
+                max-sm:text-[10px]
               "
-            />
-          </Button>
+            >
+              <span>View All Collections</span>
+
+              <ArrowRight
+                className="
+                  h-[0.85vw]
+                  w-[0.85vw]
+
+                  transition-transform
+                  duration-300
+                  ease-out
+
+                  group-hover:translate-x-[0.2vw]
+
+                  max-lg:h-3.5
+                  max-lg:w-3.5
+                "
+              />
+            </Button>
+          </div>
         </div>
 
         {/* =====================================================
             COLLECTION GRID
         ====================================================== */}
 
-        <div className="grid grid-cols-12 gap-[1vw] max-lg:gap-3">
+        <div
+          className="
+            grid
+            grid-cols-12
+            gap-[1vw]
+
+            max-xl:gap-[1.2vw]
+
+            max-lg:gap-3
+          "
+        >
           {/* =================================================
               LARGE COLLECTION
           ================================================== */}
@@ -189,8 +266,12 @@ export default function Collections({
               row-span-2
               min-h-[38vw]
 
+              max-xl:min-h-[40vw]
+
               max-lg:col-span-12
               max-lg:min-h-[500px]
+
+              max-md:min-h-[440px]
 
               max-sm:min-h-[390px]
             "
@@ -200,37 +281,49 @@ export default function Collections({
               SMALL COLLECTION
           ================================================== */}
 
-          <CollectionCard
-            collection={collections[1]}
-            className="
-              col-span-5
-              min-h-[18.5vw]
+          {collections[1] && (
+            <CollectionCard
+              collection={collections[1]}
+              className="
+                col-span-5
+                min-h-[18.5vw]
 
-              max-lg:col-span-6
-              max-lg:min-h-[300px]
+                max-xl:min-h-[19vw]
 
-              max-sm:col-span-12
-              max-sm:min-h-[260px]
-            "
-          />
+                max-lg:col-span-6
+                max-lg:min-h-[300px]
+
+                max-md:min-h-[280px]
+
+                max-sm:col-span-12
+                max-sm:min-h-[260px]
+              "
+            />
+          )}
 
           {/* =================================================
               SMALL COLLECTION
           ================================================== */}
 
-          <CollectionCard
-            collection={collections[2]}
-            className="
-              col-span-5
-              min-h-[18.5vw]
+          {collections[2] && (
+            <CollectionCard
+              collection={collections[2]}
+              className="
+                col-span-5
+                min-h-[18.5vw]
 
-              max-lg:col-span-6
-              max-lg:min-h-[300px]
+                max-xl:min-h-[19vw]
 
-              max-sm:col-span-12
-              max-sm:min-h-[260px]
-            "
-          />
+                max-lg:col-span-6
+                max-lg:min-h-[300px]
+
+                max-md:min-h-[280px]
+
+                max-sm:col-span-12
+                max-sm:min-h-[260px]
+              "
+            />
+          )}
         </div>
       </Container>
     </section>
@@ -255,10 +348,17 @@ function CollectionCard({
         group
         relative
         overflow-hidden
+
         rounded-[1.1vw]
-        border
-        border-[var(--border)]
+
+        
+    
+
         bg-[var(--surface)]
+
+        transition-colors
+        duration-500
+
         ${className}
       `}
     >
@@ -273,9 +373,11 @@ function CollectionCard({
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 60vw"
         className="
           object-cover
+
           transition-transform
-          duration-700
+          duration-[900ms]
           ease-out
+
           group-hover:scale-[1.045]
         "
       />
@@ -288,6 +390,7 @@ function CollectionCard({
         className="
           absolute
           inset-0
+
           bg-gradient-to-t
           from-black/85
           via-black/25
@@ -296,7 +399,7 @@ function CollectionCard({
       />
 
       {/* ===================================================
-          HOVER GLOW
+          SUBTLE HOVER OVERLAY
       ==================================================== */}
 
       <div
@@ -304,11 +407,13 @@ function CollectionCard({
           pointer-events-none
           absolute
           inset-0
-          bg-[radial-gradient(circle_at_50%_100%,rgba(229,30,50,0.18),transparent_55%)]
-          opacity-0
-          transition-opacity
+
+          bg-black/0
+
+          transition-colors
           duration-500
-          group-hover:opacity-100
+
+          group-hover:bg-black/[0.08]
         "
       />
 
@@ -316,26 +421,45 @@ function CollectionCard({
           TOP TAG
       ==================================================== */}
 
-      <div className="absolute left-[1vw] top-[1vw] max-lg:left-4 max-lg:top-4">
+      <div
+        className="
+          absolute
+          left-[1vw]
+          top-[1vw]
+
+          max-lg:left-4
+          max-lg:top-4
+        "
+      >
         <span
           className="
             inline-flex
             items-center
+
             rounded-full
+
             border
             border-white/15
+
             bg-black/30
+
             px-[0.7vw]
             py-[0.35vw]
-            text-[9px]
+
+            text-[0.58vw]
             font-semibold
             uppercase
             tracking-[0.1em]
+
             text-white
+
             backdrop-blur-xl
+
+            max-xl:text-[8px]
 
             max-lg:px-3
             max-lg:py-1.5
+            max-lg:text-[9px]
           "
         >
           {collection.tag}
@@ -352,23 +476,53 @@ function CollectionCard({
           bottom-0
           left-0
           right-0
+
           p-[1.25vw]
 
+          max-xl:p-[1.5vw]
+
           max-lg:p-5
+
+          max-sm:p-4
         "
       >
-        <div className="flex items-end justify-between gap-5">
-          {/* TEXT */}
+        <div
+          className="
+            flex
+            items-end
+            justify-between
 
-          <div className="max-w-[430px]">
+            gap-[2vw]
+
+            max-lg:gap-5
+          "
+        >
+          {/* =================================================
+              TEXT
+          ================================================== */}
+
+          <div
+            className="
+              max-w-[30vw]
+
+              max-lg:max-w-[430px]
+            "
+          >
             <p
               className="
-                mb-1
-                text-[9px]
+                mb-[0.35vw]
+
+                text-[0.58vw]
                 font-medium
                 uppercase
                 tracking-[0.12em]
+
                 text-white/55
+
+                max-xl:text-[8px]
+
+                max-lg:mb-1
+                max-lg:text-[9px]
               "
             >
               Soul&apos;s Glory
@@ -380,9 +534,13 @@ function CollectionCard({
                 font-bold
                 leading-[1]
                 tracking-[-0.045em]
+
                 text-white
 
+                max-xl:text-[25px]
+
                 max-lg:text-[25px]
+
                 max-sm:text-[22px]
               "
             >
@@ -391,47 +549,78 @@ function CollectionCard({
 
             <p
               className="
-                mt-2
-                max-w-[380px]
-                text-[11px]
+                mt-[0.6vw]
+
+                max-w-[26vw]
+
+                text-[0.68vw]
                 leading-[1.5]
+
                 text-white/65
+
+                max-xl:max-w-[380px]
+                max-xl:text-[10px]
+
+                max-lg:mt-2
+                max-lg:text-[11px]
+
+                max-sm:text-[10px]
               "
             >
               {collection.description}
             </p>
           </div>
 
-          {/* ARROW */}
+          {/* =================================================
+              ARROW BUTTON
+          ================================================== */}
 
           <div
             className="
               flex
+
               h-[3vw]
               w-[3vw]
-              min-h-[42px]
-              min-w-[42px]
+
+              min-h-10
+              min-w-10
+
               shrink-0
+
               items-center
               justify-center
+
               rounded-full
-              bg-white
-              text-black
+
+              bg-primary
+              text-[var(--primary-contrast)]
 
               transition-all
               duration-300
+              ease-out
 
-              group-hover:translate-x-1
+              group-hover:translate-x-[0.25vw]
               group-hover:scale-105
 
-              max-lg:h-11
-              max-lg:w-11
+              max-xl:h-11
+              max-xl:w-11
 
               max-sm:h-10
               max-sm:w-10
             "
           >
-            <ArrowRight size={15} />
+            <ArrowRight
+              className="
+                h-[0.9vw]
+                w-[0.9vw]
+
+                max-xl:h-3.5
+                max-xl:w-3.5
+
+                max-sm:h-3
+                max-sm:w-3
+              "
+            />
           </div>
         </div>
       </div>

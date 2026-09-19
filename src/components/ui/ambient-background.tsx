@@ -1,7 +1,29 @@
-
 "use client";
 
 import { useEffect, useRef } from "react";
+
+type Thread = {
+  x: number;
+  y: number;
+
+  length: number;
+  angle: number;
+
+  speed: number;
+  drift: number;
+
+  wave: number;
+  waveSpeed: number;
+  phase: number;
+
+  thickness: number;
+  opacity: number;
+  colorIndex: number;
+
+  // Smooth velocity
+  vx: number;
+  vy: number;
+};
 
 export default function AmbientBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,6 +36,17 @@ export default function AmbientBackground() {
     if (!ctx) return;
 
     let animationFrame = 0;
+    let threads: Thread[] = [];
+
+    // =====================================================
+    // THEME
+    // =====================================================
+
+    const getTheme = () => {
+      return document.documentElement.getAttribute(
+        "data-theme"
+      );
+    };
 
     // =====================================================
     // MOUSE
@@ -22,6 +55,7 @@ export default function AmbientBackground() {
     const mouse = {
       x: -1000,
       y: -1000,
+
       targetX: -1000,
       targetY: -1000,
     };
@@ -31,22 +65,42 @@ export default function AmbientBackground() {
     // =====================================================
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(
+        window.devicePixelRatio || 1,
+        2
+      );
 
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
+      canvas.width =
+        window.innerWidth * dpr;
 
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
+      canvas.height =
+        window.innerHeight * dpr;
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      canvas.style.width =
+        `${window.innerWidth}px`;
+
+      canvas.style.height =
+        `${window.innerHeight}px`;
+
+      ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+      );
+
+      createThreads();
     };
 
     // =====================================================
     // MOUSE MOVE
     // =====================================================
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (
+      e: MouseEvent
+    ) => {
       mouse.targetX = e.clientX;
       mouse.targetY = e.clientY;
     };
@@ -56,199 +110,724 @@ export default function AmbientBackground() {
       mouse.targetY = -1000;
     };
 
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseleave", handleMouseLeave);
+    // =====================================================
+    // COLORS
+    // =====================================================
+
+    const getColors = () => {
+      const isLight =
+        getTheme() === "light";
+
+      if (isLight) {
+        return [
+          "rgba(155, 125, 30, 0.20)",
+          "rgba(17, 18, 20, 0.11)",
+          "rgba(120, 92, 28, 0.15)",
+          "rgba(150, 65, 65, 0.12)",
+          "rgba(50, 105, 92, 0.10)",
+          "rgba(95, 75, 110, 0.09)",
+          "rgba(100, 80, 55, 0.13)",
+        ];
+      }
+
+      return [
+        "rgba(247, 229, 123, 0.24)",
+        "rgba(255, 255, 255, 0.13)",
+        "rgba(184, 148, 69, 0.19)",
+        "rgba(174, 76, 76, 0.13)",
+        "rgba(75, 135, 119, 0.11)",
+        "rgba(130, 105, 150, 0.10)",
+        "rgba(139, 104, 63, 0.16)",
+      ];
+    };
+
+    // =====================================================
+    // CREATE THREADS
+    // =====================================================
+
+    const createThreads = () => {
+      const width =
+        window.innerWidth;
+
+      const height =
+        window.innerHeight;
+
+      const area =
+        width * height;
+
+      /*
+       * More threads.
+       *
+       * Desktop: 1400
+       * Laptop: 1100
+       * Mobile: 650
+       */
+
+      const density =
+        area > 1800000
+          ? 1400
+          : area > 1000000
+            ? 1100
+            : 650;
+
+      threads = [];
+
+      for (
+        let i = 0;
+        i < density;
+        i++
+      ) {
+        threads.push({
+          x:
+            Math.random() *
+            width,
+
+          y:
+            Math.random() *
+            height,
+
+          // Small threads
+          length:
+            2.5 +
+            Math.random() *
+              Math.min(
+                width,
+                height
+              ) *
+              0.009,
+
+          // Random direction
+          angle:
+            Math.random() *
+            Math.PI *
+            2,
+
+          // Smooth visible movement
+          speed:
+            0.07 +
+            Math.random() *
+              0.16,
+
+          // Gentle floating
+          drift:
+            0.06 +
+            Math.random() *
+              0.15,
+
+          // Small curve
+          wave:
+            0.25 +
+            Math.random() *
+              1.1,
+
+          // Slow wave
+          waveSpeed:
+            0.0009 +
+            Math.random() *
+              0.0015,
+
+          phase:
+            Math.random() *
+            Math.PI *
+            2,
+
+          // Thin
+          thickness:
+            0.28 +
+            Math.random() *
+              0.42,
+
+          // Subtle
+          opacity:
+            0.30 +
+            Math.random() *
+              0.40,
+
+          colorIndex:
+            Math.floor(
+              Math.random() * 7
+            ),
+
+          vx: 0,
+          vy: 0,
+        });
+      }
+    };
+
+    // =====================================================
+    // THEME OBSERVER
+    // =====================================================
+
+    const observer =
+      new MutationObserver(() => {
+        render();
+      });
+
+    observer.observe(
+      document.documentElement,
+      {
+        attributes: true,
+        attributeFilter: [
+          "data-theme",
+        ],
+      }
+    );
+
+    window.addEventListener(
+      "resize",
+      resize
+    );
+
+    window.addEventListener(
+      "mousemove",
+      handleMouseMove
+    );
+
+    document.addEventListener(
+      "mouseleave",
+      handleMouseLeave
+    );
 
     resize();
 
     // =====================================================
-    // ANIMATION
+    // RENDER
     // =====================================================
 
     const render = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const width =
+        window.innerWidth;
 
-      // Smooth mouse movement
-      mouse.x += (mouse.targetX - mouse.x) * 0.1;
-      mouse.y += (mouse.targetY - mouse.y) * 0.1;
+      const height =
+        window.innerHeight;
 
-      ctx.clearRect(0, 0, width, height);
+      const time =
+        performance.now();
 
-      // ===================================================
-      // GRID SETTINGS
-      // ===================================================
-
-      const gridSize = Math.max(35, width * 0.04);
-
-      // Mouse distortion area
-      const distortionRadius = Math.min(width, height) * 0.2;
-
-      // Distortion strength
-      const distortionStrength =
-        Math.min(width, height) * 0.055;
-
-      ctx.lineWidth = 0.7;
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.035)";
+      const colors =
+        getColors();
 
       // ===================================================
-      // VERTICAL GRID LINES
+      // VERY SMOOTH CURSOR
       // ===================================================
 
-      for (let x = 0; x <= width + gridSize; x += gridSize) {
-        ctx.beginPath();
+      mouse.x +=
+        (mouse.targetX -
+          mouse.x) *
+        0.075;
 
-        for (let y = 0; y <= height + 8; y += 8) {
-          const dx = x - mouse.x;
-          const dy = y - mouse.y;
+      mouse.y +=
+        (mouse.targetY -
+          mouse.y) *
+        0.075;
 
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      // ===================================================
+      // CLEAR
+      // ===================================================
 
-          let offsetX = 0;
+      ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+      );
 
-          if (distance < distortionRadius) {
-            const influence =
-              1 - distance / distortionRadius;
+      // ===================================================
+      // POINTER SETTINGS
+      // ===================================================
 
-            const force = Math.pow(influence, 2.5);
+      /*
+       * Larger influence area.
+       * Threads around cursor get pushed away.
+       */
 
-            // Push grid away from cursor
-            const direction = dx / (distance || 1);
+      const mouseRadius =
+        Math.min(
+          width,
+          height
+        ) * 0.20;
 
-            offsetX =
-              direction *
-              force *
-              distortionStrength;
-          }
+      /*
+       * Stronger push.
+       *
+       * This is actual movement,
+       * not only visual offset.
+       */
 
-          const finalX = x + offsetX;
+      const mouseStrength =
+        Math.min(
+          width,
+          height
+        ) * 0.050;
 
-          if (y === 0) {
-            ctx.moveTo(finalX, y);
-          } else {
-            ctx.lineTo(finalX, y);
-          }
+      // ===================================================
+      // THREADS
+      // ===================================================
+
+      for (
+        const thread of threads
+      ) {
+        // =================================================
+        // NATURAL MOVEMENT
+        // =================================================
+
+        const moveX =
+          Math.cos(
+            thread.angle
+          ) *
+          thread.speed;
+
+        const moveY =
+          Math.sin(
+            thread.angle
+          ) *
+          thread.speed;
+
+        thread.x += moveX;
+        thread.y += moveY;
+
+        // =================================================
+        // NATURAL DRIFT
+        // =================================================
+
+        const driftTime =
+          time *
+            thread.waveSpeed +
+          thread.phase;
+
+        thread.x +=
+          Math.cos(
+            driftTime
+          ) *
+          thread.drift *
+          0.32;
+
+        thread.y +=
+          Math.sin(
+            driftTime * 0.8
+          ) *
+          thread.drift *
+          0.32;
+
+        // =================================================
+        // SLOW ROTATION
+        // =================================================
+
+        thread.angle +=
+          Math.sin(
+            time * 0.0002 +
+              thread.phase
+          ) *
+          0.00045;
+
+        // =================================================
+        // MOUSE REPULSION
+        // =================================================
+
+        const dx =
+          thread.x -
+          mouse.x;
+
+        const dy =
+          thread.y -
+          mouse.y;
+
+        const distance =
+          Math.sqrt(
+            dx * dx +
+              dy * dy
+          );
+
+        if (
+          distance <
+          mouseRadius
+        ) {
+          /*
+           * 0 at edge
+           * 1 at cursor
+           */
+          const influence =
+            1 -
+            distance /
+              mouseRadius;
+
+          /*
+           * Stronger near pointer.
+           *
+           * Higher exponent means
+           * smoother falloff.
+           */
+          const force =
+            Math.pow(
+              influence,
+              2.15
+            ) *
+            mouseStrength;
+
+          const directionX =
+            dx /
+            (distance || 1);
+
+          const directionY =
+            dy /
+            (distance || 1);
+
+          /*
+           * Add force to actual
+           * thread velocity.
+           */
+          thread.vx +=
+            directionX *
+            force *
+            0.045;
+
+          thread.vy +=
+            directionY *
+            force *
+            0.045;
+
+          /*
+           * Slightly rotate nearby
+           * threads for organic movement.
+           */
+          thread.angle +=
+            Math.sin(
+              time * 0.002 +
+                thread.phase
+            ) *
+            influence *
+            0.0025;
         }
 
-        ctx.stroke();
-      }
+        // =================================================
+        // APPLY POINTER VELOCITY
+        // =================================================
 
-      // ===================================================
-      // HORIZONTAL GRID LINES
-      // ===================================================
+        thread.x +=
+          thread.vx;
 
-      for (let y = 0; y <= height + gridSize; y += gridSize) {
-        ctx.beginPath();
+        thread.y +=
+          thread.vy;
 
-        for (let x = 0; x <= width + 8; x += 8) {
-          const dx = x - mouse.x;
-          const dy = y - mouse.y;
+        // =================================================
+        // SMOOTHLY DAMP VELOCITY
+        // =================================================
 
-          const distance = Math.sqrt(dx * dx + dy * dy);
+        thread.vx *=
+          0.88;
 
-          let offsetY = 0;
+        thread.vy *=
+          0.88;
 
-          if (distance < distortionRadius) {
-            const influence =
-              1 - distance / distortionRadius;
+        // =================================================
+        // WRAP
+        // =================================================
 
-            const force = Math.pow(influence, 2.5);
+        const margin =
+          thread.length * 3;
 
-            // Push grid away from cursor
-            const direction = dy / (distance || 1);
-
-            offsetY =
-              direction *
-              force *
-              distortionStrength;
-          }
-
-          const finalY = y + offsetY;
-
-          if (x === 0) {
-            ctx.moveTo(x, finalY);
-          } else {
-            ctx.lineTo(x, finalY);
-          }
+        if (
+          thread.x <
+          -margin
+        ) {
+          thread.x =
+            width + margin;
         }
 
-        ctx.stroke();
-      }
+        if (
+          thread.x >
+          width + margin
+        ) {
+          thread.x =
+            -margin;
+        }
 
-      // ===================================================
-      // SMALL JELLY / BUBBLE CURSOR
-      // ===================================================
+        if (
+          thread.y <
+          -margin
+        ) {
+          thread.y =
+            height + margin;
+        }
 
-      const bubbleRadius = 24;
+        if (
+          thread.y >
+          height + margin
+        ) {
+          thread.y =
+            -margin;
+        }
 
-      ctx.beginPath();
+        // =================================================
+        // THREAD GEOMETRY
+        // =================================================
 
-      const points = 80;
-      const time = performance.now();
+        const cos =
+          Math.cos(
+            thread.angle
+          );
 
-      for (let i = 0; i <= points; i++) {
-        const angle =
-          (Math.PI * 2 * i) / points;
+        const sin =
+          Math.sin(
+            thread.angle
+          );
 
-        // Subtle jelly movement
+        const startX =
+          thread.x;
+
+        const startY =
+          thread.y;
+
+        const endX =
+          startX +
+          cos *
+            thread.length;
+
+        const endY =
+          startY +
+          sin *
+            thread.length;
+
+        const perpendicularX =
+          -sin;
+
+        const perpendicularY =
+          cos;
+
+        // =================================================
+        // THREAD WAVE
+        // =================================================
+
         const wave =
           Math.sin(
-            angle * 3 + time * 0.002
+            time * 0.002 +
+              thread.phase
           ) *
-          1 +
-          Math.sin(
-            angle * 5 - time * 0.0015
-          ) *
-          0.7;
+          thread.wave;
 
-        const radius =
-          bubbleRadius + wave;
+        const controlX =
+          startX +
+          cos *
+            thread.length *
+            0.5 +
+          perpendicularX *
+            wave;
 
-        const x =
-          mouse.x +
-          Math.cos(angle) * radius;
+        const controlY =
+          startY +
+          sin *
+            thread.length *
+            0.5 +
+          perpendicularY *
+            wave;
 
-        const y =
-          mouse.y +
-          Math.sin(angle) * radius;
+        // =================================================
+        // MOUSE BRIGHTNESS
+        // =================================================
 
-        if (i === 0) {
-          ctx.moveTo(x, y);
+        const mouseBrightness =
+          distance <
+          mouseRadius
+            ? Math.pow(
+                1 -
+                  distance /
+                    mouseRadius,
+                2.5
+              )
+            : 0;
+
+        // =================================================
+        // DRAW
+        // =================================================
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+          startX,
+          startY
+        );
+
+        ctx.quadraticCurveTo(
+          controlX,
+          controlY,
+          endX,
+          endY
+        );
+
+        // =================================================
+        // COLOR
+        // =================================================
+
+        const color =
+          colors[
+            thread.colorIndex
+          ];
+
+        const rgbaMatch =
+          color.match(
+            /rgba?\(([^)]+)\)/
+          );
+
+        if (rgbaMatch) {
+          const values =
+            rgbaMatch[1]
+              .split(",")
+              .map(
+                (value) =>
+                  value.trim()
+              );
+
+          const r =
+            values[0];
+
+          const g =
+            values[1];
+
+          const b =
+            values[2];
+
+          const alpha =
+            Math.min(
+              0.30,
+              thread.opacity *
+                (
+                  0.34 +
+                  mouseBrightness *
+                    0.25
+                )
+            );
+
+          ctx.strokeStyle =
+            `rgba(${r}, ${g}, ${b}, ${alpha})`;
         } else {
-          ctx.lineTo(x, y);
+          ctx.strokeStyle =
+            color;
         }
+
+        // =================================================
+        // THICKNESS
+        // =================================================
+
+        ctx.lineWidth =
+          thread.thickness +
+          mouseBrightness *
+            0.10;
+
+        ctx.lineCap =
+          "round";
+
+        ctx.stroke();
       }
 
-      ctx.closePath();
+      // ===================================================
+      // JELLY CURSOR
+      // ===================================================
 
-      // Soft gold jelly border
-      ctx.strokeStyle =
-        "rgba(247, 229, 123, 0.45)";
+      if (
+        mouse.x > -500 &&
+        mouse.y > -500
+      ) {
+        const bubbleRadius =
+          12;
 
-      ctx.lineWidth = 1;
+        const points = 70;
 
-      ctx.shadowBlur = 7;
+        ctx.beginPath();
 
-      ctx.shadowColor =
-        "rgba(247, 229, 123, 0.2)";
+        for (
+          let i = 0;
+          i <= points;
+          i++
+        ) {
+          const angle =
+            (Math.PI * 2 * i) /
+            points;
 
-      ctx.stroke();
+          const wave =
+            Math.sin(
+              angle * 3 +
+                time * 0.0015
+            ) *
+              0.65 +
+            Math.sin(
+              angle * 5 -
+                time * 0.001
+            ) *
+              0.3;
 
-      ctx.shadowBlur = 0;
+          const radius =
+            bubbleRadius +
+            wave;
+
+          const x =
+            mouse.x +
+            Math.cos(
+              angle
+            ) *
+              radius;
+
+          const y =
+            mouse.y +
+            Math.sin(
+              angle
+            ) *
+              radius;
+
+          if (i === 0) {
+            ctx.moveTo(
+              x,
+              y
+            );
+          } else {
+            ctx.lineTo(
+              x,
+              y
+            );
+          }
+        }
+
+        ctx.closePath();
+
+        const isLight =
+          getTheme() ===
+          "light";
+
+        ctx.strokeStyle =
+          isLight
+            ? "rgba(17, 18, 20, 0.10)"
+            : "rgba(247, 229, 123, 0.13)";
+
+        ctx.lineWidth =
+          0.8;
+
+        ctx.stroke();
+      }
+
+      // ===================================================
+      // LOOP
+      // ===================================================
 
       animationFrame =
-        requestAnimationFrame(render);
+        requestAnimationFrame(
+          render
+        );
     };
 
-    render();
+    animationFrame =
+      requestAnimationFrame(
+        render
+      );
 
     // =====================================================
     // CLEANUP
     // =====================================================
 
     return () => {
-      cancelAnimationFrame(animationFrame);
+      cancelAnimationFrame(
+        animationFrame
+      );
+
+      observer.disconnect();
 
       window.removeEventListener(
         "resize",
@@ -277,82 +856,6 @@ export default function AmbientBackground() {
         overflow-hidden
       "
     >
-      {/* =====================================================
-          RED AMBIENT GLOW — TOP LEFT
-      ====================================================== */}
-
-      <div
-        className="
-          absolute
-          left-[-12vw]
-          top-[-10vw]
-          h-[38vw]
-          w-[38vw]
-          rounded-full
-          bg-[var(--primary)]
-          opacity-[0.075]
-          blur-[10vw]
-        "
-      />
-
-      {/* =====================================================
-          BURGUNDY GLOW — TOP RIGHT
-      ====================================================== */}
-
-      <div
-        className="
-          absolute
-          right-[-12vw]
-          top-[8vw]
-          h-[34vw]
-          w-[34vw]
-          rounded-full
-          bg-red-950
-          opacity-[0.11]
-          blur-[9vw]
-        "
-      />
-
-      {/* =====================================================
-          CENTER GLOW
-      ====================================================== */}
-
-      <div
-        className="
-          absolute
-          left-[38%]
-          top-[28%]
-          h-[30vw]
-          w-[30vw]
-          rounded-full
-          bg-[var(--primary)]
-          opacity-[0.025]
-          blur-[10vw]
-        "
-      />
-
-      {/* =====================================================
-          BOTTOM GLOW
-      ====================================================== */}
-
-      <div
-        className="
-          absolute
-          bottom-[-15vw]
-          left-[15%]
-          h-[35vw]
-          w-[35vw]
-          rounded-full
-          bg-[var(--primary)]
-          opacity-[0.045]
-          blur-[11vw]
-        "
-      />
-
-      {/* =====================================================
-          INTERACTIVE GLOBAL GRID
-      ====================================================== */}
-
       <canvas
         ref={canvasRef}
         className="
@@ -360,19 +863,6 @@ export default function AmbientBackground() {
           inset-0
           h-full
           w-full
-        "
-      />
-
-      {/* =====================================================
-          VIGNETTE
-      ====================================================== */}
-
-      <div
-        className="
-          absolute
-          inset-0
-          bg-[radial-gradient(circle_at_center,transparent_20%,var(--bg)_125%)]
-          opacity-30
         "
       />
     </div>

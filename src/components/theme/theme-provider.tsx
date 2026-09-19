@@ -13,42 +13,10 @@ export type Theme = "dark" | "light";
 
 export const THEME_STORAGE_KEY = "soul-glory-theme";
 
-/* =========================================================
-   NO-FLASH SCRIPT
-
-   Runs before paint so the correct theme is on <html>
-   during the very first frame. Without this the page
-   renders dark and then snaps to light on hydration.
-========================================================= */
-
-export const themeInitScript = `
-(function () {
-  try {
-    var stored = localStorage.getItem("${THEME_STORAGE_KEY}");
-    var theme =
-      stored === "light" || stored === "dark"
-        ? stored
-        : window.matchMedia("(prefers-color-scheme: light)").matches
-          ? "light"
-          : "dark";
-    document.documentElement.setAttribute("data-theme", theme);
-  } catch (e) {
-    document.documentElement.setAttribute("data-theme", "dark");
-  }
-})();
-`;
-
-/* =========================================================
-   CONTEXT
-========================================================= */
-
 type ThemeContextValue = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
-  /* False until the client has read the stored preference.
-     Use it to avoid rendering theme-dependent icons on the
-     server where the real theme isn't known yet. */
   mounted: boolean;
 };
 
@@ -64,10 +32,6 @@ export function useTheme() {
   return context;
 }
 
-/* =========================================================
-   PROVIDER
-========================================================= */
-
 export default function ThemeProvider({
   children,
 }: {
@@ -76,27 +40,70 @@ export default function ThemeProvider({
   const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
-  /* Adopt whatever the init script already put on <html>. */
+  /*
+   * Read saved theme after the client mounts.
+   */
   useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme");
+    let nextTheme: Theme = "dark";
 
-    setThemeState(current === "light" ? "light" : "dark");
+    try {
+      const stored = localStorage.getItem(THEME_STORAGE_KEY);
+
+      if (stored === "light" || stored === "dark") {
+        nextTheme = stored;
+      } else {
+        nextTheme = window.matchMedia(
+          "(prefers-color-scheme: light)",
+        ).matches
+          ? "light"
+          : "dark";
+      }
+    } catch {
+      nextTheme = "dark";
+    }
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      nextTheme,
+    );
+
+    setThemeState(nextTheme);
     setMounted(true);
   }, []);
 
-  /* Follow the OS only while the user has made no explicit choice. */
+  /*
+   * Follow system theme when the user has not selected
+   * a theme manually.
+   */
   useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: light)");
+    const media = window.matchMedia(
+      "(prefers-color-scheme: light)",
+    );
 
     const handleChange = (event: MediaQueryListEvent) => {
-      if (localStorage.getItem(THEME_STORAGE_KEY)) {
+      let hasStoredTheme = false;
+
+      try {
+        hasStoredTheme =
+          !!localStorage.getItem(THEME_STORAGE_KEY);
+      } catch {
+        hasStoredTheme = false;
+      }
+
+      if (hasStoredTheme) {
         return;
       }
 
-      const next: Theme = event.matches ? "light" : "dark";
+      const nextTheme: Theme = event.matches
+        ? "light"
+        : "dark";
 
-      document.documentElement.setAttribute("data-theme", next);
-      setThemeState(next);
+      document.documentElement.setAttribute(
+        "data-theme",
+        nextTheme,
+      );
+
+      setThemeState(nextTheme);
     };
 
     media.addEventListener("change", handleChange);
@@ -106,19 +113,23 @@ export default function ThemeProvider({
     };
   }, []);
 
+  /*
+   * Change theme manually.
+   */
   const setTheme = useCallback((next: Theme) => {
     const root = document.documentElement;
 
-    /* Soften the flip, then drop the helper class so it
-       doesn't slow down unrelated interactions. */
     root.classList.add("theme-transition");
 
     root.setAttribute("data-theme", next);
 
     try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
+      localStorage.setItem(
+        THEME_STORAGE_KEY,
+        next,
+      );
     } catch {
-      /* Private mode — the choice just won't persist. */
+      // Storage unavailable/private mode.
     }
 
     setThemeState(next);
@@ -128,16 +139,26 @@ export default function ThemeProvider({
     }, 220);
   }, []);
 
+  /*
+   * Toggle between dark and light.
+   */
   const toggleTheme = useCallback(() => {
     setTheme(theme === "dark" ? "light" : "dark");
   }, [theme, setTheme]);
 
   const value = useMemo<ThemeContextValue>(
-    () => ({ theme, setTheme, toggleTheme, mounted }),
+    () => ({
+      theme,
+      setTheme,
+      toggleTheme,
+      mounted,
+    }),
     [theme, setTheme, toggleTheme, mounted],
   );
 
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
   );
 }

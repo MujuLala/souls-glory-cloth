@@ -4,6 +4,7 @@ import Footer from "@/components/layout/footer";
 import AmbientBackground from "@/components/ui/ambient-background";
 import CartDrawer from "@/components/shop/CartDrawer";
 import SupportChatWidget from "@/components/chat/SupportChatWidget";
+import ZipperScrollbar from "@/components/layout/ZipperScrollbar";
 import { getStorefrontCategories } from "@/data/storefront";
 
 export default async function SiteLayout({
@@ -13,7 +14,10 @@ export default async function SiteLayout({
 }) {
   /* The shop menu mirrors the live categories rather than a
      hard-coded list, so a new category appears in the nav. */
-  const categories = await getStorefrontCategories().catch(() => []);
+  const categories =
+    await getStorefrontCategories().catch(
+      () => []
+    );
 
   return (
     <>
@@ -23,18 +27,25 @@ export default async function SiteLayout({
         <AnnouncementBar />
 
         <Header
-          categories={categories.map((category) => ({
-            name: category.name,
-            slug: category.slug,
-          }))}
+          categories={categories.map(
+            (category) => ({
+              name: category.name,
+              slug: category.slug,
+            })
+          )}
         />
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          {children}
+        </main>
 
         <Footer />
       </div>
 
       <CartDrawer />
+
+      {/* Custom zipper scrollbar */}
+      <ZipperScrollbar />
 
       {/* Live chat with the atelier — floats above every page. */}
       <SupportChatWidget />
